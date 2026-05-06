@@ -23,7 +23,8 @@ venv/
 ENV/
 
 # Data
-data/
+data/*
+!data/.gitkeep
 .env
 
 # IDE
