@@ -44,19 +44,66 @@ class _ColumnLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 6, 16, 18),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                _subHeader('业务理想', ideals.length),
-                ...ideals.map((c) => _ObserveCardWidget(card: c)),
-                const SizedBox(height: 14),
-                _subHeader('现实状况', realities.length),
-                ...realities.map((c) => _ObserveCardWidget(card: c)),
-              ],
+                  _side('业务理想', ideals, Colors.white),
+                  const SizedBox(width: 8),
+                  _side('现实状况', realities, const Color(0xFFFAFAFA)),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _side(String label, List<ObserveCard> cards, Color bgColor) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFEEEEEE)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${cards.length}',
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                children: cards
+                    .map((c) => _ObserveCardWidget(card: c))
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -84,30 +131,6 @@ class _ColumnLayout extends StatelessWidget {
             '8 条',
             style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _subHeader(String label, int count) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 14, bottom: 8),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF666666),
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '$count',
-            style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
-          ),
-          const Spacer(),
         ],
       ),
     );

@@ -36,13 +36,13 @@ class OodaScreen extends StatelessWidget {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(width: colWidth, child: const ObserveColumn()),
+                    SizedBox(width: colWidth * 1.4, child: const ObserveColumn()),
                     const SizedBox(width: 14),
                     SizedBox(width: colWidth, child: const OrientColumn()),
                     const SizedBox(width: 14),
                     SizedBox(width: colWidth * 1.2, child: const DecideColumn()),
                     const SizedBox(width: 14),
-                    SizedBox(width: colWidth * 0.8, child: const ActColumn()),
+                    SizedBox(width: colWidth * 0.4, child: const ActColumn()),
                   ],
                 );
               },
