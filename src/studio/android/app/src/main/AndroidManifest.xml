@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="studio"
+        android:label="量潮咨询"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

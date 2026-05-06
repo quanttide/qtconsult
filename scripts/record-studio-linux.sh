@@ -23,8 +23,8 @@ echo "Starting studio..."
 "$STUDIO_BIN" &
 sleep 4
 
-WID=$(xdotool search --name "com.quanttide.consult.studio" 2>/dev/null | head -1)
-[ -z "$WID" ] && WID=$(xdotool search --name "studio" 2>/dev/null | tail -1)
+WID=$(xdotool search --name "量潮咨询" 2>/dev/null | head -1)
+[ -z "$WID" ] && WID=$(xdotool search --name "com.quanttide.consult.studio" 2>/dev/null | head -1)
 if [ -z "$WID" ]; then echo "ERROR: Cannot find window" >&2; exit 0; fi
 
 xdotool windowsize "$WID" 1440 900 2>/dev/null || true
