@@ -52,10 +52,10 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+                children: [
                 _buildFilters(),
                 const SizedBox(height: 6),
                 ...filtered.map((c) => _buildCluster(c)),
@@ -69,26 +69,26 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
 
   Widget _header() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
       ),
       child: Row(
         children: [
-          const Icon(Icons.psychology_outlined, size: 14, color: Color(0xFF444444)),
-          const SizedBox(width: 6),
+          const Icon(Icons.psychology_outlined, size: 16, color: Color(0xFF333333)),
+          const SizedBox(width: 8),
           const Text(
             '分析 · Orient',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF222222),
+              color: Color(0xFF1A1A1A),
             ),
           ),
           const Spacer(),
           Text(
             '${widget.clusters.fold(0, (sum, c) => sum + c.insights.length)} 条洞察',
-            style: const TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
         ],
       ),
@@ -150,30 +150,30 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
             });
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: const Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
                 Text(
                   isCollapsed ? '▸' : '▾',
-                  style: const TextStyle(fontSize: 8, color: Color(0xFFAAAAAA)),
+                  style: const TextStyle(fontSize: 10, color: Color(0xFF999999)),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 6),
                 Text(
                   cluster.name,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF777777),
+                    color: Color(0xFF666666),
                   ),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 6),
                 Text(
                   '${cluster.insights.length}',
-                  style: const TextStyle(fontSize: 9, color: Color(0xFFAAAAAA)),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
                 ),
               ],
             ),
@@ -195,11 +195,11 @@ class _InsightCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 5),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE0E0E0)),
-        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: const Color(0xFFE6E6E6)),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,17 +208,17 @@ class _InsightCardWidget extends StatelessWidget {
             insight.title,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 12,
-              color: Color(0xFF222222),
+              fontSize: 14,
+              color: Color(0xFF1A1A1A),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Wrap(
-            spacing: 3,
-            runSpacing: 2,
+            spacing: 4,
+            runSpacing: 3,
             children: insight.evidences.map((e) {
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF5F5F5),
                   borderRadius: BorderRadius.circular(8),
@@ -226,29 +226,29 @@ class _InsightCardWidget extends StatelessWidget {
                 child: Text(
                   e.label,
                   style: const TextStyle(
-                    fontSize: 9,
-                    color: Color(0xFF888888),
+                    fontSize: 11,
+                    color: Color(0xFF666666),
                   ),
                 ),
               );
             }).toList(),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             '根因：${insight.rootCause}',
             style: const TextStyle(
-              fontSize: 10,
-              color: Color(0xFF777777),
-              height: 1.4,
+              fontSize: 13,
+              color: Color(0xFF666666),
+              height: 1.6,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             '影响：${insight.impact}',
             style: const TextStyle(
-              fontSize: 10,
-              color: Color(0xFF777777),
-              height: 1.4,
+              fontSize: 13,
+              color: Color(0xFF666666),
+              height: 1.6,
             ),
           ),
         ],

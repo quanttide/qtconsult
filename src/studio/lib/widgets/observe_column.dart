@@ -44,10 +44,10 @@ class _ColumnLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-              children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 18),
+                children: [
                 _subHeader('业务理想', ideals.length),
                 ...ideals.map((c) => _ObserveCardWidget(card: c)),
                 const SizedBox(height: 14),
@@ -63,26 +63,26 @@ class _ColumnLayout extends StatelessWidget {
 
   Widget _header() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
       ),
       child: const Row(
         children: [
-          Icon(Icons.search_outlined, size: 14, color: Color(0xFF444444)),
-          SizedBox(width: 6),
+          Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
+          SizedBox(width: 8),
           Text(
             '调研 · Observe',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF222222),
+              color: Color(0xFF1A1A1A),
             ),
           ),
           Spacer(),
           Text(
             '8 条',
-            style: TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+            style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
         ],
       ),
@@ -91,27 +91,23 @@ class _ColumnLayout extends StatelessWidget {
 
   Widget _subHeader(String label, int count) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 4),
+      padding: const EdgeInsets.only(top: 14, bottom: 8),
       child: Row(
         children: [
           Text(
             label,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF777777),
+              color: Color(0xFF666666),
             ),
           ),
           const SizedBox(width: 4),
           Text(
             '$count',
-            style: const TextStyle(fontSize: 9, color: Color(0xFFAAAAAA)),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
           const Spacer(),
-          Container(
-            height: 1,
-            color: const Color(0xFFEEEEEE),
-          ),
         ],
       ),
     );
@@ -128,103 +124,90 @@ class _ObserveCardWidget extends StatelessWidget {
     final state = context.read<OodaState>();
     final isConfirmed = card.status == CardStatus.confirmed;
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
             color: isConfirmed ? const Color(0xFF444444) : const Color(0xFFCCCCCC),
-            width: 3,
+            width: 4,
           ),
         ),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: const [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 2),
-        ],
+        color: isConfirmed ? const Color(0xFFFAFAFA) : Colors.white,
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Text(
                   card.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: Color(0xFF222222),
+                    fontSize: 14,
+                    color: Color(0xFF1A1A1A),
                   ),
                 ),
               ),
               GestureDetector(
                 onTap: () => state.toggleObserveConfirm(card.id),
                 child: Container(
-                  width: 18,
-                  height: 18,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isConfirmed
-                          ? const Color(0xFF444444)
+                          ? const Color(0xFF333333)
                           : const Color(0xFFCCCCCC),
-                      width: 1.5,
+                      width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(3),
+                    borderRadius: BorderRadius.circular(4),
                     color:
-                        isConfirmed ? const Color(0xFF444444) : Colors.transparent,
+                        isConfirmed ? const Color(0xFF333333) : Colors.transparent,
                   ),
                   child: isConfirmed
-                      ? const Icon(Icons.check, size: 12, color: Colors.white)
+                      ? const Icon(Icons.check, size: 14, color: Colors.white)
                       : null,
                 ),
               ),
             ],
           ),
-          if (card.subtitle.isNotEmpty) ...[
-            const SizedBox(height: 2),
-            Text(
-              card.subtitle,
-              style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF888888),
-              ),
-            ),
-          ],
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           Text(
             card.body,
             style: const TextStyle(
-              fontSize: 11,
-              color: Color(0xFF777777),
-              height: 1.4,
+              fontSize: 13,
+              color: Color(0xFF666666),
+              height: 1.6,
             ),
-            maxLines: 3,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Row(
             children: [
               Text(
                 card.source,
-                style: const TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+                style: const TextStyle(fontSize: 12, color: Color(0xFF999999)),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: isConfirmed
-                      ? const Color(0xFFEEEEEE)
+                      ? const Color(0xFFF2F2F2)
                       : const Color(0xFFF5F5F5),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   isConfirmed ? '已确认' : '待确认',
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 11,
                     color: isConfirmed
-                        ? const Color(0xFF222222)
+                        ? const Color(0xFF1A1A1A)
                         : const Color(0xFF888888),
                   ),
                 ),

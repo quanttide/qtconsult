@@ -3,262 +3,498 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>咨询服务看板 · 原型</title>
+  <title>咨询服务看板</title>
   <style>
     :root {
-      --bg: #f5f5f5;
+      --bg: #f7f7f7;
       --surface: #fff;
-      --border: #e0e0e0;
-      --border-light: #eee;
-      --text: #222;
-      --text-secondary: #777;
-      --text-muted: #aaa;
-      --accent: #444;
-      --accent-light: #f0f0f0;
-      --shadow: 0 1px 3px rgba(0,0,0,0.06);
-      --radius-sm: 6px;
-      --radius: 10px;
+      --border: #e6e6e6;
+      --text: #1a1a1a;
+      --text-secondary: #666;
+      --text-muted: #999;
+      --accent: #333;
+      --accent-light: #f2f2f2;
+      --shadow: 0 2px 8px rgba(0,0,0,0.05);
+      --radius: 12px;
+      --radius-sm: 8px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; }
     body {
-      font-family: -apple-system,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.5; -webkit-font-smoothing: antialiased;
-      display: flex; flex-direction: column; padding: 16px; gap: 12px;
+      font-family: -apple-system, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 14px;
     }
 
-    /* 四栏布局 OODA */
     .columns {
-      flex: 1; display: grid;
-      grid-template-columns: 2.5fr 2.5fr 3fr 2fr; gap: 14px;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2.5fr 2.5fr 3fr 2fr;
+      gap: 18px;
       min-height: 0;
     }
+
     .col {
-      display: flex; flex-direction: column; min-height: 0;
-      background: var(--surface); border-radius: var(--radius);
-      box-shadow: var(--shadow); overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
+
     .col-header {
-      font-size: 13px; font-weight: 700; color: var(--text);
-      padding: 10px 16px; background: var(--accent-light);
-      border-bottom: 1px solid var(--border); flex-shrink: 0;
-      display: flex; align-items: center; gap: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      padding: 14px 20px;
+      background: var(--accent-light);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.01em;
     }
+
     .col-header .badge {
-      font-size: 10px; font-weight: 500; color: var(--text-secondary);
-      background: var(--bg); padding: 1px 8px; border-radius: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 10px;
+      border-radius: 10px;
     }
+
     .col-body {
-      flex: 1; overflow-y: auto; padding: 12px 14px;
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 18px 20px;
     }
 
-    /* 调研栏子区域 */
-    .sub-area { margin-bottom: 14px; }
-    .sub-area:last-child { margin-bottom: 0; }
+    .sub-area {
+      margin-bottom: 22px;
+    }
+    .sub-area:last-child {
+      margin-bottom: 0;
+    }
+
     .sub-area-title {
-      font-size: 11px; font-weight: 700; color: var(--text-secondary);
-      margin-bottom: 8px; padding-bottom: 5px;
-      border-bottom: 1px solid var(--border-light);
-      display: flex; align-items: center; gap: 6px;
-    }
-    .sub-area-title .badge {
-      font-size: 9px; font-weight: 500; color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.02em;
     }
 
-    /* 卡片 */
+    .sub-area-title .badge {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    /* 调研卡片 */
     .card {
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 10px 12px; margin-bottom: 6px;
-      background: var(--surface); font-size: 12px; transition: border-color 0.15s;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: var(--surface);
+      font-size: 14px;
+      transition: border-color 0.15s, background 0.15s;
+      cursor: default;
     }
     .card:last-child { margin-bottom: 0; }
-    .card.confirmed { border-left: 3px solid var(--accent); background: #fafafa; }
-    .card.pending { border-left: 3px solid var(--text-muted); }
+    .card.confirmed {
+      background: #fafafa;
+    }
+    .card.pending {
+      border-left: 4px solid var(--border);
+    }
     .card-header {
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
     .card-title {
-      font-weight: 600; color: var(--text); flex: 1; line-height: 1.4;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.4;
     }
-    .card-title .light { font-weight: 400; color: var(--text-secondary); font-size: 11px; }
+    .card-title .light {
+      font-weight: 400;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
     .card-check {
-      flex-shrink: 0; width: 18px; height: 18px;
-      border: 1.5px solid var(--border); border-radius: 3px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      margin-top: 1px; font-size: 11px; color: transparent;
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: transparent;
       transition: all 0.15s;
     }
-    .card-check.checked { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .card-body { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+    .card-check.checked {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .card-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     .card-meta {
-      font-size: 10px; color: var(--text-muted); margin-top: 4px;
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
     .card-meta .tag {
-      font-size: 9px; padding: 1px 6px; border-radius: 6px;
-      background: var(--bg); color: var(--text-secondary);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text-secondary);
     }
-    .card-meta .tag.confirmed { background: #eee; color: var(--text); }
-    .card-actions { margin-top: 5px; display: flex; gap: 4px; }
-    .card-actions .btn-link {
-      font-size: 10px; padding: 2px 8px; border-radius: 8px;
-      border: 1px solid var(--border); background: var(--surface);
-      cursor: pointer; color: var(--text-secondary); transition: all 0.15s;
+    .card-meta .tag.confirmed {
+      background: var(--accent-light);
+      color: var(--text);
     }
-    .card-actions .btn-link:hover { background: var(--accent-light); border-color: var(--text-muted); }
 
     /* 分析栏 */
     .analysis-toolbar {
-      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
     }
     .analysis-toolbar .filter-btn {
-      font-size: 10px; padding: 3px 10px; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--surface);
-      cursor: pointer; color: var(--text-secondary); transition: all 0.15s;
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
     }
     .analysis-toolbar .filter-btn.active {
-      background: var(--accent); color: #fff; border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
     }
     .analysis-toolbar .btn-new {
-      font-size: 10px; padding: 3px 12px; border-radius: 10px;
-      border: none; background: var(--accent); color: #fff;
-      cursor: pointer; font-weight: 600;
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
     }
-    .cluster-group { margin-bottom: 10px; }
+
+    .cluster-group {
+      margin-bottom: 14px;
+    }
     .cluster-title {
-      font-size: 10px; font-weight: 700; color: var(--text-secondary);
-      padding: 5px 8px; background: var(--bg); border-radius: var(--radius-sm);
-      margin-bottom: 5px; cursor: pointer;
-      display: flex; align-items: center; gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .cluster-title .collapse-icon { font-size: 8px; color: var(--text-muted); }
-    .cluster-cards { display: flex; flex-direction: column; gap: 5px; }
+    .cluster-title .collapse-icon {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .cluster-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
     .insight-card {
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 10px 12px; background: var(--surface); font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      background: var(--surface);
     }
     .insight-card .insight-title {
-      font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 4px;
-    }
-    .insight-card .evidence-tags {
-      display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 4px;
-    }
-    .insight-card .evidence-tag {
-      font-size: 9px; padding: 1px 7px; border-radius: 8px;
-      background: var(--bg); color: var(--text-secondary); cursor: pointer;
-    }
-    .insight-card .insight-detail { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
-    .insight-card .insight-detail .label { font-weight: 600; color: var(--text); font-size: 10px; }
-
-    /* 策略栏 */
-    .strategy-card {
-      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-      padding: 12px 14px; margin-bottom: 8px;
-      background: var(--surface); font-size: 12px;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .strategy-card.selected { border-color: var(--text); background: #fafafa; }
-    .strategy-card .s-header {
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
       margin-bottom: 6px;
     }
-    .strategy-card .s-name { font-weight: 700; font-size: 13px; color: var(--text); }
-    .strategy-card .s-body { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
-    .strategy-card .s-body .section { margin-bottom: 5px; }
-    .strategy-card .s-body .s-label { font-weight: 600; color: var(--text); font-size: 10px; }
-    .strategy-card .s-select {
-      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light);
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    .insight-card .evidence-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
     }
-    .strategy-card .s-select label { font-size: 11px; display: flex; align-items: center; gap: 3px; cursor: pointer; }
-    .strategy-card .s-select input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
+    .insight-card .evidence-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .insight-card .insight-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .insight-card .insight-detail .row {
+      margin-bottom: 4px;
+    }
+    .insight-card .insight-detail .label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* 决策栏 */
+    .strategy-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      font-size: 14px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .strategy-card.selected {
+      border-color: var(--text);
+      background: #fafafa;
+    }
+    .strategy-card .s-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .strategy-card .s-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+    }
+    .strategy-card .s-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .strategy-card .s-body .section {
+      margin-bottom: 8px;
+    }
+    .strategy-card .s-body .s-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .strategy-card .s-select {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .strategy-card .s-select label {
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .strategy-card .s-select input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
     .strategy-card .s-select input[type="text"] {
-      flex: 1; min-width: 100px; font-size: 10px; padding: 4px 8px;
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      flex: 1;
+      min-width: 120px;
+      font-size: 12px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       font-family: inherit;
     }
     .strategy-card .priority-badge {
-      font-size: 9px; padding: 1px 7px; border-radius: 8px;
-      background: var(--bg); color: var(--text-secondary); font-weight: 500;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      font-weight: 500;
     }
 
-    /* 执行区 */
+    /* 执行栏 */
     .exec-toolbar {
-      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
     .exec-toolbar .btn-new-task {
-      font-size: 10px; padding: 3px 12px; border-radius: 10px;
-      border: none; background: var(--accent); color: #fff;
-      cursor: pointer; font-weight: 600;
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
     }
+
     .task-card {
-      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-      padding: 10px 12px; margin-bottom: 6px;
-      background: var(--surface); font-size: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: var(--surface);
+      font-size: 14px;
       transition: border-color 0.15s, background 0.15s;
     }
     .task-card .task-header {
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;
-      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
     }
-    .task-card .task-name { font-weight: 600; font-size: 12px; color: var(--text); flex: 1; }
+    .task-card .task-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      flex: 1;
+    }
     .task-card .task-status {
-      font-size: 9px; padding: 2px 8px; border-radius: 8px;
-      font-weight: 500; white-space: nowrap; flex-shrink: 0;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .task-status.todo { background: var(--bg); color: var(--text-muted); }
     .task-status.doing { background: #eee; color: var(--text); border: 1px solid var(--text-muted); }
     .task-status.done { background: var(--accent-light); color: var(--accent); }
     .task-status.blocked { border: 1px dashed var(--text-muted); color: var(--text-muted); background: var(--bg); }
-    .task-card .task-body { font-size: 10px; color: var(--text-secondary); line-height: 1.5; }
-    .task-card .task-body .row { display: flex; gap: 8px; margin-bottom: 3px; flex-wrap: wrap; }
+
+    .task-card .task-body {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .task-card .task-body .row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 3px;
+      flex-wrap: wrap;
+    }
     .task-card .task-body .label { color: var(--text-muted); }
     .task-card .task-link {
-      font-size: 9px; padding: 1px 6px; border-radius: 6px;
-      background: var(--bg); color: var(--text-secondary);
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text-secondary);
     }
     .task-card .task-progress {
-      margin-top: 6px; height: 3px; border-radius: 2px;
-      background: var(--border-light); overflow: hidden;
+      margin-top: 8px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      overflow: hidden;
     }
     .task-card .task-progress .bar {
-      height: 100%; border-radius: 2px; background: var(--accent);
+      height: 100%;
+      border-radius: 2px;
+      background: var(--accent);
       transition: width 0.3s;
     }
 
     /* 线索条 */
     .trail-bar {
-      background: var(--surface); border-radius: var(--radius);
-      box-shadow: var(--shadow); overflow: hidden; flex-shrink: 0;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      flex-shrink: 0;
     }
     .trail-bar .trail-header {
-      font-size: 11px; font-weight: 600; color: var(--text-secondary);
-      padding: 8px 14px; cursor: pointer; display: flex;
-      justify-content: space-between; align-items: center; user-select: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 18px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
     }
     .trail-bar .trail-header:hover { background: var(--accent-light); }
-    .trail-bar .trail-body { display: none; padding: 10px 14px; border-top: 1px solid var(--border-light); }
+    .trail-bar .trail-body { display: none; padding: 14px 18px; border-top: 1px solid var(--border); }
     .trail-bar .trail-body.open { display: flex; gap: 0; align-items: flex-start; }
-    .trail-node {
-      display: flex; align-items: flex-start; gap: 6px; flex: 1; position: relative;
-    }
-    .trail-node .node-content { font-size: 11px; color: var(--text-secondary); padding: 0 4px; }
+    .trail-node { display: flex; align-items: flex-start; gap: 8px; flex: 1; }
+    .trail-node .node-content { font-size: 12px; color: var(--text-secondary); padding: 0 4px; line-height: 1.5; }
     .trail-node .node-content strong { color: var(--text); }
     .trail-connector {
-      flex-shrink: 0; display: flex; align-items: center; padding: 0 4px;
-      color: var(--text-muted); font-size: 14px; margin-top: 1px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-top: 1px;
     }
 
     @media (max-width: 768px) {
       html, body { height: auto; overflow: auto; }
-      body { padding: 10px; gap: 10px; }
+      body { padding: 12px; gap: 10px; }
       .columns { grid-template-columns: 1fr; flex: none; }
-      .col { max-height: 400px; }
-      .col-body { padding: 10px; }
-      .trail-bar .trail-body.open { flex-direction: column; gap: 6px; }
-      .trail-connector { transform: rotate(90deg); padding: 2px 0; }
+      .col { max-height: 480px; }
+      .col-body { padding: 14px; }
+      .trail-bar .trail-body.open { flex-direction: column; gap: 8px; }
+      .trail-connector { transform: rotate(90deg); padding: 4px 0; }
     }
   </style>
 </head>
@@ -276,54 +512,50 @@
 
           <div class="card pending">
             <div class="card-header">
-              <div class="card-title">模拟 · 战略转型 · 商家赋能 <span class="light">/ 从平台型转向赋能型</span></div>
+              <div class="card-title">战略转型 · 商家赋能</div>
               <div class="card-check" onclick="this.classList.toggle('checked')"></div>
             </div>
-            <div class="card-body">战略重心从"做大平台订单量"转向"帮商家获取流量、提升营收"。需要新平台支撑商家运营、流量分发和效果追踪，同时配套数据分析能力衡量商家ROI。</div>
+            <div class="card-body">从"做大平台订单"转向"帮商家拉流量、提营收"，需要新平台和数据分析能力支撑。</div>
             <div class="card-meta">
-              <span>来源：模拟访谈 · 5月15日</span>
+              <span>模拟访谈 · 5月15日</span>
               <span class="tag">待确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card pending">
             <div class="card-header">
-              <div class="card-title">模拟 · 新平台研发 · 商家赋能平台 <span class="light">/ 需要全新的产品和技术体系</span></div>
+              <div class="card-title">新平台研发 · 商家赋能平台</div>
               <div class="card-check" onclick="this.classList.toggle('checked')"></div>
             </div>
-            <div class="card-body">需从0到1研发商家赋能平台，包括商家入驻、流量投放、数据分析、效果追踪等功能模块。要求6个月内上线MVP，同时兼容现有业务系统的数据对接。</div>
+            <div class="card-body">从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。</div>
             <div class="card-meta">
-              <span>来源：模拟访谈 · 5月15日</span>
+              <span>模拟访谈 · 5月15日</span>
               <span class="tag">待确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card pending">
             <div class="card-header">
-              <div class="card-title">模拟 · 数据分析 · 复杂多维 <span class="light">/ 商家+流量+市场多维分析</span></div>
+              <div class="card-title">数据分析 · 多维需求</div>
               <div class="card-check" onclick="this.classList.toggle('checked')"></div>
             </div>
-            <div class="card-body">新战略下的数据分析需求大幅升级：需要商家经营分析（流量/转化/营收）、市场调控分析（供需/定价/竞品）、平台运营分析（订单/流量/用户）三大维度交叉分析。</div>
+            <div class="card-body">需要商家分析、市场调控、平台运营三大维度的交叉分析能力。</div>
             <div class="card-meta">
-              <span>来源：模拟访谈 · 5月15日</span>
+              <span>模拟访谈 · 5月15日</span>
               <span class="tag">待确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card pending">
             <div class="card-header">
-              <div class="card-title">模拟 · 技术升级 · 平台能力建设 <span class="light">/ 需要提升软件工程水平和架构能力</span></div>
+              <div class="card-title">技术升级 · 平台能力</div>
               <div class="card-check" onclick="this.classList.toggle('checked')"></div>
             </div>
-            <div class="card-body">当前技术团队和软件水平不足以支撑新平台研发，需要系统性解决技术债务、引入工程规范、提升代码质量和架构设计能力，才能承载新战略落地。</div>
+            <div class="card-body">当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。</div>
             <div class="card-meta">
-              <span>来源：模拟评估 · 5月14日</span>
+              <span>模拟评估 · 5月14日</span>
               <span class="tag">待确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
         </div>
 
@@ -332,54 +564,50 @@
 
           <div class="card confirmed">
             <div class="card-header">
-              <div class="card-title">模拟 · 技术债务 <span class="light">/ 代码质量有待提升、工程规范待建立</span></div>
+              <div class="card-title">技术债务 · 工程规范待建</div>
               <div class="card-check checked" onclick="this.classList.toggle('checked')">✓</div>
             </div>
-            <div class="card-body">现有代码库在单元测试覆盖、CI/CD流水线、代码审查流程等方面有待完善。核心模块耦合度较高，修改影响面较大。线上问题修复和新功能开发中部分时间用于处理历史遗留问题。</div>
+            <div class="card-body">代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。</div>
             <div class="card-meta">
-              <span>来源：模拟代码审计 · 5月10日</span>
+              <span>模拟代码审计 · 5月10日</span>
               <span class="tag confirmed">已确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card confirmed">
             <div class="card-header">
-              <div class="card-title">模拟 · 技术团队能力 <span class="light">/ 团队配置以业务开发为主</span></div>
+              <div class="card-title">团队能力 · 以业务开发为主</div>
               <div class="card-check checked" onclick="this.classList.toggle('checked')">✓</div>
             </div>
-            <div class="card-body">现有技术团队以业务功能开发为主，在系统架构设计、数据工程、DevOps等方面能力有待加强。当前规模和技能结构同时支撑新平台研发、架构优化和数据基建三大任务存在挑战。</div>
+            <div class="card-body">团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。</div>
             <div class="card-meta">
-              <span>来源：模拟评估 · 5月14日</span>
+              <span>模拟评估 · 5月14日</span>
               <span class="tag confirmed">已确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card confirmed">
             <div class="card-header">
-              <div class="card-title">模拟 · 数据分析能力 <span class="light">/ 数据分析处于起步阶段</span></div>
+              <div class="card-title">数据分析 · 起步阶段</div>
               <div class="card-check checked" onclick="this.classList.toggle('checked')">✓</div>
             </div>
-            <div class="card-body">数据分析工具和专职数据团队尚在规划中。目前经营数据主要通过人工方式汇总，报表制作周期较长。新战略所需的商家分析、流量分析等能力需要从基础开始建设。</div>
+            <div class="card-body">无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。</div>
             <div class="card-meta">
-              <span>来源：模拟调研 · 5月12日</span>
+              <span>模拟调研 · 5月12日</span>
               <span class="tag confirmed">已确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
 
           <div class="card confirmed">
             <div class="card-header">
-              <div class="card-title">模拟 · 数据基础设施 <span class="light">/ 数据平台建设有待加强</span></div>
+              <div class="card-title">数据基础设施 · 待建设</div>
               <div class="card-check checked" onclick="this.classList.toggle('checked')">✓</div>
             </div>
-            <div class="card-body">数据仓库和统一数据平台尚在规划阶段。各业务数据分散在不同系统中，数据规范和文档化程度有待提升。数据汇聚和清洗流程需要从头搭建，新平台研发也应同步考虑数据基础设施建设。</div>
+            <div class="card-body">无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。</div>
             <div class="card-meta">
-              <span>来源：模拟评估 · 5月13日</span>
+              <span>模拟评估 · 5月13日</span>
               <span class="tag confirmed">已确认</span>
             </div>
-            <div class="card-actions"><button class="btn-link">关联到洞察</button></div>
           </div>
         </div>
 
@@ -400,31 +628,30 @@
 
         <div class="cluster-group">
           <div class="cluster-title" onclick="toggleCluster(this)">
-            <span class="collapse-icon">▾</span> 模拟：战略技术断层 <span style="font-size:9px;color:var(--text-muted)">2</span>
+            <span class="collapse-icon">▾</span> 战略技术断层 <span style="font-size:11px;color:var(--text-muted)">2</span>
           </div>
           <div class="cluster-cards">
             <div class="insight-card">
-              <div class="insight-title">模拟洞察：战略目标与技术承载能力之间存在差距</div>
+              <div class="insight-title">战略目标与技术承载能力之间存在差距</div>
               <div class="evidence-tags">
-                <span class="evidence-tag">模拟·战略转型</span>
-                <span class="evidence-tag">模拟·新平台研发</span>
-                <span class="evidence-tag">模拟·技术升级</span>
+                <span class="evidence-tag">战略转型</span>
+                <span class="evidence-tag">新平台研发</span>
+                <span class="evidence-tag">技术升级</span>
               </div>
               <div class="insight-detail">
-                <span class="label">根因：</span>过往技术投入以支撑现有业务运行为主，面向下一阶段的技术储备和能力建设有待加强。战略升级后，技术能力、基础设施、团队规模等方面需要同步提升。<br>
-                <span class="label">影响：</span>新平台研发、架构优化、数据基建三大任务需协调推进，避免资源分散导致各项进展不及预期。
+                <div class="row"><span class="label">根因：</span>过往技术投入以支撑运行为主，未为下一阶段做储备。</div>
+                <div class="row"><span class="label">影响：</span>三大任务需协调推进，避免资源分散。</div>
               </div>
             </div>
             <div class="insight-card">
-              <div class="insight-title">模拟洞察：架构优化前置有助于新平台建设</div>
+              <div class="insight-title">架构优化前置有助于新平台建设</div>
               <div class="evidence-tags">
-                <span class="evidence-tag">模拟·技术债务</span>
-                <span class="evidence-tag">模拟·技术团队能力</span>
-                <span class="evidence-tag">模拟·技术升级</span>
+                <span class="evidence-tag">技术债务</span>
+                <span class="evidence-tag">团队能力</span>
               </div>
               <div class="insight-detail">
-                <span class="label">根因：</span>现有系统在代码规范、架构设计、工程实践等方面有优化空间，长期积累的技术债需要在新建系统前妥善处理。<br>
-                <span class="label">影响：</span>在架构优化完成前启动新平台，可能将旧系统的架构问题延拓到新平台，增加后续治理成本。
+                <div class="row"><span class="label">根因：</span>现有代码和架构有优化空间，技术债需在新建前处理。</div>
+                <div class="row"><span class="label">影响：</span>不清债直接建新平台，可能将旧问题延拓到新系统。</div>
               </div>
             </div>
           </div>
@@ -432,31 +659,29 @@
 
         <div class="cluster-group">
           <div class="cluster-title" onclick="toggleCluster(this)">
-            <span class="collapse-icon">▾</span> 模拟：数据基建 <span style="font-size:9px;color:var(--text-muted)">2</span>
+            <span class="collapse-icon">▾</span> 数据基建 <span style="font-size:11px;color:var(--text-muted)">2</span>
           </div>
           <div class="cluster-cards">
             <div class="insight-card">
-              <div class="insight-title">模拟洞察：数据分析需求日趋复杂，数据基础有待夯实</div>
+              <div class="insight-title">数据分析需求复杂，数据基础有待夯实</div>
               <div class="evidence-tags">
-                <span class="evidence-tag">模拟·数据分析</span>
-                <span class="evidence-tag">模拟·数据分析能力</span>
-                <span class="evidence-tag">模拟·数据基础设施</span>
+                <span class="evidence-tag">数据分析</span>
+                <span class="evidence-tag">数据基础设施</span>
               </div>
               <div class="insight-detail">
-                <span class="label">根因：</span>随着战略升级，商家分析、流量分析、市场分析等多维度数据分析需求涌现，但数据采集、存储、处理的基础能力尚在建设中。<br>
-                <span class="label">影响：</span>数据分析能力需分阶段建设，建议优先聚焦核心场景（如商家ROI分析、流量效果评估），逐步扩展分析维度。
+                <div class="row"><span class="label">根因：</span>多维分析需求涌现，但数据采集和存储能力尚在建设中。</div>
+                <div class="row"><span class="label">影响：</span>需分阶段建设，优先聚焦商家ROI和流量效果评估。</div>
               </div>
             </div>
             <div class="insight-card">
-              <div class="insight-title">模拟洞察：新平台与数据基础设施需统筹规划</div>
+              <div class="insight-title">新平台与数据基础设施需统筹规划</div>
               <div class="evidence-tags">
-                <span class="evidence-tag">模拟·新平台研发</span>
-                <span class="evidence-tag">模拟·数据分析</span>
-                <span class="evidence-tag">模拟·数据基础设施</span>
+                <span class="evidence-tag">新平台研发</span>
+                <span class="evidence-tag">数据分析</span>
               </div>
               <div class="insight-detail">
-                <span class="label">根因：</span>新平台的数据架构若独立规划，未来可能面临数据孤岛问题，与现有系统的数据整合成本将增加。<br>
-                <span class="label">影响：</span>新平台建设应从架构设计阶段就考虑数据规范、埋点标准、数据上报机制，确保新平台的数据能够自然融入统一的数据体系。
+                <div class="row"><span class="label">根因：</span>新平台数据架构若独立规划，未来可能形成新数据孤岛。</div>
+                <div class="row"><span class="label">影响：</span>应从设计阶段就考虑数据规范和数据上报机制。</div>
               </div>
             </div>
           </div>
@@ -473,15 +698,16 @@
         <div class="strategy-card selected">
           <div class="s-header">
             <div>
-              <span class="s-name">模拟方案A："先筑基、再建房"三阶段推进</span>
-              <span class="priority-badge" style="margin-left:4px;">P1</span>
+              <span class="s-name">方案A：先筑基、再建房</span>
+              <span class="priority-badge" style="margin-left:6px;">P1</span>
             </div>
-            <span style="font-size:10px;color:var(--text-muted);">关联 4 条洞察</span>
+            <span style="font-size:12px;color:var(--text-muted);">关联 4 条洞察</span>
           </div>
           <div class="s-body">
-            <div class="section"><span class="s-label">优势：</span>先夯实技术基础和团队能力，确保新平台和数据基建建立在稳固的根基上，降低后期治理成本。</div>
-            <div class="section"><span class="s-label">概要：</span>第一阶段（4个月）筑基：系统性优化技术架构（引入工程规范、完善CI/CD、核心模块重构），同步扩充团队（补充架构师、数据工程师）。第二阶段（6个月）新平台+数据基建并行：启动商家赋能平台研发，同步建设统一数据仓库和BI体系。第三阶段（持续）分析能力深化：基于新平台和数据底座，逐步实现商家分析、流量追踪、市场分析等能力。</div>
-            <div class="section"><span class="s-label">资源与价格：</span>总周期约10个月出第一阶段成果，整体约18个月。团队从现有规模扩展，新增架构师、数据工程师、前后端开发等角色。<br><span style="font-size:10px;color:var(--text-muted);">关键假设：管理层接受前期以技术基建为主，新产品和分析看板在第二阶段后陆续交付。</span></div>
+            <div class="section"><span class="s-label">优势：</span>先夯实技术基础，降低后期治理成本。</div>
+            <div class="section"><span class="s-label">概要：</span>第1阶段（4个月）架构优化+团队扩充 → 第2阶段（6个月）新平台+数仓并行 → 第3阶段分析能力深化。</div>
+            <div class="section"><span class="s-label">资源：</span>总周期约18个月。团队需从现有规模扩展，新增架构师、数据工程师等。</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">关键假设：管理层接受前期以技术基建为主。</div>
           </div>
           <div class="s-select">
             <label><input type="checkbox" checked /> 倾向本方案</label>
@@ -491,13 +717,17 @@
 
         <div class="strategy-card">
           <div class="s-header">
-            <div><span class="s-name">模拟方案B：新平台快速上马，技术优化并行推进</span><span class="priority-badge" style="margin-left:4px;">P2</span></div>
-            <span style="font-size:10px;color:var(--text-muted);">关联 3 条洞察</span>
+            <div>
+              <span class="s-name">方案B：新平台快上，并行优化</span>
+              <span class="priority-badge" style="margin-left:6px;">P2</span>
+            </div>
+            <span style="font-size:12px;color:var(--text-muted);">关联 3 条洞察</span>
           </div>
           <div class="s-body">
-            <div class="section"><span class="s-label">优势：</span>新平台MVP可在较短时间内上线，快速验证业务方向，抢占市场窗口期。</div>
-            <div class="section"><span class="s-label">概要：</span>第一阶段（6个月）新平台MVP研发：集中主力资源快速上线商家赋能平台MVP（核心功能：商家入驻、流量投放、基础数据看板）。原有系统维持基本维护。第二阶段（4个月）架构优化+数据基建：新平台上线后逐步推进架构优化和数据平台建设。第三阶段（持续）整合新平台分析能力与统一数据体系。</div>
-            <div class="section"><span class="s-label">资源与价格：</span>总周期约10个月出MVP，整体约18个月。团队扩充以支持新平台研发为主，数据工程师在第二阶段到位。<br><span style="font-size:10px;color:var(--text-muted);">关键假设：原有系统的架构问题不影响新平台核心功能开发，后续有时间窗口进行系统性优化。</span></div>
+            <div class="section"><span class="s-label">优势：</span>新平台快速上线验证方向，抢占窗口期。</div>
+            <div class="section"><span class="s-label">概要：</span>第1阶段（6个月）MVP研发 → 第2阶段（4个月）架构优化+数据基建 → 第3阶段整合。</div>
+            <div class="section"><span class="s-label">资源：</span>总周期约18个月。前期集中资源做新平台，数据工程师第2阶段到位。</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">关键假设：旧系统架构问题不影响新平台核心功能。</div>
           </div>
           <div class="s-select">
             <label><input type="checkbox" /> 倾向本方案</label>
@@ -519,14 +749,12 @@
 
         <div class="task-card">
           <div class="task-header">
-            <span class="task-name">架构优化与工程规范建设</span>
+            <span class="task-name">架构优化与工程规范</span>
             <span class="task-status doing">进行中</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案A·第一阶段</span></div>
-            <div class="row"><span class="label">负责人：</span>架构组</div>
-            <div class="row"><span class="label">计划：</span>6月1日 → 9月30日</div>
-            <div class="row"><span class="label">备注：</span>已完成CI/CD搭建，代码审查机制试行中，核心模块重构进行到60%</div>
+            <div class="row"><span class="label">方案A · 第一阶段</span></div>
+            <div class="row">架构组 · 6月→9月 · CI/CD已完成，核心重构60%</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:60%"></div></div>
         </div>
@@ -537,36 +765,32 @@
             <span class="task-status doing">进行中</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案A·第一阶段</span></div>
-            <div class="row"><span class="label">负责人：</span>HR + CTO</div>
-            <div class="row"><span class="label">计划：</span>6月1日 → 8月31日</div>
-            <div class="row"><span class="label">备注：</span>架构师已到岗，数据工程师招聘中，预计再招3名后端</div>
+            <div class="row"><span class="label">方案A · 第一阶段</span></div>
+            <div class="row">HR+CTO · 6月→8月 · 架构师已到岗，数据工程师招聘中</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:40%"></div></div>
         </div>
 
         <div class="task-card">
           <div class="task-header">
-            <span class="task-name">商家赋能平台MVP研发</span>
+            <span class="task-name">商家赋能平台MVP</span>
             <span class="task-status todo">待开始</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案A·第二阶段</span><span class="task-link">方案B·第一阶段</span></div>
-            <div class="row"><span class="label">负责人：</span>待定</div>
-            <div class="row"><span class="label">计划：</span>10月1日 → 次年3月31日</div>
+            <div class="row"><span class="label">方案A·第二阶段 / 方案B·第一阶段</span></div>
+            <div class="row">负责人待定 · 10月启动</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:0%"></div></div>
         </div>
 
         <div class="task-card">
           <div class="task-header">
-            <span class="task-name">数据仓库与BI体系建设</span>
+            <span class="task-name">数据仓库与BI体系</span>
             <span class="task-status todo">待开始</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案A·第二阶段</span></div>
-            <div class="row"><span class="label">负责人：</span>待定（需数据工程师到岗）</div>
-            <div class="row"><span class="label">计划：</span>10月1日 → 次年6月30日</div>
+            <div class="row"><span class="label">方案A · 第二阶段</span></div>
+            <div class="row">待数据工程师到岗 · 10月启动</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:0%"></div></div>
         </div>
@@ -577,22 +801,20 @@
             <span class="task-status doing">进行中</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案B·保障</span></div>
-            <div class="row"><span class="label">负责人：</span>现有团队</div>
-            <div class="row"><span class="label">备注：</span>高峰期保障、日常Bug修复、外包协调</div>
+            <div class="row"><span class="label">方案B · 保障</span></div>
+            <div class="row">现有团队 · 高峰期保障、Bug修复、外包协调</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:100%"></div></div>
         </div>
 
         <div class="task-card">
           <div class="task-header">
-            <span class="task-name">数据治理与数据规范制定</span>
+            <span class="task-name">数据治理与规范制定</span>
             <span class="task-status blocked">受阻</span>
           </div>
           <div class="task-body">
-            <div class="row"><span class="label">关联：</span><span class="task-link">方案A·筑基</span><span class="task-link">方案B·第二阶段</span></div>
-            <div class="row"><span class="label">负责人：</span>数据工程师（待招）</div>
-            <div class="row"><span class="label">受阻原因：</span>数据工程师未到岗，无法启动</div>
+            <div class="row"><span class="label">方案A · 筑基 / 方案B · 第二阶段</span></div>
+            <div class="row">受阻：数据工程师未到岗，无法启动</div>
           </div>
           <div class="task-progress"><div class="bar" style="width:5%"></div></div>
         </div>
@@ -610,19 +832,19 @@
     </div>
     <div class="trail-body">
       <div class="trail-node">
-        <div class="node-content"><strong>调研：</strong>模拟：战略转型 / 新平台研发 / 架构待优化 / 数据基础建设中</div>
+        <div class="node-content"><strong>调研：</strong>战略转型 / 新平台 / 数据需求 / 技术差距</div>
       </div>
       <div class="trail-connector">→</div>
       <div class="trail-node">
-        <div class="node-content"><strong>洞察：</strong>模拟：战略与技术差距 / 架构优化前置 / 数据基础分阶段建设 / 新平台与数据统筹规划</div>
+        <div class="node-content"><strong>分析：</strong>战略与技术断层 / 债务需先清 / 数据需分阶段</div>
       </div>
       <div class="trail-connector">→</div>
       <div class="trail-node">
-        <div class="node-content"><strong>决策：</strong>模拟方案A 先筑基再建房 / 模拟方案B 新平台快上并行优化</div>
+        <div class="node-content"><strong>决策：</strong>方案A 先筑基 / 方案B 快上并行</div>
       </div>
       <div class="trail-connector">→</div>
       <div class="trail-node">
-        <div class="node-content"><strong>执行：</strong>架构优化(60%) / 团队扩充(40%) / MVP待开始 / 数据治理受阻</div>
+        <div class="node-content"><strong>执行：</strong>架构优化60% / 团队扩充40% / MVP待开始</div>
       </div>
     </div>
   </div>
@@ -639,7 +861,6 @@
         icon.textContent = '▸';
       }
     }
-
     document.querySelectorAll('.filter-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         if (this.classList.contains('btn-new')) return;
@@ -647,7 +868,6 @@
         this.classList.add('active');
       });
     });
-
     document.querySelectorAll('.strategy-card input[type="checkbox"]').forEach(function(cb) {
       cb.addEventListener('change', function() {
         this.closest('.strategy-card').classList.toggle('selected', this.checked);

@@ -39,12 +39,12 @@ class _ColumnLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
-              children: tasks.map((t) => _TaskCardWidget(task: t)).toList(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
+                children: tasks.map((t) => _TaskCardWidget(task: t)).toList(),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -52,26 +52,26 @@ class _ColumnLayout extends StatelessWidget {
 
   Widget _header() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
       ),
       child: const Row(
         children: [
-          Icon(Icons.play_arrow_outlined, size: 14, color: Color(0xFF444444)),
-          SizedBox(width: 6),
+          Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
+          SizedBox(width: 8),
           Text(
             '执行 · Act',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF222222),
+              color: Color(0xFF1A1A1A),
             ),
           ),
           Spacer(),
           Text(
             '6 项任务',
-            style: TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+            style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
         ],
       ),
@@ -103,39 +103,39 @@ class _TaskCardWidget extends StatelessWidget {
 
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         border: Border.all(
           color: borderColor,
           width: task.status == TaskStatus.doing ? 1.5 : 1,
         ),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(8),
         color: bgColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Text(
                   task.name,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 11,
+                    fontSize: 14,
                     color: task.status == TaskStatus.done
                         ? const Color(0xFF888888)
-                        : const Color(0xFF222222),
+                        : const Color(0xFF1A1A1A),
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
                   color: _statusBgColor(task.status),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(10),
                   border: task.status == TaskStatus.blocked
                       ? Border.all(
                           color: const Color(0xFFCCCCCC),
@@ -146,7 +146,7 @@ class _TaskCardWidget extends StatelessWidget {
                 child: Text(
                   taskStatusLabel(task.status),
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 11,
                     fontWeight: FontWeight.w500,
                     color: taskStatusColor(task.status),
                   ),
@@ -154,7 +154,7 @@ class _TaskCardWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           if (task.linkedStrategy.isNotEmpty)
             _metaRow('关联', task.linkedStrategy),
           if (task.assignee.isNotEmpty) _metaRow('负责人', task.assignee),
@@ -163,15 +163,15 @@ class _TaskCardWidget extends StatelessWidget {
           if (task.notes.isNotEmpty) _metaRow('备注', task.notes),
           if (task.status == TaskStatus.blocked && task.blockedReason.isNotEmpty)
             _metaRow('受阻原因', task.blockedReason),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(2),
             child: LinearProgressIndicator(
               value: task.progress,
-              minHeight: 3,
-              backgroundColor: const Color(0xFFEEEEEE),
+              minHeight: 4,
+              backgroundColor: const Color(0xFFE6E6E6),
               valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFF444444),
+                Color(0xFF333333),
               ),
             ),
           ),
@@ -182,22 +182,22 @@ class _TaskCardWidget extends StatelessWidget {
 
   Widget _metaRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.only(bottom: 3),
       child: Text.rich(
         TextSpan(
           children: [
             TextSpan(
               text: '$label：',
               style: const TextStyle(
-                fontSize: 9,
-                color: Color(0xFFAAAAAA),
+                fontSize: 12,
+                color: Color(0xFF999999),
               ),
             ),
             TextSpan(
               text: value,
               style: const TextStyle(
-                fontSize: 9,
-                color: Color(0xFF888888),
+                fontSize: 12,
+                color: Color(0xFF666666),
               ),
             ),
           ],

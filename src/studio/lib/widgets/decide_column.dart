@@ -39,10 +39,10 @@ class _ColumnLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              children: strategies
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+                children: strategies
                   .map((s) => _StrategyCardWidget(strategy: s))
                   .toList(),
             ),
@@ -54,26 +54,26 @@ class _ColumnLayout extends StatelessWidget {
 
   Widget _header() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
       ),
       child: const Row(
         children: [
-          Icon(Icons.account_tree_outlined, size: 14, color: Color(0xFF444444)),
-          SizedBox(width: 6),
+          Icon(Icons.account_tree_outlined, size: 16, color: Color(0xFF333333)),
+          SizedBox(width: 8),
           Text(
             '决策 · Decide',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF222222),
+              color: Color(0xFF1A1A1A),
             ),
           ),
           Spacer(),
           Text(
             '2 套方案',
-            style: TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
+            style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
         ],
       ),
@@ -90,16 +90,16 @@ class _StrategyCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.read<OodaState>();
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
           color: strategy.isSelected
-              ? const Color(0xFF222222)
-              : const Color(0xFFE0E0E0),
+              ? const Color(0xFF1A1A1A)
+              : const Color(0xFFE6E6E6),
           width: strategy.isSelected ? 1.5 : 1,
         ),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(8),
         color: strategy.isSelected
             ? const Color(0xFFFAFAFA)
             : Colors.white,
@@ -118,27 +118,27 @@ class _StrategyCardWidget extends StatelessWidget {
                         strategy.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          color: Color(0xFF222222),
+                          fontSize: 15,
+                          color: Color(0xFF1A1A1A),
                         ),
                       ),
                     ),
                     if (strategy.priority.isNotEmpty) ...[
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 1,
+                          horizontal: 10,
+                          vertical: 2,
                         ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           strategy.priority,
                           style: const TextStyle(
-                            fontSize: 9,
-                            color: Color(0xFF888888),
+                            fontSize: 11,
+                            color: Color(0xFF666666),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -150,32 +150,32 @@ class _StrategyCardWidget extends StatelessWidget {
               Text(
                 '关联 ${strategy.linkedInsightCount} 条洞察',
                 style: const TextStyle(
-                  fontSize: 10,
-                  color: Color(0xFFAAAAAA),
+                  fontSize: 12,
+                  color: Color(0xFF999999),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           _row('优势', strategy.advantage),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           _row('概要', strategy.summary),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           _row('资源与价格', strategy.resources),
           if (strategy.keyAssumption.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
               '关键假设：${strategy.keyAssumption}',
               style: const TextStyle(
-                fontSize: 10,
-                color: Color(0xFFAAAAAA),
+                fontSize: 12,
+                color: Color(0xFF999999),
                 fontStyle: FontStyle.italic,
               ),
             ),
           ],
-          const SizedBox(height: 8),
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
+          const Divider(height: 1, color: Color(0xFFE6E6E6)),
+          const SizedBox(height: 12),
           Row(
             children: [
               GestureDetector(
@@ -184,53 +184,54 @@ class _StrategyCardWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      width: 16,
-                      height: 16,
+                      width: 20,
+                      height: 20,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: strategy.isSelected
-                              ? const Color(0xFF444444)
+                              ? const Color(0xFF333333)
                               : const Color(0xFFCCCCCC),
+                          width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: BorderRadius.circular(4),
                         color: strategy.isSelected
-                            ? const Color(0xFF444444)
+                            ? const Color(0xFF333333)
                             : Colors.transparent,
                       ),
                       child: strategy.isSelected
-                          ? const Icon(Icons.check, size: 11, color: Colors.white)
+                          ? const Icon(Icons.check, size: 14, color: Colors.white)
                           : null,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 6),
                     const Text(
                       '倾向本方案',
                       style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFF444444),
+                        fontSize: 13,
+                        color: Color(0xFF1A1A1A),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               Expanded(
                 child: SizedBox(
-                  height: 28,
+                  height: 32,
                   child: TextField(
                     controller: TextEditingController(text: strategy.clientNote),
-                    style: const TextStyle(fontSize: 10, color: Color(0xFF666666)),
+                    style: const TextStyle(fontSize: 12, color: Color(0xFF666666)),
                     decoration: InputDecoration(
                       hintText: '填写顾虑或条件……',
                       hintStyle: const TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Color(0xFFCCCCCC),
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFE6E6E6)),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                        horizontal: 10,
                         vertical: 6,
                       ),
                       isDense: true,
@@ -253,17 +254,17 @@ class _StrategyCardWidget extends StatelessWidget {
           TextSpan(
             text: '$label：',
             style: const TextStyle(
-              fontSize: 10,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF222222),
+              color: Color(0xFF1A1A1A),
             ),
           ),
           TextSpan(
             text: text,
             style: const TextStyle(
-              fontSize: 10,
-              color: Color(0xFF777777),
-              height: 1.4,
+              fontSize: 13,
+              color: Color(0xFF666666),
+              height: 1.6,
             ),
           ),
         ],
