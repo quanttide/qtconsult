@@ -8,8 +8,6 @@ on:
 
 env:
   FLUTTER_VERSION: "3.41.9"
-  ALIYUN_BUCKET: qtconsult-studio
-  ALIYUN_ENDPOINT: oss-cn-hangzhou.aliyuncs.com
 
 jobs:
   build:
@@ -47,6 +45,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -62,18 +62,4 @@ jobs:
       - name: Upload to OSS
         run: |
           pip install oss2
-          python3 -c '
-import oss2
-import os
-
-auth = oss2.Auth(os.environ["ALIYUN_ACCESS_KEY_ID"], os.environ["ALIYUN_ACCESS_KEY_SECRET"])
-bucket = oss2.Bucket(auth, "oss-cn-hangzhou.aliyuncs.com", "qtconsult-studio")
-
-for root, dirs, files in os.walk("build/web"):
-    for file in files:
-        local_path = os.path.join(root, file)
-        oss_path = os.path.join(root, file).replace("build/web/", "")
-        bucket.put_object_from_file(oss_path, local_path)
-        print(f"Uploaded: {oss_path}")
-print("Done!")
-'
+          python scripts/upload_oss.py
