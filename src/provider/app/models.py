@@ -19,13 +19,8 @@ class Card(BaseModel):
     upstream: list[str] = Field(default_factory=list)
 
 
-class CardInList(BaseModel):
-    name: str
-    cards: list[Card]
-
-
 class ProjectLists(BaseModel):
-    observe: list[CardInList]
+    observe: list[Card]
     orient: list[Card]
     decide: list[Card]
     act: list[Card]
@@ -33,4 +28,5 @@ class ProjectLists(BaseModel):
 
 class Project(BaseModel):
     name: str
+    title: str
     lists: ProjectLists

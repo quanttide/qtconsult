@@ -1,104 +1,95 @@
 {
-  "name": "商家赋能平台数字化转型",
+  "name": "project1",
+  "title": "商家赋能平台数字化转型",
   "lists": {
     "observe": [
       {
-        "name": "业务理想",
-        "cards": [
-          {
-            "id": "o1",
-            "title": "战略转型 · 商家赋能",
-            "description": "从\"做大平台订单\"转向\"帮商家拉流量、提营收\"，需要新平台和数据分析能力支撑。",
-            "category": "ideal",
-            "date": "2026-05-15",
-            "assignee": null,
-            "upstream": [],
-            "source": "访谈",
-            "status": "pending"
-          },
-          {
-            "id": "o2",
-            "title": "新平台研发 · 商家赋能平台",
-            "description": "从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。",
-            "category": "ideal",
-            "date": "2026-05-15",
-            "assignee": null,
-            "upstream": [],
-            "source": "访谈",
-            "status": "pending"
-          },
-          {
-            "id": "o3",
-            "title": "数据分析 · 复杂多维",
-            "description": "需要商家分析、市场调控、平台运营三大维度的交叉分析能力。",
-            "category": "ideal",
-            "date": "2026-05-15",
-            "assignee": null,
-            "upstream": [],
-            "source": "访谈",
-            "status": "pending"
-          },
-          {
-            "id": "o4",
-            "title": "技术升级 · 平台能力建设",
-            "description": "当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。",
-            "category": "ideal",
-            "date": "2026-05-14",
-            "assignee": null,
-            "upstream": [],
-            "source": "评估",
-            "status": "pending"
-          }
-        ]
+        "id": "o1",
+        "title": "战略转型 · 商家赋能",
+        "description": "从\"做大平台订单\"转向\"帮商家拉流量、提营收\"，需要新平台和数据分析能力支撑。",
+        "category": "ideal",
+        "date": "2026-05-15",
+        "assignee": null,
+        "upstream": [],
+        "source": "访谈",
+        "status": "pending"
       },
       {
-        "name": "技术现实",
-        "cards": [
-          {
-            "id": "o5",
-            "title": "技术债务",
-            "description": "代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。",
-            "category": "reality",
-            "date": "2026-05-10",
-            "assignee": null,
-            "upstream": [],
-            "source": "代码审计",
-            "status": "confirmed"
-          },
-          {
-            "id": "o6",
-            "title": "技术团队能力",
-            "description": "团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。",
-            "category": "reality",
-            "date": "2026-05-14",
-            "assignee": null,
-            "upstream": [],
-            "source": "评估",
-            "status": "confirmed"
-          },
-          {
-            "id": "o7",
-            "title": "数据分析能力",
-            "description": "无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。",
-            "category": "reality",
-            "date": "2026-05-12",
-            "assignee": null,
-            "upstream": [],
-            "source": "调研",
-            "status": "confirmed"
-          },
-          {
-            "id": "o8",
-            "title": "数据基础设施",
-            "description": "无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。",
-            "category": "reality",
-            "date": "2026-05-13",
-            "assignee": null,
-            "upstream": [],
-            "source": "评估",
-            "status": "confirmed"
-          }
-        ]
+        "id": "o2",
+        "title": "新平台研发 · 商家赋能平台",
+        "description": "从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。",
+        "category": "ideal",
+        "date": "2026-05-15",
+        "assignee": null,
+        "upstream": [],
+        "source": "访谈",
+        "status": "pending"
+      },
+      {
+        "id": "o3",
+        "title": "数据分析 · 复杂多维",
+        "description": "需要商家分析、市场调控、平台运营三大维度的交叉分析能力。",
+        "category": "ideal",
+        "date": "2026-05-15",
+        "assignee": null,
+        "upstream": [],
+        "source": "访谈",
+        "status": "pending"
+      },
+      {
+        "id": "o4",
+        "title": "技术升级 · 平台能力建设",
+        "description": "当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。",
+        "category": "ideal",
+        "date": "2026-05-14",
+        "assignee": null,
+        "upstream": [],
+        "source": "评估",
+        "status": "pending"
+      },
+      {
+        "id": "o5",
+        "title": "技术债务",
+        "description": "代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。",
+        "category": "reality",
+        "date": "2026-05-10",
+        "assignee": null,
+        "upstream": [],
+        "source": "代码审计",
+        "status": "confirmed"
+      },
+      {
+        "id": "o6",
+        "title": "技术团队能力",
+        "description": "团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。",
+        "category": "reality",
+        "date": "2026-05-14",
+        "assignee": null,
+        "upstream": [],
+        "source": "评估",
+        "status": "confirmed"
+      },
+      {
+        "id": "o7",
+        "title": "数据分析能力",
+        "description": "无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。",
+        "category": "reality",
+        "date": "2026-05-12",
+        "assignee": null,
+        "upstream": [],
+        "source": "调研",
+        "status": "confirmed"
+      },
+      {
+        "id": "o8",
+        "title": "数据基础设施",
+        "description": "无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。",
+        "category": "reality",
+        "date": "2026-05-13",
+        "assignee": null,
+        "upstream": [],
+        "source": "评估",
+        "status": "confirmed"
       }
     ],
     "orient": [

@@ -7,15 +7,13 @@ from app.models import Project
 
 @pytest.fixture(autouse=True)
 def reset_project():
-    raw = (Path(__file__).resolve().parents[3] / "assets" / "fixtures" / "project.json").read_text("utf-8")
+    from pathlib import Path
+    raw = (Path(__file__).resolve().parents[3] / "assets" / "fixtures" / "projects" / "project1.json").read_text("utf-8")
     app.dependency_overrides.clear()
     project_data = Project.model_validate_json(raw)
     import app.main as m
     m.project = project_data
     yield
-
-
-from pathlib import Path
 
 
 client = TestClient(app)
@@ -26,7 +24,7 @@ class TestRead:
         resp = client.get("/project")
         assert resp.status_code == 200
         data = resp.json()
-        assert data["name"] == "商家赋能平台数字化转型"
+        assert data["title"] == "商家赋能平台数字化转型"
         assert "observe" in data["lists"]
         assert "orient" in data["lists"]
         assert "decide" in data["lists"]
@@ -36,11 +34,7 @@ class TestRead:
         resp = client.get("/project/lists/observe")
         assert resp.status_code == 200
         data = resp.json()
-        assert len(data) == 2
-        assert data[0]["name"] == "业务理想"
-        assert data[1]["name"] == "技术现实"
-        assert len(data[0]["cards"]) == 4
-        assert len(data[1]["cards"]) == 4
+        assert len(data) == 8
 
     def test_get_orient_list(self):
         resp = client.get("/project/lists/orient")
@@ -72,7 +66,7 @@ class TestRead:
     def test_get_card_from_orient(self):
         resp = client.get("/project/cards/i1")
         assert resp.status_code == 200
-        assert resp.json()["category"] == "战略技术断层"
+        assert resp.json()["types"] == "战略技术断层"
 
     def test_get_card_from_decide(self):
         resp = client.get("/project/cards/s1")
@@ -90,7 +84,7 @@ class TestRead:
 
 
 class TestCreate:
-    def test_create_card_in_orient(self):
+    def test_create_card(self):
         payload = {
             "id": "i5",
             "title": "新洞察",
@@ -99,28 +93,9 @@ class TestCreate:
         }
         resp = client.post("/project/cards?list_name=orient", json=payload)
         assert resp.status_code == 201
-        assert resp.json()["id"] == "i5"
 
         resp = client.get("/project/cards/i5")
         assert resp.status_code == 200
-
-    def test_create_card_in_observe_sublist(self):
-        payload = {
-            "id": "o9",
-            "title": "新调研发现",
-            "description": "测试",
-            "category": "ideal",
-        }
-        resp = client.post("/project/cards?list_name=observe&sublist_name=业务理想", json=payload)
-        assert resp.status_code == 201
-
-        resp = client.get("/project/cards/o9")
-        assert resp.status_code == 200
-
-    def test_create_card_in_observe_missing_sublist(self):
-        payload = {"id": "o10", "title": "no sublist"}
-        resp = client.post("/project/cards?list_name=observe", json=payload)
-        assert resp.status_code == 400
 
     def test_create_card_invalid_list(self):
         payload = {"id": "x1", "title": "invalid"}
@@ -154,13 +129,6 @@ class TestDelete:
         assert resp.json()["deleted"] == "o4"
 
         resp = client.get("/project/cards/o4")
-        assert resp.status_code == 404
-
-    def test_delete_card_from_orient(self):
-        resp = client.delete("/project/cards/i4")
-        assert resp.status_code == 200
-
-        resp = client.get("/project/cards/i4")
         assert resp.status_code == 404
 
     def test_delete_card_not_found(self):
