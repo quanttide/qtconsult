@@ -1,63 +1,103 @@
 # 项目计划
 
-## 阶段一：统一数据模型
+## 迭代一：客户端缓存 + 数据结构对齐
 
-Flutter 端将 `ObserveCard`、`InsightCard`、`StrategyCard`、`TaskCard` 合并为统一的 `Card`，与 provider 对齐。
+**目标**：Flutter 端读取本地缓存数据，废除 `ooda_data.json`，对齐 fixtures 数据结构。
 
-| Flutter 旧字段 | 新 Card 字段 | 说明 |
-|---------------|-------------|------|
-| `ObserveCard.title` | `title` | 统一 |
-| `subtitle` + `body` | `description` | 合并 |
-| `isIdeal` | `category` | `"ideal"` / `"reality"` |
-| `cluster` | `types` | 字符串数组 |
-| `evidences[{observeCardId}]` | `upstream` | 统一为 Card[] ID |
-| `linkedStrategy` | `upstream` | 同上 |
-| `source` / `date` / `assignee` / `status` / `progress` / `blockedReason` 等 | 自定义字段 | 按需保留 |
+| 任务 | 说明 |
+|------|------|
+| 1.1 | 删除 `ooda_data.json` 和 `OodaLoader` 旧逻辑 |
+| 1.2 | Flutter 模型类改为匹配 fixtures 结构（统一 Card、ProjectLists、OODA 列表键名） |
+| 1.3 | 新建 `cache_service.dart`：从 `src/studio/data/project.json` 读写 |
+| 1.4 | 改造 `OodaState`：启动时读缓存渲染，无缓存时提示同步 |
+| 1.5 | Fixtures 同步脚本：`assets/fixtures/projects/` → `src/studio/data/` |
 
-## 阶段二：Flutter 接入 provider
+**验证**：Flutter 独立启动，读取本地缓存正常渲染看板。
 
-- 添加 `http` 包依赖
-- 新建 `api_service.dart`：封装所有对 provider 的 HTTP 调用
-- 替换 `OodaLoader.load()` 为 GET `/project`
-- 写操作（增改删）调用 POST/PUT/DELETE `/project/cards`
+---
 
-### 环境切换
+## 迭代二：服务端 storage 集成
 
+**目标**：Provider 写操作持久化到文件，重启不丢失。
+
+| 任务 | 说明 |
+|------|------|
+| 2.1 | main.py 集成 `app.storage`：启动时 `storage.load()`，写操作后 `storage.save()` |
+| 2.2 | seed 脚本：首次运行时 `cp assets/fixtures/projects/ → data/` |
+| 2.3 | Fixtures 同步脚本补充：`assets/fixtures/projects/` → `src/provider/data/` |
+
+**验证**：Flutter 增删改后重启 provider，数据保留。
+
+---
+
+## 迭代三：HTTP API 接入
+
+**目标**：Flutter 接入 provider API，增删改操作走服务端。
+
+| 任务 | 说明 |
+|------|------|
+| 3.1 | 添加 `http` 包依赖 |
+| 3.2 | 新建 `api_service.dart`：`fetchProject()`、`createCard()`、`updateCard()`、`deleteCard()` |
+| 3.3 | 改造 `OodaState`：读缓存优先，提供"从服务端刷新"按钮调 API 更新缓存 |
+| 3.4 | 写操作先调 API，成功后同步更新缓存 |
+| 3.5 | `--dart-define API_BASE_URL=` 编译时注入后端地址 |
+
+**验证**：启动 provider → Flutter 从 API 加载 → 增删改操作同步到缓存。
+
+---
+
+## 迭代四：端到端测试
+
+| 任务 | 说明 |
+|------|------|
+| 4.1 | Provider 侧：TestClient 覆盖 CRUD + 边界（已实现） |
+| 4.2 | Flutter 侧：MockClient 拦截请求，验证 UI 渲染 |
+| 4.3 | 全链路：本地部署 provider + Flutter 直连，手动验证 7 个 E2E 场景 |
+
+---
+
+## 迭代五：生产部署
+
+| 任务 | 说明 |
+|------|------|
+| 5.1 | Provider 部署 + S3 存储接入 |
+| 5.2 | CI/CD 中配置 `API_BASE_URL` 指向生产地址 |
+| 5.3 | 移除 fixtures 临时数据源，切换为正式数据 |
+
+---
+
+## 数据结构契约
+
+Fixtures JSON 结构是服务端和客户端的共享契约：
+
+```json
+{
+  "name": "project1",
+  "title": "商家赋能平台数字化转型",
+  "lists": {
+    "observe": [{ "id": "o1", "title": "战略转型 · 商家赋能", "category": "ideal", ... }],
+    "orient": [{ "id": "i1", "title": "...", "types": "战略技术断层", "upstream": ["o1", ...], ... }],
+    "decide": [{ "id": "s1", "title": "方案A：...", "upstream": ["i1", ...], ... }],
+    "act":    [{ "id": "t1", "title": "架构优化...", "upstream": ["s1"], ... }]
+  }
+}
 ```
-开发：provider → localhost:8000 → data/（本地文件）
-生产：provider → api.example.com → S3
+
+## 开发同步脚本
+
+每次 fixtures 变更后：
+
+```bash
+# 复制到客户端缓存（迭代一）
+cp assets/fixtures/projects/project1.json src/studio/data/project.json
+
+# 复制到服务端数据目录（迭代二）
+cp assets/fixtures/projects/project1.json src/provider/data/project.json
 ```
 
-Flutter 端通过 `--dart-define API_BASE_URL=` 编译时注入地址。
+## 版本发布
 
-## 阶段四：端到端测试
-
-### 测试范围
-
-覆盖完整链路：Flutter 操作 → HTTP 请求 → Provider API → 存储层 → 数据验证。
-
-### 测试场景
-
-| 编号 | 场景 | 步骤 | 断言 |
-|------|------|------|------|
-| E2E-1 | 加载项目 | Flutter 启动 → GET /project | 渲染 4 列看板，Observe 8 张卡片，Orient 4 张，Decide 2 张，Act 6 张 |
-| E2E-2 | 创建卡片 | Flutter 新建调研卡 → POST /project/cards | Observe 列新增一张卡片 |
-| E2E-3 | 更新卡片 | Flutter 编辑洞察卡片标题 → PUT /project/cards/{id} | 卡片标题更新 |
-| E2E-4 | 删除卡片 | Flutter 删除策略卡片 → DELETE /project/cards/{id} | 卡片从看板消失，再次 GET 返回 404 |
-| E2E-5 | 拒未授权写操作 | 不带 Token → PUT /project/cards/{id} | 返回 401 |
-| E2E-6 | 添加标签 | Flutter 给卡片加标签 → PUT /project/cards/{id} | tags 字段更新 |
-| E2E-7 | 跨列表引用 | Orient 卡片 upstream 引用 Observe 卡片 | GET /project/cards/{id} 返回正确的 upstream ID |
-
-### 测试方式
-
-- Provider 侧：现有的 `tests/test_api.py` 用 TestClient 模拟 HTTP 请求
-- Flutter 侧：使用 `flutter test` + `MockClient`（http 包提供的 mock）拦截请求，验证 UI 渲染
-- 全链路：部署 provider 到本地，Flutter 直连运行，手动验证
-
-### 关键验证点
-
-- `GET /project` 返回的 `lists` 结构是否正确
-- `POST` 新增后 `GET` 能查到
-- `PUT` 部分更新不会覆盖未传字段
-- `DELETE` 重复删除返回 404
-- 数据持久化：重启后数据不丢失（storage 集成后）
+| 子模块 | v0.0.1 | v0.0.2 发布时机 |
+|--------|--------|----------------|
+| **studio** | 已发布 | 客户端改造完成（迭代一 + 迭代三） |
+| **provider** | 已发布 | Storage 集成完成（迭代二） |
