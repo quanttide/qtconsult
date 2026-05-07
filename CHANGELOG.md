@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.3] - 2026-05-07
+
+### 新增
+- Studio 本地缓存（CacheService）：废除静态 JSON 加载，支持离线调试
+- Provider 数据持久化（app.storage）：写操作自动保存，重启不丢失
+- 端到端测试：根目录 `tests/test_e2e.py` + `pyproject.toml` uv 配置
+- OSS 存储设计方案文档
+
+### 变更
+- Flutter 模型统一为 BoardCard，对齐 fixtures 结构
+- Provider Pydantic 模型加 extra='allow' 支持自定义字段，新增 CardPatch 部分更新
+- PMD 项目计划重构为迭代
+
+### 发布
+- provider/v0.0.2：Storage 集成完成
+- studio/v0.0.2：客户端改造完成
+
 ## [0.0.2] - 2026-05-07
 
 ### 新增
