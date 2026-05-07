@@ -12,7 +12,7 @@ class Card(BaseModel):
     title: str
     description: str = ""
     category: str | None = None
-    types: list[str] = Field(default_factory=list)
+    types: str | None = None
     tags: list[str] = Field(default_factory=list)
     date: date | CardDate | None = None
     assignee: str | None = None
