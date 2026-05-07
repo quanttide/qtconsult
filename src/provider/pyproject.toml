@@ -1,6 +1,6 @@
 [project]
 name = "qtconsult-provider"
-version = "0.1.0"
+version = "0.0.1"
 description = "QtConsult backend data provider"
 requires-python = ">=3.12"
 dependencies = [

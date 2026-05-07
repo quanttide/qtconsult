@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.auth import verify_token
 from app.models import Card, CardInList, Project
 
-app = FastAPI(title="QtConsult Provider", version="0.1.0")
+app = FastAPI(title="QtConsult Provider", version="0.0.1")
 
 app.add_middleware(
     CORSMiddleware,
