@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_studio/models/ooda_data.dart';
 import 'package:qtconsult_studio/screens/ooda_screen.dart';
@@ -8,13 +7,14 @@ import 'package:qtconsult_studio/services/cache_service.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 
 String get cachePath {
-  final env = Platform.environment['QTCONSULT_STUDIO_CACHE_PATH'];
+  final env = dotenv.env['QTCONSULT_STUDIO_CACHE_PATH'];
   if (env != null && env.isNotEmpty) return env;
   return 'data/projects/project1.json';
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   runApp(const QtConsultStudio());
 }
 
