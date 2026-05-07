@@ -8,7 +8,7 @@
 |------|------|
 | 1.1 | 删除 `ooda_data.json` 和 `OodaLoader` 旧逻辑 |
 | 1.2 | Flutter 模型类改为匹配 fixtures 结构（统一 Card、ProjectLists、OODA 列表键名） |
-| 1.3 | 新建 `cache_service.dart`：从 `src/studio/data/project.json` 读写 |
+| 1.3 | 新建 `cache_service.dart`：从 `src/studio/data/` 读写 |
 | 1.4 | 改造 `OodaState`：启动时读缓存渲染，无缓存时提示同步 |
 | 1.5 | Fixtures 同步脚本：`assets/fixtures/projects/` → `src/studio/data/` |
 

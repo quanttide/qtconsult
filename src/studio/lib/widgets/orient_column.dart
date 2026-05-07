@@ -10,7 +10,7 @@ class OrientColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        final clusters = state.data.clusters;
+        final clusters = state.project.lists.clusters;
         return _ColumnLayout(clusters: clusters);
       },
     );
@@ -18,7 +18,7 @@ class OrientColumn extends StatelessWidget {
 }
 
 class _ColumnLayout extends StatefulWidget {
-  final List<InsightCluster> clusters;
+  final List<_CardCluster> clusters;
 
   const _ColumnLayout({required this.clusters});
 
@@ -52,10 +52,10 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-                children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+              children: [
                 _buildFilters(),
                 const SizedBox(height: 6),
                 ...filtered.map((c) => _buildCluster(c)),
@@ -68,6 +68,7 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
   }
 
   Widget _header() {
+    final total = widget.clusters.fold(0, (sum, c) => sum + c.cards.length);
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
       decoration: const BoxDecoration(
@@ -79,15 +80,11 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
           const SizedBox(width: 8),
           const Text(
             '分析 · Orient',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1A1A1A),
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A)),
           ),
           const Spacer(),
           Text(
-            '${widget.clusters.fold(0, (sum, c) => sum + c.insights.length)} 条洞察',
+            '$total 条洞察',
             style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
           ),
         ],
@@ -109,13 +106,10 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
-                  color:
-                      isActive ? const Color(0xFF444444) : const Color(0xFFF5F5F5),
+                  color: isActive ? const Color(0xFF444444) : const Color(0xFFF5F5F5),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isActive
-                        ? const Color(0xFF444444)
-                        : const Color(0xFFE0E0E0),
+                    color: isActive ? const Color(0xFF444444) : const Color(0xFFE0E0E0),
                   ),
                 ),
                 child: Text(
@@ -134,7 +128,7 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
     );
   }
 
-  Widget _buildCluster(InsightCluster cluster) {
+  Widget _buildCluster(_CardCluster cluster) {
     final isCollapsed = _collapsed.contains(cluster.name);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,11 +136,8 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
         GestureDetector(
           onTap: () {
             setState(() {
-              if (isCollapsed) {
-                _collapsed.remove(cluster.name);
-              } else {
-                _collapsed.add(cluster.name);
-              }
+              if (isCollapsed) _collapsed.remove(cluster.name);
+              else _collapsed.add(cluster.name);
             });
           },
           child: Container(
@@ -157,30 +148,19 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
             ),
             child: Row(
               children: [
-                Text(
-                  isCollapsed ? '▸' : '▾',
-                  style: const TextStyle(fontSize: 10, color: Color(0xFF999999)),
-                ),
+                Text(isCollapsed ? '▸' : '▾',
+                    style: const TextStyle(fontSize: 10, color: Color(0xFF999999))),
                 const SizedBox(width: 6),
-                Text(
-                  cluster.name,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF666666),
-                  ),
-                ),
+                Text(cluster.name, style: const TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
                 const SizedBox(width: 6),
-                Text(
-                  '${cluster.insights.length}',
-                  style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
-                ),
+                Text('${cluster.cards.length}',
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
               ],
             ),
           ),
         ),
-        if (!isCollapsed)
-          ...cluster.insights.map((insight) => _InsightCardWidget(insight: insight)),
+        if (!isCollapsed) ...cluster.cards.map((c) => _InsightCardWidget(card: c)),
         const SizedBox(height: 6),
       ],
     );
@@ -188,9 +168,9 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
 }
 
 class _InsightCardWidget extends StatelessWidget {
-  final InsightCard insight;
+  final Card card;
 
-  const _InsightCardWidget({required this.insight});
+  const _InsightCardWidget({required this.card});
 
   @override
   Widget build(BuildContext context) {
@@ -204,53 +184,36 @@ class _InsightCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            insight.title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 4,
-            runSpacing: 3,
-            children: insight.evidences.map((e) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  e.label,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF666666),
+          Text(card.title, style: const TextStyle(
+              fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
+          if (card.upstream.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 4,
+              runSpacing: 3,
+              children: card.upstream.map((id) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F5F5),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '根因：${insight.rootCause}',
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF666666),
-              height: 1.6,
+                  child: Text(id,
+                      style: const TextStyle(fontSize: 11, color: Color(0xFF666666))),
+                );
+              }).toList(),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '影响：${insight.impact}',
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF666666),
-              height: 1.6,
-            ),
-          ),
+          ],
+          if (card.custom['rootCause'] != null) ...[
+            const SizedBox(height: 8),
+            Text('根因：${card.custom['rootCause']}',
+                style: const TextStyle(fontSize: 13, color: Color(0xFF666666), height: 1.6)),
+          ],
+          if (card.custom['impact'] != null) ...[
+            const SizedBox(height: 4),
+            Text('影响：${card.custom['impact']}',
+                style: const TextStyle(fontSize: 13, color: Color(0xFF666666), height: 1.6)),
+          ],
         ],
       ),
     );

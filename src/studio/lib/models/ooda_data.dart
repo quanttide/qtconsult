@@ -1,298 +1,177 @@
 import 'package:flutter/material.dart';
 
-// ===== Enums =====
+// ===== 统一卡片模型 =====
 
-enum CardStatus { pending, confirmed }
-
-enum TaskStatus { todo, doing, done, blocked }
-
-enum Stance { support, neutral, oppose }
-
-// ===== 调研层 =====
-
-class ObserveCard {
+class Card {
   final String id;
   final String title;
-  final String subtitle;
-  final String body;
-  final String source;
-  final String date;
-  final CardStatus status;
-  final bool isIdeal; // true=业务理想, false=现实状况
+  final String description;
+  final String? category;
+  final String? types;
+  final List<String> tags;
+  final dynamic date;
+  final String? assignee;
+  final List<String> upstream;
+  final Map<String, dynamic> custom;
 
-  const ObserveCard({
+  const Card({
     required this.id,
     required this.title,
-    this.subtitle = '',
-    required this.body,
-    required this.source,
-    required this.date,
-    this.status = CardStatus.pending,
-    required this.isIdeal,
+    this.description = '',
+    this.category,
+    this.types,
+    this.tags = const [],
+    this.date,
+    this.assignee,
+    this.upstream = const [],
+    this.custom = const {},
   });
 
-  factory ObserveCard.fromJson(Map<String, dynamic> json) {
-    return ObserveCard(
+  factory Card.fromJson(Map<String, dynamic> json) {
+    final builtIn = {
+      'id', 'title', 'description', 'category', 'types',
+      'tags', 'date', 'assignee', 'upstream',
+    };
+    final custom = <String, dynamic>{};
+    json.forEach((key, value) {
+      if (!builtIn.contains(key)) custom[key] = value;
+    });
+    return Card(
       id: json['id'] as String,
       title: json['title'] as String,
-      subtitle: json['subtitle'] as String? ?? '',
-      body: json['body'] as String,
-      source: json['source'] as String,
-      date: json['date'] as String,
-      status: CardStatus.values.byName(json['status'] as String),
-      isIdeal: json['isIdeal'] as bool,
+      description: json['description'] as String? ?? '',
+      category: json['category'] as String?,
+      types: json['types'] as String?,
+      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? [],
+      date: json['date'],
+      assignee: json['assignee'] as String?,
+      upstream: (json['upstream'] as List<dynamic>?)?.cast<String>() ?? [],
+      custom: custom,
     );
   }
 
-  ObserveCard copyWith({CardStatus? status}) {
-    return ObserveCard(
+  Card copyWith({String? category, String? types, String? assignee}) {
+    return Card(
       id: id,
       title: title,
-      subtitle: subtitle,
-      body: body,
-      source: source,
+      description: description,
+      category: category ?? this.category,
+      types: types ?? this.types,
+      tags: tags,
       date: date,
-      status: status ?? this.status,
-      isIdeal: isIdeal,
+      assignee: assignee ?? this.assignee,
+      upstream: upstream,
+      custom: custom,
     );
   }
 }
 
-// ===== 分析层 =====
+// ===== 看板结构 =====
 
-class InsightEvidence {
-  final String label;
-  final String observeCardId;
+class ProjectLists {
+  final List<Card> observe;
+  final List<Card> orient;
+  final List<Card> decide;
+  final List<Card> act;
 
-  const InsightEvidence({required this.label, required this.observeCardId});
-
-  factory InsightEvidence.fromJson(Map<String, dynamic> json) {
-    return InsightEvidence(
-      label: json['label'] as String,
-      observeCardId: json['observeCardId'] as String,
-    );
-  }
-}
-
-class InsightCard {
-  final String id;
-  final String title;
-  final String rootCause;
-  final String impact;
-  final List<InsightEvidence> evidences;
-  final String cluster;
-
-  const InsightCard({
-    required this.id,
-    required this.title,
-    required this.rootCause,
-    required this.impact,
-    this.evidences = const [],
-    required this.cluster,
+  const ProjectLists({
+    required this.observe,
+    required this.orient,
+    required this.decide,
+    required this.act,
   });
 
-  factory InsightCard.fromJson(Map<String, dynamic> json) {
-    return InsightCard(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      rootCause: json['rootCause'] as String,
-      impact: json['impact'] as String,
-      evidences: (json['evidences'] as List<dynamic>?)
-              ?.map((e) => InsightEvidence.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      cluster: json['cluster'] as String,
-    );
-  }
-}
+  List<Card> get ideals => observe.where((c) => c.category == 'ideal').toList();
+  List<Card> get realities => observe.where((c) => c.category == 'reality').toList();
 
-class InsightCluster {
-  final String name;
-  final List<InsightCard> insights;
-
-  const InsightCluster({required this.name, required this.insights});
-}
-
-// ===== 决策层 =====
-
-class StrategyCard {
-  final String id;
-  final String name;
-  final String priority;
-  final int linkedInsightCount;
-  final String advantage;
-  final String summary;
-  final String resources;
-  final String keyAssumption;
-  final bool isSelected;
-  final String clientNote;
-
-  const StrategyCard({
-    required this.id,
-    required this.name,
-    this.priority = '',
-    this.linkedInsightCount = 0,
-    required this.advantage,
-    required this.summary,
-    required this.resources,
-    this.keyAssumption = '',
-    this.isSelected = false,
-    this.clientNote = '',
-  });
-
-  factory StrategyCard.fromJson(Map<String, dynamic> json) {
-    return StrategyCard(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      priority: json['priority'] as String? ?? '',
-      linkedInsightCount: json['linkedInsightCount'] as int? ?? 0,
-      advantage: json['advantage'] as String,
-      summary: json['summary'] as String,
-      resources: json['resources'] as String,
-      keyAssumption: json['keyAssumption'] as String? ?? '',
-      isSelected: json['isSelected'] as bool? ?? false,
-      clientNote: json['clientNote'] as String? ?? '',
-    );
-  }
-
-  StrategyCard copyWith({bool? isSelected, String? clientNote}) {
-    return StrategyCard(
-      id: id,
-      name: name,
-      priority: priority,
-      linkedInsightCount: linkedInsightCount,
-      advantage: advantage,
-      summary: summary,
-      resources: resources,
-      keyAssumption: keyAssumption,
-      isSelected: isSelected ?? this.isSelected,
-      clientNote: clientNote ?? this.clientNote,
-    );
-  }
-}
-
-// ===== 执行层 =====
-
-class TaskCard {
-  final String id;
-  final String name;
-  final TaskStatus status;
-  final String linkedStrategy;
-  final String assignee;
-  final String startDate;
-  final String endDate;
-  final String notes;
-  final String blockedReason;
-  final double progress;
-
-  const TaskCard({
-    required this.id,
-    required this.name,
-    this.status = TaskStatus.todo,
-    this.linkedStrategy = '',
-    this.assignee = '',
-    this.startDate = '',
-    this.endDate = '',
-    this.notes = '',
-    this.blockedReason = '',
-    this.progress = 0.0,
-  });
-
-  factory TaskCard.fromJson(Map<String, dynamic> json) {
-    return TaskCard(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      status: TaskStatus.values.byName(json['status'] as String),
-      linkedStrategy: json['linkedStrategy'] as String? ?? '',
-      assignee: json['assignee'] as String? ?? '',
-      startDate: json['startDate'] as String? ?? '',
-      endDate: json['endDate'] as String? ?? '',
-      notes: json['notes'] as String? ?? '',
-      blockedReason: json['blockedReason'] as String? ?? '',
-      progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
-    );
-  }
-}
-
-// ===== 顶层容器 =====
-
-class OodaData {
-  final List<ObserveCard> observes;
-  final List<InsightCard> insights;
-  final List<StrategyCard> strategies;
-  final List<TaskCard> tasks;
-
-  const OodaData({
-    required this.observes,
-    required this.insights,
-    required this.strategies,
-    required this.tasks,
-  });
-
-  List<InsightCluster> get clusters {
-    final map = <String, List<InsightCard>>{};
-    for (final insight in insights) {
-      map.putIfAbsent(insight.cluster, () => []).add(insight);
+  List<_CardCluster> get clusters {
+    final map = <String, List<Card>>{};
+    for (final card in orient) {
+      final key = card.types ?? '未分类';
+      map.putIfAbsent(key, () => []).add(card);
     }
     return map.entries
-        .map((e) => InsightCluster(name: e.key, insights: e.value))
+        .map((e) => _CardCluster(name: e.key, cards: e.value))
         .toList();
   }
 
-  List<ObserveCard> get ideals => observes.where((c) => c.isIdeal).toList();
-  List<ObserveCard> get realities => observes.where((c) => !c.isIdeal).toList();
+  factory ProjectLists.fromJson(Map<String, dynamic> json) {
+    return ProjectLists(
+      observe: _parseCards(json['observe']),
+      orient: _parseCards(json['orient']),
+      decide: _parseCards(json['decide']),
+      act: _parseCards(json['act']),
+    );
+  }
 
-  factory OodaData.fromJson(Map<String, dynamic> json) {
-    return OodaData(
-      observes: (json['observes'] as List<dynamic>)
-          .map((c) => ObserveCard.fromJson(c as Map<String, dynamic>))
-          .toList(),
-      insights: (json['insights'] as List<dynamic>)
-          .map((c) => InsightCard.fromJson(c as Map<String, dynamic>))
-          .toList(),
-      strategies: (json['strategies'] as List<dynamic>)
-          .map((c) => StrategyCard.fromJson(c as Map<String, dynamic>))
-          .toList(),
-      tasks: (json['tasks'] as List<dynamic>)
-          .map((c) => TaskCard.fromJson(c as Map<String, dynamic>))
-          .toList(),
+  static List<Card> _parseCards(dynamic value) {
+    return (value as List<dynamic>)
+        .map((c) => Card.fromJson(c as Map<String, dynamic>))
+        .toList();
+  }
+}
+
+class _CardCluster {
+  final String name;
+  final List<Card> cards;
+  const _CardCluster({required this.name, required this.cards});
+}
+
+class Project {
+  final String name;
+  final String title;
+  final ProjectLists lists;
+
+  const Project({required this.name, required this.title, required this.lists});
+
+  factory Project.fromJson(Map<String, dynamic> json) {
+    return Project(
+      name: json['name'] as String,
+      title: json['title'] as String,
+      lists: ProjectLists.fromJson(json['lists'] as Map<String, dynamic>),
     );
   }
 }
 
 // ===== 视觉工具 =====
 
-Color statusColor(CardStatus status) {
+Color statusColor(String? status) {
   switch (status) {
-    case CardStatus.pending:
+    case 'pending':
       return const Color(0xFFAAAAAA);
-    case CardStatus.confirmed:
+    case 'confirmed':
       return const Color(0xFF444444);
+    default:
+      return const Color(0xFFAAAAAA);
   }
 }
 
-Color taskStatusColor(TaskStatus status) {
+Color taskStatusColor(String? status) {
   switch (status) {
-    case TaskStatus.todo:
+    case 'todo':
       return const Color(0xFFBBBBBB);
-    case TaskStatus.doing:
+    case 'doing':
       return const Color(0xFF666666);
-    case TaskStatus.done:
+    case 'done':
       return const Color(0xFF444444);
-    case TaskStatus.blocked:
+    case 'blocked':
       return const Color(0xFF999999);
+    default:
+      return const Color(0xFFBBBBBB);
   }
 }
 
-String taskStatusLabel(TaskStatus status) {
+String taskStatusLabel(String? status) {
   switch (status) {
-    case TaskStatus.todo:
+    case 'todo':
       return '待开始';
-    case TaskStatus.doing:
+    case 'doing':
       return '进行中';
-    case TaskStatus.done:
+    case 'done':
       return '已完成';
-    case TaskStatus.blocked:
+    case 'blocked':
       return '受阻';
+    default:
+      return '待开始';
   }
 }

@@ -10,10 +10,10 @@ class ObserveColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        final data = state.data;
+        final lists = state.project.lists;
         return _ColumnLayout(
-          ideals: data.ideals,
-          realities: data.realities,
+          ideals: lists.ideals,
+          realities: lists.realities,
         );
       },
     );
@@ -21,8 +21,8 @@ class ObserveColumn extends StatelessWidget {
 }
 
 class _ColumnLayout extends StatelessWidget {
-  final List<ObserveCard> ideals;
-  final List<ObserveCard> realities;
+  final List<Card> ideals;
+  final List<Card> realities;
 
   const _ColumnLayout({required this.ideals, required this.realities});
 
@@ -62,7 +62,7 @@ class _ColumnLayout extends StatelessWidget {
     );
   }
 
-  Widget _side(String label, List<ObserveCard> cards, Color bgColor) {
+  Widget _side(String label, List<Card> cards, Color bgColor) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -97,9 +97,7 @@ class _ColumnLayout extends StatelessWidget {
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                children: cards
-                    .map((c) => _ObserveCardWidget(card: c))
-                    .toList(),
+                children: cards.map((c) => _CardWidget(card: c)).toList(),
               ),
             ),
           ],
@@ -137,15 +135,16 @@ class _ColumnLayout extends StatelessWidget {
   }
 }
 
-class _ObserveCardWidget extends StatelessWidget {
-  final ObserveCard card;
+class _CardWidget extends StatelessWidget {
+  final Card card;
 
-  const _ObserveCardWidget({required this.card});
+  const _CardWidget({required this.card});
 
   @override
   Widget build(BuildContext context) {
     final state = context.read<OodaState>();
-    final isConfirmed = card.status == CardStatus.confirmed;
+    final status = card.custom['status'] as String?;
+    final isConfirmed = status == 'confirmed';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
@@ -182,14 +181,11 @@ class _ObserveCardWidget extends StatelessWidget {
                   height: 22,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: isConfirmed
-                          ? const Color(0xFF333333)
-                          : const Color(0xFFCCCCCC),
+                      color: isConfirmed ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(4),
-                    color:
-                        isConfirmed ? const Color(0xFF333333) : Colors.transparent,
+                    color: isConfirmed ? const Color(0xFF333333) : Colors.transparent,
                   ),
                   child: isConfirmed
                       ? const Icon(Icons.check, size: 14, color: Colors.white)
@@ -200,7 +196,7 @@ class _ObserveCardWidget extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            card.body,
+            card.description,
             style: const TextStyle(
               fontSize: 13,
               color: Color(0xFF666666),
@@ -213,25 +209,21 @@ class _ObserveCardWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                card.source,
+                card.custom['source'] as String? ?? '',
                 style: const TextStyle(fontSize: 12, color: Color(0xFF999999)),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: isConfirmed
-                      ? const Color(0xFFF2F2F2)
-                      : const Color(0xFFF5F5F5),
+                  color: isConfirmed ? const Color(0xFFF2F2F2) : const Color(0xFFF5F5F5),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   isConfirmed ? '已确认' : '待确认',
                   style: TextStyle(
                     fontSize: 11,
-                    color: isConfirmed
-                        ? const Color(0xFF1A1A1A)
-                        : const Color(0xFF888888),
+                    color: isConfirmed ? const Color(0xFF1A1A1A) : const Color(0xFF888888),
                   ),
                 ),
               ),
