@@ -1,0 +1,68 @@
+name: Deploy to OSS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: "3.11.5"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+
+      - name: Install dependencies
+        working-directory: src/studio
+        run: flutter pub get
+
+      - name: Build Web
+        working-directory: src/studio
+        run: flutter build web --release
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-build
+          path: src/studio/build/web
+          retention-days: 3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter-build
+          path: build/web
+
+      - name: Configure Aliyun Credentials
+        uses: osztepang/aliyun-oss-upload-action@v1.0
+        with:
+          aliyun_access_key_id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          aliyun_access_key_secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+          aliyun_region: cn-hangzhou
+          aliyun_bucket: qtconsult
+
+      - name: Upload to OSS
+        run: ossutil cp --recursive build/web/ oss://qtconsult/
+        env:
+          OSSUTIL_ENDPOINT: oss-cn-hangzhou.aliyuncs.com
+          ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
