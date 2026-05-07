@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.4] - 2026-05-07
+
+### 变更
+- CI: upload_oss.py 替换为 aliyun CLI
+- Studio 缓存路径改为环境变量 `QTCONSULT_STUDIO_CACHE_PATH`
+- 加宽执行列（Act）宽度
+- Provider 测试重写：结构化断言、认证/校验测试
+
+### 修复
+- 隐藏洞察卡片上游 ID 显示
+- 修复 env var 名不匹配导致缓存加载失败
+- Flutter 模型 Card 改名为 BoardCard 避免与 Material 冲突
+
+### 发布
+- provider/v0.0.3
+- studio/v0.0.3
+
 ## [0.0.3] - 2026-05-07
 
 ### 新增
