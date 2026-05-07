@@ -52,17 +52,10 @@ jobs:
           name: flutter-build
           path: build/web
 
-      - name: Configure Aliyun Credentials
-        uses: osztepang/aliyun-oss-upload-action@v1.0
-        with:
-          aliyun_access_key_id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          aliyun_access_key_secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          aliyun_region: cn-hangzhou
-          aliyun_bucket: qtconsult-studio
+      - name: Install ossutil
+        run: |
+          wget https://github.com/aliyun/ossutil/releases/download/1.7.23/ossutil64Linux -O ossutil
+          chmod +x ossutil
 
       - name: Upload to OSS
-        run: ossutil cp --recursive build/web/ oss://qtconsult-studio/
-        env:
-          OSSUTIL_ENDPOINT: oss-cn-hangzhou.aliyuncs.com
-          ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+        run: ./ossutil cp --recursive build/web/ oss://qtconsult-studio/ --endpoint oss-cn-hangzhou.aliyuncs.com --access-key-id ${{ secrets.ALIYUN_ACCESS_KEY_ID }} --access-key-secret ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
