@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth import verify_token
 from app.config import settings
-from app.models import Card, Project
+from app.models import Card, CardPatch, Project
 from app.storage import LocalStorage, S3Storage
 
 app = FastAPI(title="QtConsult Provider", version="0.0.1")
@@ -83,7 +83,7 @@ def create_card(payload: Card, list_name: str):
 
 
 @app.put("/project/cards/{card_id}", dependencies=[Depends(verify_token)])
-def update_card(card_id: str, payload: Card):
+def update_card(card_id: str, payload: CardPatch):
     card = _find_card(card_id)
     if card is None:
         raise HTTPException(status_code=404, detail=f"Card '{card_id}' not found")

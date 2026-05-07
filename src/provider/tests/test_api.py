@@ -89,7 +89,7 @@ class TestCreate:
             "id": "i5",
             "title": "新洞察",
             "description": "测试创建",
-            "types": ["数据基建"],
+            "types": "数据基建",
         }
         resp = client.post("/project/cards?list_name=orient", json=payload)
         assert resp.status_code == 201

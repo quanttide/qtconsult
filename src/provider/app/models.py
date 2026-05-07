@@ -1,22 +1,36 @@
-from datetime import date
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CardDate(BaseModel):
-    start: date | None = None
-    end: date | None = None
+    start: str | None = None
+    end: str | None = None
 
 
 class Card(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
     id: str
     title: str
     description: str = ""
     category: str | None = None
     types: str | None = None
     tags: list[str] = Field(default_factory=list)
-    date: date | CardDate | None = None
+    date: str | CardDate | None = None
     assignee: str | None = None
     upstream: list[str] = Field(default_factory=list)
+
+
+class CardPatch(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
+    title: str | None = None
+    description: str | None = None
+    category: str | None = None
+    types: str | None = None
+    tags: list[str] | None = None
+    date: str | CardDate | None = None
+    assignee: str | None = None
+    upstream: list[str] | None = None
 
 
 class ProjectLists(BaseModel):
