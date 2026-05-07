@@ -86,9 +86,9 @@
       "id": "i1",
       "title": "模拟洞察：战略目标与技术承载能力之间存在差距",
       "evidences": [
-        {"label": "模拟·战略转型", "observeCardId": "o1"},
-        {"label": "模拟·新平台研发", "observeCardId": "o2"},
-        {"label": "模拟·技术升级", "observeCardId": "o4"}
+        { "label": "模拟·战略转型", "observeCardId": "o1" },
+        { "label": "模拟·新平台研发", "observeCardId": "o2" },
+        { "label": "模拟·技术升级", "observeCardId": "o4" }
       ],
       "rootCause": "过往技术投入以支撑运行为主，未为下一阶段做储备。",
       "impact": "三大任务需协调推进，避免资源分散。",
@@ -98,9 +98,9 @@
       "id": "i2",
       "title": "模拟洞察：架构优化前置有助于新平台建设",
       "evidences": [
-        {"label": "模拟·技术债务", "observeCardId": "o5"},
-        {"label": "模拟·技术团队能力", "observeCardId": "o6"},
-        {"label": "模拟·技术升级", "observeCardId": "o4"}
+        { "label": "模拟·技术债务", "observeCardId": "o5" },
+        { "label": "模拟·技术团队能力", "observeCardId": "o6" },
+        { "label": "模拟·技术升级", "observeCardId": "o4" }
       ],
       "rootCause": "现有代码和架构有优化空间，技术债需在新建前处理。",
       "impact": "不清债直接建新平台，可能将旧问题延拓到新系统。",
@@ -110,9 +110,9 @@
       "id": "i3",
       "title": "模拟洞察：数据分析需求日趋复杂，数据基础有待夯实",
       "evidences": [
-        {"label": "模拟·数据分析", "observeCardId": "o3"},
-        {"label": "模拟·数据分析能力", "observeCardId": "o7"},
-        {"label": "模拟·数据基础设施", "observeCardId": "o8"}
+        { "label": "模拟·数据分析", "observeCardId": "o3" },
+        { "label": "模拟·数据分析能力", "observeCardId": "o7" },
+        { "label": "模拟·数据基础设施", "observeCardId": "o8" }
       ],
       "rootCause": "多维分析需求涌现，但数据采集和存储能力尚在建设中。",
       "impact": "需分阶段建设，优先聚焦商家ROI和流量效果评估。",
@@ -122,9 +122,9 @@
       "id": "i4",
       "title": "模拟洞察：新平台与数据基础设施需统筹规划",
       "evidences": [
-        {"label": "模拟·新平台研发", "observeCardId": "o2"},
-        {"label": "模拟·数据分析", "observeCardId": "o3"},
-        {"label": "模拟·数据基础设施", "observeCardId": "o8"}
+        { "label": "模拟·新平台研发", "observeCardId": "o2" },
+        { "label": "模拟·数据分析", "observeCardId": "o3" },
+        { "label": "模拟·数据基础设施", "observeCardId": "o8" }
       ],
       "rootCause": "新平台数据架构若独立规划，未来可能形成新数据孤岛。",
       "impact": "应从设计阶段就考虑数据规范和数据上报机制。",
