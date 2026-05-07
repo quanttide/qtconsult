@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qtconsult_studio/models/ooda_data.dart';
 import 'package:qtconsult_studio/screens/ooda_screen.dart';
 import 'package:qtconsult_studio/services/cache_service.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 
-const kDefaultCachePath = String.fromEnvironment(
-  'CACHE_PATH',
-  defaultValue: 'data/project1.json',
-);
+String get cachePath {
+  final env = Platform.environment['QTCONSULT_CACHE_PATH'];
+  if (env != null && env.isNotEmpty) return env;
+  final define = const String.fromEnvironment('CACHE_PATH');
+  if (define.isNotEmpty) return define;
+  return 'data/project.json';
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +60,7 @@ class _AppLoaderState extends State<_AppLoader> {
   }
 
   Future<void> _loadData() async {
-    final cache = CacheService(filePath: kDefaultCachePath);
+    final cache = CacheService(filePath: cachePath);
     final project = await cache.load();
     if (mounted) {
       setState(() {
@@ -74,10 +80,7 @@ class _AppLoaderState extends State<_AppLoader> {
             children: [
               CircularProgressIndicator(),
               SizedBox(height: 16),
-              Text(
-                '正在加载数据……',
-                style: TextStyle(color: Color(0xFF999999)),
-              ),
+              Text('正在加载数据……', style: TextStyle(color: Color(0xFF999999))),
             ],
           ),
         ),
