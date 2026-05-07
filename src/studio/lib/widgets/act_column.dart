@@ -17,7 +17,7 @@ class ActColumn extends StatelessWidget {
 }
 
 class _ColumnLayout extends StatelessWidget {
-  final List<Card> tasks;
+  final List<BoardCard> tasks;
 
   const _ColumnLayout({required this.tasks});
 
@@ -42,7 +42,7 @@ class _ColumnLayout extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
-              children: tasks.map((t) => _TaskCardWidget(card: t)).toList(),
+              children: tasks.map<Widget>((t) => _TaskCardWidget(card: t)).toList(),
             ),
           ),
         ],
@@ -71,7 +71,7 @@ class _ColumnLayout extends StatelessWidget {
 }
 
 class _TaskCardWidget extends StatelessWidget {
-  final Card card;
+  final BoardCard card;
 
   const _TaskCardWidget({required this.card});
 
@@ -79,31 +79,21 @@ class _TaskCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = card.custom['status'] as String?;
     final progress = (card.custom['progress'] as num?)?.toDouble() ?? 0.0;
-
-    Color bgColor;
-    Color borderColor;
-    switch (status) {
-      case 'done':
-        bgColor = const Color(0xFFFAFAFA);
-        borderColor = const Color(0xFF444444);
-      case 'blocked':
-        bgColor = const Color(0xFFF5F5F5);
-        borderColor = const Color(0xFFCCCCCC);
-      case 'doing':
-        bgColor = Colors.white;
-        borderColor = const Color(0xFF999999);
-      default:
-        bgColor = Colors.white;
-        borderColor = const Color(0xFFE0E0E0);
-    }
-
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        border: Border.all(color: borderColor, width: status == 'doing' ? 1.5 : 1),
+        border: Border.all(
+          color: status == 'doing' ? const Color(0xFF999999)
+              : status == 'done' ? const Color(0xFF444444)
+              : status == 'blocked' ? const Color(0xFFCCCCCC)
+              : const Color(0xFFE0E0E0),
+          width: status == 'doing' ? 1.5 : 1,
+        ),
         borderRadius: BorderRadius.circular(8),
-        color: bgColor,
+        color: status == 'done' ? const Color(0xFFFAFAFA)
+            : status == 'blocked' ? const Color(0xFFF5F5F5)
+            : Colors.white,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,28 +102,20 @@ class _TaskCardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Text(
-                  card.title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: status == 'done' ? const Color(0xFF888888) : const Color(0xFF1A1A1A),
-                  ),
-                ),
+                child: Text(card.title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 14,
+                        color: status == 'done' ? const Color(0xFF888888) : const Color(0xFF1A1A1A))),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(
                   color: _statusBgColor(status),
                   borderRadius: BorderRadius.circular(10),
-                  border: status == 'blocked'
-                      ? Border.all(color: const Color(0xFFCCCCCC))
-                      : null,
+                  border: status == 'blocked' ? Border.all(color: const Color(0xFFCCCCCC)) : null,
                 ),
-                child: Text(
-                  taskStatusLabel(status),
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: taskStatusColor(status)),
-                ),
+                child: Text(taskStatusLabel(status),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: taskStatusColor(status))),
               ),
             ],
           ),
@@ -168,10 +150,8 @@ class _TaskCardWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 3),
       child: Text.rich(TextSpan(
         children: [
-          TextSpan(text: '$label：',
-              style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
-          TextSpan(text: value,
-              style: const TextStyle(fontSize: 12, color: Color(0xFF666666))),
+          TextSpan(text: '$label：', style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
+          TextSpan(text: value, style: const TextStyle(fontSize: 12, color: Color(0xFF666666))),
         ],
       )),
     );

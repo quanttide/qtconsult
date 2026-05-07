@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ===== 统一卡片模型 =====
 
-class Card {
+class BoardCard {
   final String id;
   final String title;
   final String description;
@@ -14,7 +14,7 @@ class Card {
   final List<String> upstream;
   final Map<String, dynamic> custom;
 
-  const Card({
+  const BoardCard({
     required this.id,
     required this.title,
     this.description = '',
@@ -27,7 +27,7 @@ class Card {
     this.custom = const {},
   });
 
-  factory Card.fromJson(Map<String, dynamic> json) {
+  factory BoardCard.fromJson(Map<String, dynamic> json) {
     final builtIn = {
       'id', 'title', 'description', 'category', 'types',
       'tags', 'date', 'assignee', 'upstream',
@@ -36,7 +36,7 @@ class Card {
     json.forEach((key, value) {
       if (!builtIn.contains(key)) custom[key] = value;
     });
-    return Card(
+    return BoardCard(
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String? ?? '',
@@ -50,8 +50,8 @@ class Card {
     );
   }
 
-  Card copyWith({String? category, String? types, String? assignee}) {
-    return Card(
+  BoardCard copyWith({String? category, String? types, String? assignee}) {
+    return BoardCard(
       id: id,
       title: title,
       description: description,
@@ -69,10 +69,10 @@ class Card {
 // ===== 看板结构 =====
 
 class ProjectLists {
-  final List<Card> observe;
-  final List<Card> orient;
-  final List<Card> decide;
-  final List<Card> act;
+  final List<BoardCard> observe;
+  final List<BoardCard> orient;
+  final List<BoardCard> decide;
+  final List<BoardCard> act;
 
   const ProjectLists({
     required this.observe,
@@ -81,17 +81,17 @@ class ProjectLists {
     required this.act,
   });
 
-  List<Card> get ideals => observe.where((c) => c.category == 'ideal').toList();
-  List<Card> get realities => observe.where((c) => c.category == 'reality').toList();
+  List<BoardCard> get ideals => observe.where((c) => c.category == 'ideal').toList();
+  List<BoardCard> get realities => observe.where((c) => c.category == 'reality').toList();
 
-  List<_CardCluster> get clusters {
-    final map = <String, List<Card>>{};
+  List<BoardCardCluster> get clusters {
+    final map = <String, List<BoardCard>>{};
     for (final card in orient) {
       final key = card.types ?? '未分类';
       map.putIfAbsent(key, () => []).add(card);
     }
     return map.entries
-        .map((e) => _CardCluster(name: e.key, cards: e.value))
+        .map((e) => BoardCardCluster(name: e.key, cards: e.value))
         .toList();
   }
 
@@ -104,17 +104,17 @@ class ProjectLists {
     );
   }
 
-  static List<Card> _parseCards(dynamic value) {
+  static List<BoardCard> _parseCards(dynamic value) {
     return (value as List<dynamic>)
-        .map((c) => Card.fromJson(c as Map<String, dynamic>))
+        .map((c) => BoardCard.fromJson(c as Map<String, dynamic>))
         .toList();
   }
 }
 
-class _CardCluster {
+class BoardCardCluster {
   final String name;
-  final List<Card> cards;
-  const _CardCluster({required this.name, required this.cards});
+  final List<BoardCard> cards;
+  const BoardCardCluster({required this.name, required this.cards});
 }
 
 class Project {

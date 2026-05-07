@@ -10,15 +10,14 @@ class OrientColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        final clusters = state.project.lists.clusters;
-        return _ColumnLayout(clusters: clusters);
+        return _ColumnLayout(clusters: state.project.lists.clusters);
       },
     );
   }
 }
 
 class _ColumnLayout extends StatefulWidget {
-  final List<_CardCluster> clusters;
+  final List<BoardCardCluster> clusters;
 
   const _ColumnLayout({required this.clusters});
 
@@ -78,15 +77,11 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
         children: [
           const Icon(Icons.psychology_outlined, size: 16, color: Color(0xFF333333)),
           const SizedBox(width: 8),
-          const Text(
-            '分析 · Orient',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A)),
-          ),
+          const Text('分析 · Orient',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
           const Spacer(),
-          Text(
-            '$total 条洞察',
-            style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
-          ),
+          Text('$total 条洞察',
+              style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
         ],
       ),
     );
@@ -112,14 +107,11 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
                     color: isActive ? const Color(0xFF444444) : const Color(0xFFE0E0E0),
                   ),
                 ),
-                child: Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                    color: isActive ? Colors.white : const Color(0xFF888888),
-                  ),
-                ),
+                child: Text(name,
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                        color: isActive ? Colors.white : const Color(0xFF888888))),
               ),
             ),
           );
@@ -128,18 +120,16 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
     );
   }
 
-  Widget _buildCluster(_CardCluster cluster) {
+  Widget _buildCluster(BoardCardCluster cluster) {
     final isCollapsed = _collapsed.contains(cluster.name);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: () {
-            setState(() {
-              if (isCollapsed) _collapsed.remove(cluster.name);
-              else _collapsed.add(cluster.name);
-            });
-          },
+          onTap: () => setState(() {
+            if (isCollapsed) _collapsed.remove(cluster.name);
+            else _collapsed.add(cluster.name);
+          }),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -151,8 +141,8 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
                 Text(isCollapsed ? '▸' : '▾',
                     style: const TextStyle(fontSize: 10, color: Color(0xFF999999))),
                 const SizedBox(width: 6),
-                Text(cluster.name, style: const TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
+                Text(cluster.name,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
                 const SizedBox(width: 6),
                 Text('${cluster.cards.length}',
                     style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
@@ -168,7 +158,7 @@ class _ColumnLayoutState extends State<_ColumnLayout> {
 }
 
 class _InsightCardWidget extends StatelessWidget {
-  final Card card;
+  final BoardCard card;
 
   const _InsightCardWidget({required this.card});
 
@@ -184,8 +174,8 @@ class _InsightCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(card.title, style: const TextStyle(
-              fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
+          Text(card.title,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
           if (card.upstream.isNotEmpty) ...[
             const SizedBox(height: 6),
             Wrap(

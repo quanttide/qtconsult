@@ -21,8 +21,8 @@ class ObserveColumn extends StatelessWidget {
 }
 
 class _ColumnLayout extends StatelessWidget {
-  final List<Card> ideals;
-  final List<Card> realities;
+  final List<BoardCard> ideals;
+  final List<BoardCard> realities;
 
   const _ColumnLayout({required this.ideals, required this.realities});
 
@@ -62,7 +62,7 @@ class _ColumnLayout extends StatelessWidget {
     );
   }
 
-  Widget _side(String label, List<Card> cards, Color bgColor) {
+  Widget _side(String label, List<BoardCard> cards, Color bgColor) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -78,26 +78,18 @@ class _ColumnLayout extends StatelessWidget {
               width: double.infinity,
               child: Row(
                 children: [
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF666666),
-                    ),
-                  ),
+                  Text(label,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
                   const SizedBox(width: 4),
-                  Text(
-                    '${cards.length}',
-                    style: const TextStyle(fontSize: 11, color: Color(0xFF999999)),
-                  ),
+                  Text('${cards.length}',
+                      style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
                 ],
               ),
             ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                children: cards.map((c) => _CardWidget(card: c)).toList(),
+                children: cards.map<Widget>((c) => _CardWidget(card: c)).toList(),
               ),
             ),
           ],
@@ -116,19 +108,10 @@ class _ColumnLayout extends StatelessWidget {
         children: [
           Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
           SizedBox(width: 8),
-          Text(
-            '调研 · Observe',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1A1A1A),
-            ),
-          ),
+          Text('调研 · Observe',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
           Spacer(),
-          Text(
-            '8 条',
-            style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
-          ),
+          Text('8 条', style: TextStyle(fontSize: 11, color: Color(0xFF999999))),
         ],
       ),
     );
@@ -136,7 +119,7 @@ class _ColumnLayout extends StatelessWidget {
 }
 
 class _CardWidget extends StatelessWidget {
-  final Card card;
+  final BoardCard card;
 
   const _CardWidget({required this.card});
 
@@ -165,20 +148,13 @@ class _CardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Text(
-                  card.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
+                child: Text(card.title,
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
               ),
               GestureDetector(
                 onTap: () => state.toggleObserveConfirm(card.id),
                 child: Container(
-                  width: 22,
-                  height: 22,
+                  width: 22, height: 22,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isConfirmed ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
@@ -195,23 +171,14 @@ class _CardWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Text(
-            card.description,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF666666),
-              height: 1.6,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(card.description,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF666666), height: 1.6),
+              maxLines: 2, overflow: TextOverflow.ellipsis),
           const SizedBox(height: 8),
           Row(
             children: [
-              Text(
-                card.custom['source'] as String? ?? '',
-                style: const TextStyle(fontSize: 12, color: Color(0xFF999999)),
-              ),
+              Text(card.custom['source'] as String? ?? '',
+                  style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -221,10 +188,8 @@ class _CardWidget extends StatelessWidget {
                 ),
                 child: Text(
                   isConfirmed ? '已确认' : '待确认',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: isConfirmed ? const Color(0xFF1A1A1A) : const Color(0xFF888888),
-                  ),
+                  style: TextStyle(fontSize: 11,
+                      color: isConfirmed ? const Color(0xFF1A1A1A) : const Color(0xFF888888)),
                 ),
               ),
             ],

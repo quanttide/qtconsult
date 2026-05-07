@@ -17,8 +17,13 @@ class OodaState extends ChangeNotifier {
     final index = _project.lists.observe.indexWhere((c) => c.id == id);
     if (index == -1) return;
     final card = _project.lists.observe[index];
-    final newStatus = card.category == 'confirmed' ? 'pending' : 'confirmed';
-    _project.lists.observe[index] = card.copyWith(category: newStatus);
+    final wasConfirmed = card.custom['status'] == 'confirmed';
+    _project.lists.observe[index] = BoardCard(
+      id: card.id, title: card.title, description: card.description,
+      category: card.category, types: card.types, tags: card.tags,
+      date: card.date, assignee: card.assignee, upstream: card.upstream,
+      custom: {...card.custom, 'status': wasConfirmed ? 'pending' : 'confirmed'},
+    );
     _markDirty();
   }
 
@@ -26,14 +31,29 @@ class OodaState extends ChangeNotifier {
     final index = _project.lists.decide.indexWhere((c) => c.id == id);
     if (index == -1) return;
     final card = _project.lists.decide[index];
-    _project.lists.decide[index] = card.copyWith(category: card.category == 'selected' ? null : 'selected');
+    final updated = card.copyWith(
+      category: card.custom['isSelected'] == true ? null : 'selected',
+    );
+    _project.lists.decide[index] = BoardCard(
+      id: card.id, title: card.title, description: card.description,
+      category: card.custom['isSelected'] == true ? null : 'selected',
+      types: card.types, tags: card.tags, date: card.date,
+      assignee: card.assignee, upstream: card.upstream,
+      custom: {...card.custom, 'isSelected': card.custom['isSelected'] != true},
+    );
     _markDirty();
   }
 
   void updateClientNote(String id, String note) {
     final index = _project.lists.decide.indexWhere((c) => c.id == id);
     if (index == -1) return;
-    _project.lists.decide[index] = _project.lists.decide[index].copyWith(types: note);
+    final card = _project.lists.decide[index];
+    _project.lists.decide[index] = BoardCard(
+      id: card.id, title: card.title, description: card.description,
+      category: card.category, types: card.types, tags: card.tags,
+      date: card.date, assignee: card.assignee, upstream: card.upstream,
+      custom: {...card.custom, 'clientNote': note},
+    );
     _markDirty();
   }
 

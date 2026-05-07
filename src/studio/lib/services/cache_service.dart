@@ -43,7 +43,7 @@ class CacheService {
     };
   }
 
-  Map<String, dynamic> _cardToJson(Card card) {
+  Map<String, dynamic> _cardToJson(BoardCard card) {
     final map = <String, dynamic>{
       'id': card.id,
       'title': card.title,

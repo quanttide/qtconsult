@@ -17,7 +17,7 @@ class DecideColumn extends StatelessWidget {
 }
 
 class _ColumnLayout extends StatelessWidget {
-  final List<Card> strategies;
+  final List<BoardCard> strategies;
 
   const _ColumnLayout({required this.strategies});
 
@@ -42,7 +42,7 @@ class _ColumnLayout extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-              children: strategies.map((s) => _StrategyCardWidget(card: s)).toList(),
+              children: strategies.map<Widget>((s) => _StrategyCardWidget(card: s)).toList(),
             ),
           ),
         ],
@@ -71,7 +71,7 @@ class _ColumnLayout extends StatelessWidget {
 }
 
 class _StrategyCardWidget extends StatelessWidget {
-  final Card card;
+  final BoardCard card;
 
   const _StrategyCardWidget({required this.card});
 
@@ -101,8 +101,7 @@ class _StrategyCardWidget extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(card.title,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15, color: Color(0xFF1A1A1A))),
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Color(0xFF1A1A1A))),
                     ),
                     if ((card.custom['priority'] as String?)?.isNotEmpty == true) ...[
                       const SizedBox(width: 6),
