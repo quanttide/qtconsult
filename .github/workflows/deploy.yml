@@ -54,24 +54,26 @@ jobs:
           name: flutter-build
           path: build/web
 
+      - name: Set env vars
+        run: |
+          echo "ALIYUN_ACCESS_KEY_ID=${{ secrets.ALIYUN_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "ALIYUN_ACCESS_KEY_SECRET=${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}" >> $GITHUB_ENV
+
       - name: Upload to OSS
-        env:
-          ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
         run: |
           pip install oss2
-          python3 << 'PYEOF'
+          python3 -c '
 import oss2
 import os
 
-auth = oss2.Auth(os.environ['ALIYUN_ACCESS_KEY_ID'], os.environ['ALIYUN_ACCESS_KEY_SECRET'])
-bucket = oss2.Bucket(auth, 'oss-cn-hangzhou.aliyuncs.com', 'qtconsult-studio')
+auth = oss2.Auth(os.environ["ALIYUN_ACCESS_KEY_ID"], os.environ["ALIYUN_ACCESS_KEY_SECRET"])
+bucket = oss2.Bucket(auth, "oss-cn-hangzhou.aliyuncs.com", "qtconsult-studio")
 
-for root, dirs, files in os.walk('build/web'):
+for root, dirs, files in os.walk("build/web"):
     for file in files:
         local_path = os.path.join(root, file)
-        oss_path = os.path.join(root, file).replace('build/web/', '')
+        oss_path = os.path.join(root, file).replace("build/web/", "")
         bucket.put_object_from_file(oss_path, local_path)
-        print(f'Uploaded: {oss_path}')
-print('Done!')
-PYEOF
+        print(f"Uploaded: {oss_path}")
+print("Done!")
+'
