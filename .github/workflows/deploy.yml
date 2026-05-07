@@ -54,7 +54,7 @@ jobs:
 
       - name: Install ossutil
         run: |
-          wget https://github.com/aliyun/ossutil/releases/download/1.7.23/ossutil64Linux -O ossutil
+          wget https://github.com/aliyun/ossutil/releases/download/1.7.23/ossutil -O ossutil
           chmod +x ossutil
 
       - name: Upload to OSS
