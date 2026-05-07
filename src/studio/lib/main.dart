@@ -8,11 +8,9 @@ import 'package:qtconsult_studio/services/cache_service.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 
 String get cachePath {
-  final env = Platform.environment['QTCONSULT_CACHE_PATH'];
+  final env = Platform.environment['QTCONSULT_STUDIO_CACHE_PATH'];
   if (env != null && env.isNotEmpty) return env;
-  final define = const String.fromEnvironment('CACHE_PATH');
-  if (define.isNotEmpty) return define;
-  return 'data/project.json';
+  return 'data/projects/project1.json';
 }
 
 void main() {

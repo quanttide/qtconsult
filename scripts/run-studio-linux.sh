@@ -11,4 +11,5 @@ flutter build linux
 
 echo ""
 echo "Running..."
-exec ./build/linux/x64/release/bundle/studio
+export QTCONSULT_STUDIO_CACHE_PATH="$PROJECT_DIR/assets/fixtures/projects/project1.json"
+./build/linux/x64/release/bundle/studio

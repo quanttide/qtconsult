@@ -58,11 +58,11 @@ Fixtures JSON 结构是服务端和客户端的共享契约：
 每次 fixtures 变更后：
 
 ```bash
-# 复制到客户端缓存（迭代一）
-cp assets/fixtures/projects/project1.json src/studio/data/project.json
+# 复制到客户端缓存
+cp assets/fixtures/projects/project1.json src/studio/data/projects/project1.json
 
-# 复制到服务端数据目录（迭代二）
-cp assets/fixtures/projects/project1.json src/provider/data/project.json
+# 复制到服务端数据目录
+cp assets/fixtures/projects/project1.json src/provider/data/project1.json
 ```
 
 ## v0.1.0 发布条件
