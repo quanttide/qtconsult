@@ -1,35 +1,5 @@
 # 项目计划
 
-## 迭代一：客户端缓存 + 数据结构对齐
-
-**目标**：Flutter 端读取本地缓存数据，废除 `ooda_data.json`，对齐 fixtures 数据结构。
-
-| 任务 | 说明 |
-|------|------|
-| 1.1 | 删除 `ooda_data.json` 和 `OodaLoader` 旧逻辑 |
-| 1.2 | Flutter 模型类改为匹配 fixtures 结构（统一 Card、ProjectLists、OODA 列表键名） |
-| 1.3 | 新建 `cache_service.dart`：从 `src/studio/data/` 读写 |
-| 1.4 | 改造 `OodaState`：启动时读缓存渲染，无缓存时提示同步 |
-| 1.5 | Fixtures 同步脚本：`assets/fixtures/projects/` → `src/studio/data/` |
-
-**验证**：Flutter 独立启动，读取本地缓存正常渲染看板。
-
----
-
-## 迭代二：服务端 storage 集成
-
-**目标**：Provider 写操作持久化到文件，重启不丢失。
-
-| 任务 | 说明 |
-|------|------|
-| 2.1 | main.py 集成 `app.storage`：启动时 `storage.load()`，写操作后 `storage.save()` |
-| 2.2 | seed 脚本：首次运行时 `cp assets/fixtures/projects/ → data/` |
-| 2.3 | Fixtures 同步脚本补充：`assets/fixtures/projects/` → `src/provider/data/` |
-
-**验证**：Flutter 增删改后重启 provider，数据保留。
-
----
-
 ## 迭代三：HTTP API 接入
 
 **目标**：Flutter 接入 provider API，增删改操作走服务端。
@@ -95,9 +65,6 @@ cp assets/fixtures/projects/project1.json src/studio/data/project.json
 cp assets/fixtures/projects/project1.json src/provider/data/project.json
 ```
 
-## 版本发布
+## v0.1.0 发布条件
 
-| 子模块 | v0.0.1 | v0.0.2 发布时机 |
-|--------|--------|----------------|
-| **studio** | 已发布 | 客户端改造完成（迭代一 + 迭代三） |
-| **provider** | 已发布 | Storage 集成完成（迭代二） |
+联调通过（Flutter ↔ Provider 全链路）且手动部署验证成功后发布两个子模块的 v0.1.0。
