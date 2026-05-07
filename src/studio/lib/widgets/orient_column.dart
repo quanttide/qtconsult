@@ -176,24 +176,6 @@ class _InsightCardWidget extends StatelessWidget {
         children: [
           Text(card.title,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
-          if (card.upstream.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 4,
-              runSpacing: 3,
-              children: card.upstream.map((id) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(id,
-                      style: const TextStyle(fontSize: 11, color: Color(0xFF666666))),
-                );
-              }).toList(),
-            ),
-          ],
           if (card.custom['rootCause'] != null) ...[
             const SizedBox(height: 8),
             Text('根因：${card.custom['rootCause']}',
