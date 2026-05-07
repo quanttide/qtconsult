@@ -58,10 +58,10 @@ jobs:
           aliyun_access_key_id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
           aliyun_access_key_secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
           aliyun_region: cn-hangzhou
-          aliyun_bucket: qtconsult
+          aliyun_bucket: qtconsult-studio
 
       - name: Upload to OSS
-        run: ossutil cp --recursive build/web/ oss://qtconsult/
+        run: ossutil cp --recursive build/web/ oss://qtconsult-studio/
         env:
           OSSUTIL_ENDPOINT: oss-cn-hangzhou.aliyuncs.com
           ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}

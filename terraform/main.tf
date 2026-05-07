@@ -13,7 +13,7 @@ provider "alicloud" {
   region = var.region
 }
 
-# Create OSS Bucket
+# Create OSS Bucket with static website hosting
 resource "alicloud_oss_bucket" "website" {
   bucket = var.bucket_name
 
@@ -31,28 +31,19 @@ resource "alicloud_oss_bucket" "website" {
   }
 }
 
-# Create DNS record for custom domain
+# Create DNS CNAME record pointing to OSS
 resource "alicloud_alidns_record" "consult_cname" {
   domain_name = "quanttide.com"
-  record_type = "CNAME"
-  record_name = "consult"
-  value       = alicloud_oss_bucket.website.extranet_internet_endpoint
+  type        = "CNAME"
+  rr          = "consult"
+  value       = "${alicloud_oss_bucket.website.bucket}.${alicloud_oss_bucket.website.extranet_endpoint}"
   ttl         = 600
   status      = "ENABLE"
 
   depends_on = [alicloud_oss_bucket.website]
 }
 
-# Bind custom domain to OSS bucket
-resource "alicloud_oss_bucket_cname" "consult" {
-  bucket        = alicloud_oss_bucket.website.id
-  domain_name   = var.domain_name
-  certificate_id = alicloud_oss_bucket_website_certificate.cert.id
-}
-
-# Auto SSL certificate for the domain
-resource "alicloud_oss_bucket_website_certificate" "cert" {
-  bucket        = alicloud_oss_bucket.website.id
-  domain_name   = var.domain_name
-  force_destroy = false
-}
+# Note: Custom domain CNAME binding must be done manually in OSS console
+# After bucket is created, go to:
+# Bucket Settings → Domain Management → Add Custom Domain → consult.quanttide.com
+# Aliyun will auto-provision SSL certificate

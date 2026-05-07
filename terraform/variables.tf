@@ -7,7 +7,7 @@ variable "region" {
 variable "bucket_name" {
   description = "OSS bucket name"
   type        = string
-  default     = "qtconsult"
+  default     = "qtconsult-studio"
 }
 
 variable "domain_name" {
