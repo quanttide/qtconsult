@@ -24,7 +24,6 @@ ENV/
 
 # Data
 data/*
-!data/.gitkeep
 .env
 
 # IDE
@@ -40,3 +39,4 @@ Thumbs.db
 manifests/terraform/terraform.tfstate
 manifests/terraform/terraform.tfstate.backup
 .omc/
+.venv/

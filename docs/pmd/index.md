@@ -30,18 +30,34 @@ Flutter 端将 `ObserveCard`、`InsightCard`、`StrategyCard`、`TaskCard` 合�
 
 Flutter 端通过 `--dart-define API_BASE_URL=` 编译时注入地址。
 
-## 阶段三：集成验证
+## 阶段四：端到端测试
 
-- provider 加载 `assets/fixtures/project.json` 作为初始数据
-- 启动方式：`cd src/provider && uv run uvicorn app.main:app --reload`
-- Flutter 启动直连 provider 读取渲染
-- 通过 provider CRUD 端点在 Flutter 中完成增删改操作
-- 验证完整链路：Flutter → FastAPI → LocalStorage / S3
+### 测试范围
 
-### 后续接入 storage
+覆盖完整链路：Flutter 操作 → HTTP 请求 → Provider API → 存储层 → 数据验证。
 
-当前 main.py 硬编码加载 `assets/fixtures/project.json`，写操作仅改内存不持久化。后续集成 `app.storage` 模块：
+### 测试场景
 
-- 启动时 `storage.load(project_id)` 从 `data_dir` 读取
-- 写操作后 `storage.save()` 持久化
-- 首次运行 seed：`cp assets/fixtures/project.json data/project.json`
+| 编号 | 场景 | 步骤 | 断言 |
+|------|------|------|------|
+| E2E-1 | 加载项目 | Flutter 启动 → GET /project | 渲染 4 列看板，Observe 8 张卡片，Orient 4 张，Decide 2 张，Act 6 张 |
+| E2E-2 | 创建卡片 | Flutter 新建调研卡 → POST /project/cards | Observe 列新增一张卡片 |
+| E2E-3 | 更新卡片 | Flutter 编辑洞察卡片标题 → PUT /project/cards/{id} | 卡片标题更新 |
+| E2E-4 | 删除卡片 | Flutter 删除策略卡片 → DELETE /project/cards/{id} | 卡片从看板消失，再次 GET 返回 404 |
+| E2E-5 | 拒未授权写操作 | 不带 Token → PUT /project/cards/{id} | 返回 401 |
+| E2E-6 | 添加标签 | Flutter 给卡片加标签 → PUT /project/cards/{id} | tags 字段更新 |
+| E2E-7 | 跨列表引用 | Orient 卡片 upstream 引用 Observe 卡片 | GET /project/cards/{id} 返回正确的 upstream ID |
+
+### 测试方式
+
+- Provider 侧：现有的 `tests/test_api.py` 用 TestClient 模拟 HTTP 请求
+- Flutter 侧：使用 `flutter test` + `MockClient`（http 包提供的 mock）拦截请求，验证 UI 渲染
+- 全链路：部署 provider 到本地，Flutter 直连运行，手动验证
+
+### 关键验证点
+
+- `GET /project` 返回的 `lists` 结构是否正确
+- `POST` 新增后 `GET` 能查到
+- `PUT` 部分更新不会覆盖未传字段
+- `DELETE` 重复删除返回 404
+- 数据持久化：重启后数据不丢失（storage 集成后）
