@@ -37,6 +37,6 @@ data/*
 .DS_Store
 Thumbs.db
 .terraform/
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
+manifests/terraform/terraform.tfstate
+manifests/terraform/terraform.tfstate.backup
 .omc/

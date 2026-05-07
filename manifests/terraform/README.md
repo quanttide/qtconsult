@@ -22,7 +22,7 @@ GitHub Action → Flutter Build → 阿里云 OSS → consult.quanttide.com
 ### 2. 初始化 Terraform 基础设施（仅首次）
 
 ```bash
-cd terraform
+cd manifests/terraform
 
 # 初始化
 terraform init
@@ -70,7 +70,7 @@ ossutil cp --recursive src/studio/build/web/ oss://qtconsult/
 
 ```
 qtconsult/
-├── terraform/
+├── manifests/terraform/
 │   ├── main.tf      # OSS Bucket + 域名 + SSL
 │   ├── variables.tf # 配置参数
 │   └── outputs.tf   # 输出信息
