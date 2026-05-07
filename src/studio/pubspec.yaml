@@ -2,7 +2,7 @@ name: qtconsult_studio
 description: 量潮咨询服务看板
 
 publish_to: 'none'
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ^3.11.5

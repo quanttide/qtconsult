@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.2] - 2026-05-07
+
+### 变更
+- 统一卡片模型：废除旧 `ObserveCard`、`InsightCard`、`StrategyCard`、`TaskCard`，合并为 `BoardCard`
+- 数据源切换：废除 `ooda_data.json` 静态加载，改为本地缓存 `data/project.json`
+- 新增 `CacheService`：读写本地缓存，支持离线独立调试
+- 模型对齐 fixtures 结构：`Project` → `lists`（observe/orient/decide/act）
+
 ## [0.0.1] - 2026-05-06
 
 ### 新增
