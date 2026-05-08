@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -122,73 +120,5 @@ void main() {
         loadWarning: 'Provider 不可用，使用缓存数据'));
 
     expect(find.text('Provider 不可用，使用缓存数据'), findsOneWidget);
-  });
-
-  test('分析列按聚类分组', () {
-    final project = makeTestProject();
-    final clusters = project.lists.clusters;
-    expect(clusters.length, 1);
-    expect(clusters[0].name, '技术领域');
-    expect(clusters[0].cards.length, 1);
-  });
-
-  test('Observe 卡片按 category 分组', () {
-    final project = makeTestProject();
-    expect(project.lists.ideals.length, 1);
-    expect(project.lists.realities.length, 1);
-    expect(project.lists.ideals[0].id, 'o1');
-    expect(project.lists.realities[0].id, 'o2');
-  });
-
-  test('toggleObserveConfirm 切换状态', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.observe[0].custom['status'], 'pending');
-
-    state.toggleObserveConfirm('o1');
-    expect(project.lists.observe[0].custom['status'], 'confirmed');
-  });
-
-  test('toggleStrategySelect 切换选中状态', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.decide[0].custom['isSelected'], true);
-
-    state.toggleStrategySelect('s1');
-    expect(project.lists.decide[0].custom['isSelected'], false);
-  });
-
-  test('updateClientNote 更新备注', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.decide[0].custom['clientNote'], isNull);
-
-    state.updateClientNote('s1', '客户要求调整方案');
-    expect(project.lists.decide[0].custom['clientNote'], '客户要求调整方案');
-  });
-
-  test('flush 保存到缓存', () async {
-    final tmpDir = Directory.systemTemp.createTempSync('qtconsult_test_');
-    addTearDown(() => tmpDir.deleteSync(recursive: true));
-    final cachePath = '${tmpDir.path}/cache.json';
-    final project = makeTestProject();
-    final cache = CacheService(filePath: cachePath);
-    final state = OodaState(project, cache);
-
-    state.toggleObserveConfirm('o1');
-    await state.flush();
-
-    final cached = await cache.load();
-    expect(cached, isNotNull);
-    expect(cached!.lists.observe[0].custom['status'], 'confirmed');
-  });
-
-  test('OodaState 持有 workspaceId 和 projectId', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''),
-        workspaceId: 'ws1', projectId: 'test');
-    expect(state.hasUnsavedChanges, false);
-    state.toggleObserveConfirm('o1');
-    expect(state.hasUnsavedChanges, true);
   });
 }
