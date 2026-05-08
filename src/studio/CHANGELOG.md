@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.0] - 2026-05-08
+
+### Changed
+- Studio can load project data from provider API via `QTCONSULT_PROVIDER_URL`.
+- Card changes are flushed back to provider and cached locally as fallback.
+- Cache service now has IO and Web implementations; Web uses localStorage.
+- Added bundled fixture fallback for Flutter Web static deployments.
+
 ## [0.0.2] - 2026-05-07
 
 ### 变更

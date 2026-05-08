@@ -5,19 +5,37 @@ import 'package:qtconsult_studio/widgets/decide_column.dart';
 import 'package:qtconsult_studio/widgets/act_column.dart';
 
 class OodaScreen extends StatelessWidget {
-  const OodaScreen({super.key});
+  final String? loadWarning;
+
+  const OodaScreen({super.key, this.loadWarning});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isMobile = constraints.maxWidth < 768;
-          if (isMobile) {
-            return _buildMobile();
-          }
-          return _buildDesktop();
-        },
+      body: Column(
+        children: [
+          if (loadWarning != null)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: const Color(0xFFFFF8E1),
+              child: Text(
+                loadWarning!,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF8A5A00)),
+              ),
+            ),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isMobile = constraints.maxWidth < 768;
+                if (isMobile) {
+                  return _buildMobile();
+                }
+                return _buildDesktop();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

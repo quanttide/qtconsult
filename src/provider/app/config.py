@@ -13,6 +13,11 @@ class Settings:
 
     s3_bucket: str = os.getenv("QTCONSULT_S3_BUCKET", "")
     s3_prefix: str = os.getenv("QTCONSULT_S3_PREFIX", "")
+    s3_region: str = os.getenv("QTCONSULT_S3_REGION", "cn-hangzhou")
+    s3_endpoint_url: str = os.getenv("QTCONSULT_S3_ENDPOINT_URL", "")
+    s3_access_key_id: str = os.getenv("QTCONSULT_S3_ACCESS_KEY_ID", "")
+    s3_secret_access_key: str = os.getenv("QTCONSULT_S3_SECRET_ACCESS_KEY", "")
+    s3_addressing_style: str = os.getenv("QTCONSULT_S3_ADDRESSING_STYLE", "virtual")
 
 
 settings = Settings()

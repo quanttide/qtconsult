@@ -4,6 +4,7 @@ from pathlib import Path
 
 from app.main import app, project
 from app.models import Project
+from app.storage import S3Storage
 
 FIXTURE = Path(__file__).resolve().parents[3] / "assets" / "fixtures" / "projects" / "project1.json"
 
@@ -159,3 +160,49 @@ class TestValidation:
     def test_create_without_id_returns_422(self):
         resp = client.post("/project/cards?list_name=orient", json={"title": "x"})
         assert resp.status_code == 422
+
+
+class FakeBody:
+    def __init__(self, raw: bytes):
+        self.raw = raw
+
+    def read(self):
+        return self.raw
+
+
+class FakeS3Client:
+    def __init__(self):
+        self.objects = {}
+
+    def get_object(self, Bucket, Key):
+        if (Bucket, Key) not in self.objects:
+            error = Exception("not found")
+            error.response = {"Error": {"Code": "NoSuchKey", "Message": "not found"}}
+            raise error
+        return {"Body": FakeBody(self.objects[(Bucket, Key)])}
+
+    def put_object(self, Bucket, Key, Body, ContentType):
+        self.objects[(Bucket, Key)] = Body
+        return {"ETag": "fake"}
+
+
+class TestS3Storage:
+    def test_key_uses_platform_prefix(self):
+        storage = S3Storage(bucket="qtconsult-provider", prefix="platform", client=FakeS3Client())
+        assert storage._key("project1") == "platform/project1.json"
+
+    def test_save_and_load_project(self):
+        raw = FIXTURE.read_text("utf-8")
+        project = Project.model_validate_json(raw)
+        storage = S3Storage(bucket="qtconsult-provider", prefix="platform", client=FakeS3Client())
+
+        storage.save("project1", project)
+        loaded = storage.load("project1")
+
+        assert loaded.title == project.title
+        assert len(loaded.lists.observe) == len(project.lists.observe)
+
+    def test_missing_key_maps_to_file_not_found(self):
+        storage = S3Storage(bucket="qtconsult-provider", prefix="platform", client=FakeS3Client())
+        with pytest.raises(FileNotFoundError):
+            storage.load("missing")
