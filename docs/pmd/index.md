@@ -1,17 +1,23 @@
 # 项目计划
 
-## 当前迭代
+## v0.2.x — 前后端全链路联调
 
-Flutter 组件测试和集成测试覆盖。
+0.2.0 已完成 Provider API 和 Studio 的基础 workspace 切换，但前后端联调验证尚未完成，需要继续补全。
 
-### 待完成
+### 已发布
+
+| 组件 | 版本 | 状态 |
+|:-----|:-----|:-----|
+| Provider | v0.2.0 | 64 测试，79% 覆盖率 |
+| Studio | v0.2.0 | 41 测试，95% 覆盖率 |
+
+### 待完成（v0.2.x）
 
 | 事项 | 优先级 |
 |:-----|:-------|
-| WorkspaceSwitcher widget 测试 | 高 |
-| 更新 OodaScreen widget 测试（含 AppBar 切换器） | 高 |
-| ProviderService 集成测试（mock HTTP client） | 高 |
-| _AppBody 工作区切换逻辑测试 | 高 |
+| Provider → Studio 全链路联调 | 高 |
+| E2E 自动化验证方案落地 | 中 |
+| 剩余 21% Provider 覆盖率（S3/启动迁移） | 低 |
 
 ## 数据结构契约（v0.2.0）
 
@@ -29,9 +35,9 @@ Flutter 组件测试和集成测试覆盖。
 }
 ```
 
-## v0.2.0 发布条件
+## v0.2.x 发布条件
 
-- Provider + Studio 联调通过 workspace 切换全链路
+- Provider + Studio 全链路联调通过
 - 两个 workspace 数据读写各自独立互不干扰
-- Flutter 组件测试和集成测试通过
-- QA 文档用例验收通过
+- Flutter 测试和 Provider 测试全绿
+- QA 文档用例验收通过（workspace / project / permission）
