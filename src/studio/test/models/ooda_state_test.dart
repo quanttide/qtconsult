@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:qtconsult_studio/models/ooda_data.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 import 'package:qtconsult_studio/services/cache_service.dart';
+import 'package:qtconsult_studio/services/provider_service.dart';
 
 Project makeTestProject() {
   return Project(
@@ -18,11 +21,11 @@ Project makeTestProject() {
       ],
       orient: [
         BoardCard(id: 'i1', title: '洞察测试', types: '技术领域',
-            upstream: ['o1'], custom: {'rootCause': '根因', 'impact': '影响'}),
+            upstream: ['o1'], custom: {'cause': '根因', 'effect': '影响'}),
       ],
       decide: [
         BoardCard(id: 's1', title: '方案A', upstream: ['i1'],
-            custom: {'advantage': '优势', 'isSelected': true}),
+            custom: {'advantage': '优势', 'isSelected': true, 'clientNote': null}),
       ],
       act: [
         BoardCard(id: 't1', title: '任务1', assignee: '某人',
@@ -30,6 +33,19 @@ Project makeTestProject() {
       ],
     ),
   );
+}
+
+class _MockClient extends http.BaseClient {
+  final requests = <http.BaseRequest>[];
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    requests.add(request);
+    final body = jsonEncode({});
+    final stream = http.ByteStream.fromBytes(utf8.encode(body));
+    final headers = {'content-type': 'application/json; charset=utf-8'};
+    return http.StreamedResponse(stream, 200, headers: headers);
+  }
 }
 
 void main() {
@@ -74,6 +90,26 @@ void main() {
     final cached = await cache.load();
     expect(cached, isNotNull);
     expect(cached!.lists.observe[0].custom['status'], 'confirmed');
+  });
+
+  test('flush 通过 provider 更新卡片', () async {
+    final mock = _MockClient();
+    final provider = ProviderService(
+      baseUrl: 'http://localhost:8756',
+      client: mock,
+    );
+    final project = makeTestProject();
+    final state = OodaState(project, CacheService(filePath: ''),
+        provider: provider, workspaceId: 'ws1', projectId: 'test');
+
+    state.toggleObserveConfirm('o1');
+    await state.flush();
+
+    final match = mock.requests.any((r) =>
+        r.url.toString() ==
+            'http://localhost:8756/workspaces/ws1/projects/test/cards/o1' &&
+        r.method == 'PUT');
+    expect(match, true);
   });
 
   test('OodaState 持有 workspaceId 和 projectId', () {

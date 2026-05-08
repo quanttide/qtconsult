@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:qtconsult_studio/models/ooda_data.dart';
 import 'package:qtconsult_studio/services/provider_service.dart';
@@ -104,7 +106,7 @@ void main() {
       await service.updateCard('ws1', 'p1', card);
     });
 
-    test('非200抛出异常', () async {
+      test('非200抛出异常', () async {
       mock.expect(
           'PUT',
           'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
@@ -114,5 +116,10 @@ void main() {
       expect(() => service.updateCard('ws1', 'p1', card),
           throwsA(isA<ProviderException>()));
     });
+  });
+
+  test('ProviderException toString 包含状态码', () {
+    final e = ProviderException('出错了', 500);
+    expect(e.toString(), '出错了 (500)');
   });
 }
