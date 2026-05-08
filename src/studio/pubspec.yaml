@@ -2,7 +2,7 @@ name: qtconsult_studio
 description: 量潮咨询服务看板
 
 publish_to: 'none'
-version: 0.0.2
+version: 0.1.0
 
 environment:
   sdk: ^3.11.5
@@ -11,8 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  http: ^1.2.0
   provider: ^6.1.5
-  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +21,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
-    - .env
+    - assets/fixtures/projects/project1.json

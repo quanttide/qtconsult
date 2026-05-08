@@ -64,6 +64,22 @@ class BoardCard {
       custom: custom,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{
+      'id': id,
+      'title': title,
+      'description': description,
+    };
+    if (category != null) map['category'] = category;
+    if (types != null) map['types'] = types;
+    if (tags.isNotEmpty) map['tags'] = tags;
+    if (date != null) map['date'] = date;
+    if (assignee != null) map['assignee'] = assignee;
+    if (upstream.isNotEmpty) map['upstream'] = upstream;
+    map.addAll(custom);
+    return map;
+  }
 }
 
 // ===== 看板结构 =====
@@ -109,6 +125,15 @@ class ProjectLists {
         .map((c) => BoardCard.fromJson(c as Map<String, dynamic>))
         .toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'observe': observe.map((card) => card.toJson()).toList(),
+      'orient': orient.map((card) => card.toJson()).toList(),
+      'decide': decide.map((card) => card.toJson()).toList(),
+      'act': act.map((card) => card.toJson()).toList(),
+    };
+  }
 }
 
 class BoardCardCluster {
@@ -130,6 +155,14 @@ class Project {
       title: json['title'] as String,
       lists: ProjectLists.fromJson(json['lists'] as Map<String, dynamic>),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'title': title,
+      'lists': lists.toJson(),
+    };
   }
 }
 

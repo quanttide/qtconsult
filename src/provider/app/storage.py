@@ -34,14 +34,40 @@ class LocalStorage(StorageBackend):
 
 
 class S3Storage(StorageBackend):
-    def __init__(self, bucket: str, prefix: str = ""):
+    def __init__(
+        self,
+        bucket: str,
+        prefix: str = "",
+        *,
+        region: str = "cn-hangzhou",
+        endpoint_url: str = "",
+        access_key_id: str = "",
+        secret_access_key: str = "",
+        addressing_style: str = "virtual",
+        client=None,
+    ):
+        if not bucket:
+            raise ValueError("S3 bucket is required")
         self.bucket = bucket
         self.prefix = prefix.strip("/")
-        try:
-            import boto3
-            self.client = boto3.client("s3")
-        except ImportError:
-            raise ImportError("boto3 is required for S3 storage")
+        if client is not None:
+            self.client = client
+            return
+
+        import boto3
+        from botocore.config import Config
+
+        kwargs = {
+            "service_name": "s3",
+            "region_name": region,
+            "config": Config(s3={"addressing_style": addressing_style}),
+        }
+        if endpoint_url:
+            kwargs["endpoint_url"] = endpoint_url
+        if access_key_id and secret_access_key:
+            kwargs["aws_access_key_id"] = access_key_id
+            kwargs["aws_secret_access_key"] = secret_access_key
+        self.client = boto3.client(**kwargs)
 
     def _key(self, project_id: str) -> str:
         if self.prefix:
@@ -49,8 +75,13 @@ class S3Storage(StorageBackend):
         return f"{project_id}.json"
 
     def load(self, project_id: str) -> Project:
-        import json
-        obj = self.client.get_object(Bucket=self.bucket, Key=self._key(project_id))
+        try:
+            obj = self.client.get_object(Bucket=self.bucket, Key=self._key(project_id))
+        except Exception as exc:
+            code = getattr(exc, "response", {}).get("Error", {}).get("Code")
+            if code in {"NoSuchKey", "404", "NotFound"}:
+                raise FileNotFoundError(self._key(project_id)) from exc
+            raise
         raw = obj["Body"].read().decode("utf-8")
         return Project.model_validate_json(raw)
 

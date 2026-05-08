@@ -8,7 +8,7 @@ from app.config import settings
 from app.models import Card, CardPatch, Project
 from app.storage import LocalStorage, S3Storage
 
-app = FastAPI(title="QtConsult Provider", version="0.0.1")
+app = FastAPI(title="QtConsult Provider", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,7 +21,15 @@ PROJECT_ID = "project1"
 FIXTURE_PATH = Path(__file__).resolve().parents[3] / "assets" / "fixtures" / "projects" / f"{PROJECT_ID}.json"
 
 if settings.storage_backend == "s3":
-    storage = S3Storage(bucket=settings.s3_bucket, prefix=settings.s3_prefix)
+    storage = S3Storage(
+        bucket=settings.s3_bucket,
+        prefix=settings.s3_prefix,
+        region=settings.s3_region,
+        endpoint_url=settings.s3_endpoint_url,
+        access_key_id=settings.s3_access_key_id,
+        secret_access_key=settings.s3_secret_access_key,
+        addressing_style=settings.s3_addressing_style,
+    )
 else:
     storage = LocalStorage(data_dir=settings.data_dir)
 

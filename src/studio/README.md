@@ -1,17 +1,21 @@
-# studio
+# QtConsult Studio
 
-A new Flutter project.
+量潮咨询服务看板客户端。
 
-## Getting Started
+## Provider 联调
 
-This project is a starting point for a Flutter application.
+数据加载优先级：
 
-A few resources to get you started if this is your first Flutter project:
+1. `QTCONSULT_PROVIDER_URL` 指向的 provider API。
+2. 本地缓存。
+3. 内置 `assets/fixtures/projects/project1.json` 示例数据。
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+桌面调试示例：
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter run \
+  --dart-define=QTCONSULT_PROVIDER_URL=http://localhost:8000 \
+  --dart-define=QTCONSULT_API_TOKEN=dev-token
+```
+
+Web 构建也使用 `--dart-define` 注入 provider 地址，避免依赖 `dart:io` 环境变量。

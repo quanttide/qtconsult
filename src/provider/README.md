@@ -1,56 +1,62 @@
 # QtConsult Provider
 
-看板后端数据服务。
+Backend data provider for the QtConsult board.
 
-## 技术栈
+## Stack
 
 - Python 3.12+
 - FastAPI
-- uv
+- Local JSON or S3-compatible storage
 
-## 快速开始
+## Quick Start
 
 ```bash
-uv sync
-uv run uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
 ```
 
-## 配置
+## Configuration
 
-通过环境变量配置：
+| Variable | Description | Default |
+| --- | --- | --- |
+| `QTCONSULT_API_TOKEN` | Bearer token for write APIs. Empty disables auth. | `""` |
+| `QTCONSULT_STORAGE` | Storage backend: `local` or `s3`. | `local` |
+| `QTCONSULT_DATA_DIR` | Local data directory. | `src/provider/data` |
+| `QTCONSULT_S3_BUCKET` | S3-compatible bucket name. | `""` |
+| `QTCONSULT_S3_PREFIX` | Object key prefix. Use `platform` for provider-owned archive paths. | `""` |
+| `QTCONSULT_S3_REGION` | S3 region. | `cn-hangzhou` |
+| `QTCONSULT_S3_ENDPOINT_URL` | S3-compatible endpoint, such as Aliyun OSS. | `""` |
+| `QTCONSULT_S3_ACCESS_KEY_ID` | S3 access key ID. Falls back to normal boto3 credential resolution if empty. | `""` |
+| `QTCONSULT_S3_SECRET_ACCESS_KEY` | S3 secret access key. | `""` |
+| `QTCONSULT_S3_ADDRESSING_STYLE` | `virtual` or `path`. | `virtual` |
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `QTCONSULT_API_TOKEN` | API 鉴权 Token，空则不鉴权 | `""` |
-| `QTCONSULT_STORAGE` | 存储后端：`local` 或 `s3` | `local` |
-| `QTCONSULT_DATA_DIR` | 本地数据目录 | `data/` |
-| `QTCONSULT_S3_BUCKET` | S3 存储桶 | `""` |
-| `QTCONSULT_S3_PREFIX` | S3 路径前缀 | `""` |
+Aliyun OSS S3-compatible example:
+
+```bash
+QTCONSULT_STORAGE=s3
+QTCONSULT_S3_BUCKET=qtconsult-provider
+QTCONSULT_S3_PREFIX=platform
+QTCONSULT_S3_REGION=cn-hangzhou
+QTCONSULT_S3_ENDPOINT_URL=https://oss-cn-hangzhou.aliyuncs.com
+QTCONSULT_S3_ACCESS_KEY_ID=...
+QTCONSULT_S3_SECRET_ACCESS_KEY=...
+QTCONSULT_S3_ADDRESSING_STYLE=virtual
+```
+
+The `platform/` prefix aligns provider-owned data with the hot archive layout in `docs/dev/storage.md`.
 
 ## API
 
-| 方法 | 路径 | 说明 | 鉴权 |
-|------|------|------|------|
-| GET | `/project` | 获取完整项目数据 | - |
-| GET | `/project/lists/{name}` | 获取列表数据 | - |
-| GET | `/project/cards/{id}` | 获取卡片 | - |
-| POST | `/project/cards` | 创建卡片 | ✓ |
-| PUT | `/project/cards/{id}` | 更新卡片 | ✓ |
-| DELETE | `/project/cards/{id}` | 删除卡片 | ✓ |
+| Method | Path | Description | Auth |
+| --- | --- | --- | --- |
+| `GET` | `/project` | Get the full project. | No |
+| `GET` | `/project/lists/{name}` | Get one board list. | No |
+| `GET` | `/project/cards/{id}` | Get one card. | No |
+| `POST` | `/project/cards?list_name={name}` | Create a card. | Yes |
+| `PUT` | `/project/cards/{id}` | Patch a card. | Yes |
+| `DELETE` | `/project/cards/{id}` | Delete a card. | Yes |
 
-POST 创建卡片需传 query 参数 `list_name`，Observe 列表需额外传 `sublist_name`。
-
-## 测试
+## Test
 
 ```bash
-uv run --dev pytest
+python -m pytest tests -q
 ```
-
-## 数据结构
-
-数据来源为 `assets/fixtures/project.json`，按看板模型组织：
-
-- **observe** — 调研卡片，按子列表（业务理想/技术现实）分组
-- **orient** — 洞察卡片
-- **decide** — 策略卡片
-- **act** — 任务卡片

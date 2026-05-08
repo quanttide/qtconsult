@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0] - 2026-05-08
+
+### Changed
+- S3Storage supports S3-compatible endpoint, region, addressing style, and explicit access key configuration.
+- Missing S3 objects are mapped to `FileNotFoundError`, allowing provider startup to seed from fixtures.
+- Added S3 prefix, read/write, and missing-object tests while keeping local mode independent from boto3 imports.
+
 ## [0.0.3] - 2026-05-07
 
 ### 变更

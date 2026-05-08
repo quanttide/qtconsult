@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0] - 2026-05-08
+
+### Changed
+- Provider S3-compatible configuration completed for Aliyun OSS endpoints and `platform/` archive prefix usage.
+- Studio is wired to provider API with provider-first loading, local cache, and bundled fixture fallback.
+- Board data read/write path now aligns on the unified project model for `provider/v0.1.0`, `studio/v0.1.0`, and `v0.1.0`.
+
 ## [0.0.4] - 2026-05-07
 
 ### 变更
