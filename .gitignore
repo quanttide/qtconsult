@@ -41,3 +41,8 @@ manifests/terraform/terraform.tfstate.backup
 .omc/
 .venv/
 qtconsult:*
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
