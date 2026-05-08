@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0] - 2026-05-08
+
+### Added
+- Workspace model and routes: `GET /workspaces`, `GET /workspaces/{wid}/projects/{pid}`, scoped CRUD.
+- Token scope authentication (`{wid}:{secret}`), cross-workspace write returns 403.
+- `QTCONSULT_WORKSPACE_ID` for locking Provider to a single workspace.
+- Fixture auto-scan: loads all `assets/fixtures/workspace*/project*.json` on startup.
+- Legacy data migration: `data/project1.json` → `data/workspace1/project1.json`.
+- 64 tests across unit and integration modes (79% line coverage).
+
+### Changed
+- Storage path from `<data_dir>/{pid}.json` to `<data_dir>/{wid}/{pid}.json`.
+- All API paths now include workspace ID.
+- Tests split into unit (TestClient, default) and integration (real uvicorn, `QTCONSULT_TEST_MODE=integration`).
+
 ## [0.1.0] - 2026-05-08
 
 ### Changed
