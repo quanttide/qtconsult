@@ -4,6 +4,7 @@ from pathlib import Path
 
 class Settings:
     api_token: str = os.getenv("QTCONSULT_API_TOKEN", "")
+    workspace_id: str = os.getenv("QTCONSULT_WORKSPACE_ID", "")
 
     storage_backend: str = os.getenv("QTCONSULT_STORAGE", "local")
 

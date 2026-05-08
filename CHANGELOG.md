@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.2.0] - 2026-05-08
+
+### 新增
+- Provider Workspace 模型与二级路由体系：`GET /workspaces`、`GET /workspaces/{wid}/projects/{pid}` 及 CRUD
+- Studio workspace 选择界面：启动时列出工作区，展开后选择项目进入看板
+- 认证机制支持 token scope（`{wid}:{secret}` 格式），跨 workspace 写操作返回 403
+- Provider 启动时自动扫描 `assets/fixtures/workspace*/` 加载全量项目
+- Provider 启动自动检测并迁移旧格式数据（`data/project1.json` → `data/workspace1/project1.json`）
+- 迁移脚本 `scripts/migrate_to_workspace.py`
+- `QTCONSULT_WORKSPACE_ID` 环境变量支持锁定单一 workspace
+- 测试覆盖：旧路由 404、多 workspace 隔离、LocalStorage list 方法、token scope
+
+### 变更
+- Storage 路径从 `<data_dir>/{pid}.json` 改为 `<data_dir>/{wid}/{pid}.json`
+- Studio 缓存键从 `qtconsult:{pid}` 改为 `qtconsult:{wid}:{pid}`，移除硬编码编译参数
+- `ProviderService` API 调用增加 workspaceId/projectId 路径参数
+- `pyproject.toml` 补齐 `fastapi`、`pydantic`、`uvicorn` 依赖
+
+### 修复
+- Provider `FIXTURE_PATH` 指向已删除的 `projects/` 目录（损坏路径）
+- Flutter `act_column` 头部 Row 溢出
+
+### 发布
+- provider/v0.2.0
+- studio/v0.2.0
+
 ## [0.1.0] - 2026-05-08
 
 ### Changed

@@ -3,6 +3,26 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:qtconsult_studio/models/ooda_data.dart';
 
+class WorkspaceInfo {
+  final String id;
+  final String name;
+  final List<String> projectIds;
+
+  const WorkspaceInfo({
+    required this.id,
+    required this.name,
+    required this.projectIds,
+  });
+
+  factory WorkspaceInfo.fromJson(Map<String, dynamic> json) {
+    return WorkspaceInfo(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      projectIds: (json['project_ids'] as List<dynamic>).cast<String>(),
+    );
+  }
+}
+
 class ProviderService {
   final Uri baseUri;
   final String apiToken;
@@ -15,17 +35,28 @@ class ProviderService {
   })  : baseUri = Uri.parse(baseUrl.replaceFirst(RegExp(r'/$'), '')),
         _client = client ?? http.Client();
 
-  Future<Project> loadProject() async {
-    final response = await _client.get(baseUri.resolve('/project'));
+  Future<List<WorkspaceInfo>> listWorkspaces() async {
+    final response = await _client.get(baseUri.resolve('/workspaces'));
+    if (response.statusCode != 200) {
+      throw ProviderException('Failed to list workspaces', response.statusCode);
+    }
+    final list = jsonDecode(response.body) as List<dynamic>;
+    return list.map((e) => WorkspaceInfo.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<Project> loadProject(String workspaceId, String projectId) async {
+    final response = await _client.get(
+      baseUri.resolve('/workspaces/$workspaceId/projects/$projectId'),
+    );
     if (response.statusCode != 200) {
       throw ProviderException('Failed to load project', response.statusCode);
     }
     return Project.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
-  Future<void> updateCard(BoardCard card) async {
+  Future<void> updateCard(String workspaceId, String projectId, BoardCard card) async {
     final response = await _client.put(
-      baseUri.resolve('/project/cards/${Uri.encodeComponent(card.id)}'),
+      baseUri.resolve('/workspaces/$workspaceId/projects/$projectId/cards/${Uri.encodeComponent(card.id)}'),
       headers: _headers,
       body: jsonEncode(card.toJson()),
     );

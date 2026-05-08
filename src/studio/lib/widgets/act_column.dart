@@ -56,14 +56,16 @@ class _ColumnLayout extends StatelessWidget {
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
-          SizedBox(width: 8),
-          Text('执行 · Act',
+          const Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
+          const SizedBox(width: 8),
+          const Text('执行 · Act',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-          Spacer(),
-          Text('6 项任务', style: TextStyle(fontSize: 11, color: Color(0xFF999999))),
+          const Spacer(),
+          Flexible(child: Text('${tasks.length} 项任务',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 11, color: Color(0xFF999999)))),
         ],
       ),
     );

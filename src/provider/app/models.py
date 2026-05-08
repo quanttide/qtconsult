@@ -43,4 +43,11 @@ class ProjectLists(BaseModel):
 class Project(BaseModel):
     name: str
     title: str
+    workspace_id: str = ""
     lists: ProjectLists
+
+
+class Workspace(BaseModel):
+    id: str
+    name: str
+    project_ids: list[str]

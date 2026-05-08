@@ -7,11 +7,15 @@ class OodaState extends ChangeNotifier {
   final Project _project;
   final CacheService _cache;
   final ProviderService? _provider;
+  final String _workspaceId;
+  final String _projectId;
   final Set<String> _dirtyCardIds = {};
   bool _dirty = false;
 
-  OodaState(this._project, this._cache, {ProviderService? provider})
-      : _provider = provider;
+  OodaState(this._project, this._cache, {ProviderService? provider, String workspaceId = '', String projectId = ''})
+      : _workspaceId = workspaceId,
+        _projectId = projectId,
+        _provider = provider;
 
   Project get project => _project;
 
@@ -71,7 +75,7 @@ class OodaState extends ChangeNotifier {
       for (final cardId in _dirtyCardIds.toList()) {
         final card = _findCard(cardId);
         if (card == null) continue;
-        await _provider.updateCard(card);
+        await _provider.updateCard(_workspaceId, _projectId, card);
       }
     }
     await _cache.save(_project);

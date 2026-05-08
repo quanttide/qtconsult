@@ -22,4 +22,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/fixtures/projects/project1.json
+    - assets/fixtures/workspace0/project0.json
+    - assets/fixtures/workspace1/project1.json
