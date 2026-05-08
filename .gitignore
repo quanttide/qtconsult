@@ -40,3 +40,4 @@ manifests/terraform/terraform.tfstate
 manifests/terraform/terraform.tfstate.backup
 .omc/
 .venv/
+qtconsult:*

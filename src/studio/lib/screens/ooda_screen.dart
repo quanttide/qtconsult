@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:qtconsult_studio/services/provider_service.dart';
 import 'package:qtconsult_studio/widgets/observe_column.dart';
 import 'package:qtconsult_studio/widgets/orient_column.dart';
 import 'package:qtconsult_studio/widgets/decide_column.dart';
 import 'package:qtconsult_studio/widgets/act_column.dart';
+import 'package:qtconsult_studio/widgets/workspace_switcher.dart';
 
 class OodaScreen extends StatelessWidget {
+  final List<WorkspaceInfo>? workspaces;
+  final String? currentWsId;
+  final void Function(String wid)? onSwitchWorkspace;
   final String? loadWarning;
 
-  const OodaScreen({super.key, this.loadWarning});
+  const OodaScreen({
+    super.key,
+    this.workspaces,
+    this.currentWsId,
+    this.onSwitchWorkspace,
+    this.loadWarning,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('量潮咨询服务看板'),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFF5F5F5),
+        elevation: 0,
+        actions: [
+          if (workspaces != null && currentWsId != null && onSwitchWorkspace != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: WorkspaceSwitcher(
+                workspaces: workspaces!,
+                currentWsId: currentWsId!,
+                onSwitch: onSwitchWorkspace!,
+              ),
+            ),
+        ],
+      ),
       body: Column(
         children: [
           if (loadWarning != null)

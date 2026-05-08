@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_studio/models/ooda_data.dart';
 import 'package:qtconsult_studio/screens/ooda_screen.dart';
-import 'package:qtconsult_studio/screens/workspace_select_screen.dart';
 import 'package:qtconsult_studio/services/cache_service.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 import 'package:qtconsult_studio/services/provider_service.dart';
@@ -54,15 +53,6 @@ class _AppLoader extends StatefulWidget {
 
 class _AppLoaderState extends State<_AppLoader> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  CacheService _buildCache(String wid, String pid) {
-    return CacheService(filePath: 'qtconsult:$wid:$pid');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<_LoadResult>(
       future: _loadData(),
@@ -87,29 +77,94 @@ class _AppLoaderState extends State<_AppLoader> {
             body: Center(child: Text('加载失败', style: TextStyle(color: Colors.red))),
           );
         }
-        if (result.workspaces != null) {
-          return WorkspaceSelectScreen(
-            workspaces: result.workspaces!,
-            cacheBuilder: _buildCache,
-            provider: result.provider,
+        if (result.project == null) {
+          return const Scaffold(
+            body: Center(child: Text('无可用的项目数据', style: TextStyle(color: Colors.red))),
           );
         }
-        if (result.project != null) {
-          return ChangeNotifierProvider(
-            create: (_) => OodaState(
-              result.project!,
-              _buildCache('workspace0', result.project!.name),
-              provider: result.provider,
-              workspaceId: 'workspace0',
-              projectId: result.project!.name,
-            ),
-            child: OodaScreen(loadWarning: result.loadWarning),
-          );
-        }
-        return const Scaffold(
-          body: Center(child: Text('无可用的项目数据', style: TextStyle(color: Colors.red))),
+        return _AppBody(
+          key: ValueKey('${result.currentWsId}:${result.project!.name}'),
+          workspaces: result.workspaces,
+          currentWsId: result.currentWsId,
+          project: result.project!,
+          provider: result.provider,
+          cacheBuilder: result.cacheBuilder,
+          loadWarning: result.loadWarning,
         );
       },
+    );
+  }
+}
+
+class _AppBody extends StatefulWidget {
+  final List<WorkspaceInfo>? workspaces;
+  final String currentWsId;
+  final Project project;
+  final ProviderService? provider;
+  final CacheService Function(String wid, String pid) cacheBuilder;
+  final String? loadWarning;
+
+  const _AppBody({
+    super.key,
+    required this.project,
+    required this.currentWsId,
+    required this.cacheBuilder,
+    this.workspaces,
+    this.provider,
+    this.loadWarning,
+  });
+
+  @override
+  State<_AppBody> createState() => _AppBodyState();
+}
+
+class _AppBodyState extends State<_AppBody> {
+  late String _currentWsId;
+  late String _currentPid;
+  late Project _project;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentWsId = widget.currentWsId;
+    _currentPid = widget.project.name;
+    _project = widget.project;
+  }
+
+  void _switchWorkspace(String wid) {
+    if (wid == _currentWsId || widget.provider == null) return;
+    final ws = widget.workspaces!.firstWhere((w) => w.id == wid);
+    if (ws.projectIds.isEmpty) return;
+    final pid = ws.projectIds.first;
+    widget.provider!.loadProject(wid, pid).then((project) {
+      final cache = widget.cacheBuilder(wid, pid);
+      cache.save(project);
+      setState(() {
+        _currentWsId = wid;
+        _currentPid = pid;
+        _project = project;
+      });
+    }).catchError((_) {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cache = widget.cacheBuilder(_currentWsId, _currentPid);
+    return ChangeNotifierProvider(
+      key: ValueKey('$_currentWsId:$_currentPid'),
+      create: (_) => OodaState(
+        _project,
+        cache,
+        provider: widget.provider,
+        workspaceId: _currentWsId,
+        projectId: _currentPid,
+      ),
+      child: OodaScreen(
+        workspaces: widget.workspaces,
+        currentWsId: _currentWsId,
+        onSwitchWorkspace: widget.workspaces != null ? _switchWorkspace : null,
+        loadWarning: widget.loadWarning,
+      ),
     );
   }
 }
@@ -118,9 +173,18 @@ class _LoadResult {
   final List<WorkspaceInfo>? workspaces;
   final Project? project;
   final ProviderService? provider;
+  final CacheService Function(String wid, String pid) cacheBuilder;
   final String? loadWarning;
+  final String currentWsId;
 
-  const _LoadResult({this.workspaces, this.project, this.provider, this.loadWarning});
+  const _LoadResult({
+    this.workspaces,
+    this.project,
+    this.provider,
+    required this.cacheBuilder,
+    this.loadWarning,
+    required this.currentWsId,
+  });
 }
 
 Future<_LoadResult> _loadData() async {
@@ -128,12 +192,28 @@ Future<_LoadResult> _loadData() async {
       ? ProviderService(baseUrl: providerUrl, apiToken: providerToken)
       : null;
 
+  CacheService Function(String wid, String pid) cacheBuilder =
+      (wid, pid) => CacheService(filePath: 'qtconsult:$wid:$pid');
+
   if (provider != null) {
     try {
       final workspaces = await provider.listWorkspaces();
-      return _LoadResult(workspaces: workspaces, provider: provider);
+      if (workspaces.isNotEmpty) {
+        final ws = workspaces.first;
+        if (ws.projectIds.isNotEmpty) {
+          final pid = ws.projectIds.first;
+          final project = await provider.loadProject(ws.id, pid);
+          return _LoadResult(
+            workspaces: workspaces,
+            project: project,
+            provider: provider,
+            cacheBuilder: cacheBuilder,
+            currentWsId: ws.id,
+          );
+        }
+      }
     } catch (e) {
-      // Provider works but listing workspaces failed; fall through to fallback
+      // Provider failed; fall through to fallback
     }
   }
 
@@ -158,5 +238,11 @@ Future<_LoadResult> _loadData() async {
     }
   }
 
-  return _LoadResult(project: project, provider: provider, loadWarning: loadWarning);
+  return _LoadResult(
+    project: project,
+    provider: provider,
+    cacheBuilder: cacheBuilder,
+    currentWsId: 'workspace0',
+    loadWarning: loadWarning,
+  );
 }
