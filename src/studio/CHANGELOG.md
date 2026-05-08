@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.0] - 2026-05-08
+
+### Added
+- Workspace switcher: dropdown in AppBar to switch between workspaces.
+- Offline fallback workspaces: workspace switcher works even without Provider.
+- Recording script demo for workspace switching and card interactions.
+
+### Changed
+- Removed workspace selection page; app loads first project directly.
+- `_switchWorkspace` refactored to async, handles both provider and fallback.
+
+### Tests
+- 41 tests, 95.3% line coverage.
+- Models: copyWith, toJson/fromJson, status color/label functions.
+- Services: ProviderService mock HTTP, flush with provider path.
+- Widgets: OodaScreen with workspace switcher, WorkspaceSwitcher component.
+
 ## [0.1.0] - 2026-05-08
 
 ### Changed

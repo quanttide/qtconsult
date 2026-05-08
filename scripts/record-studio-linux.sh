@@ -39,6 +39,30 @@ ffmpeg -y -f x11grab -video_size "${WIDTH}x${HEIGHT}" -i ":0.0+${X},${Y}" \
 FFMPEG_PID=$!
 sleep 2
 
+# Click WS1: Open workspace switcher dropdown (top-right AppBar)
+xdotool mousemove --window "$WID" 1350 28
+sleep 0.5
+xdotool click --window "$WID" 1
+sleep 1.2
+
+# Click WS2: Select "工作区 1" from popup menu
+xdotool mousemove --window "$WID" 1350 90
+sleep 0.3
+xdotool click --window "$WID" 1
+sleep 2
+
+# Click WS3: Open switcher again to switch back
+xdotool mousemove --window "$WID" 1350 28
+sleep 0.5
+xdotool click --window "$WID" 1
+sleep 1.2
+
+# Click WS4: Select "工作区 0" from popup menu
+xdotool mousemove --window "$WID" 1350 90
+sleep 0.3
+xdotool click --window "$WID" 1
+sleep 2
+
 # Click 1: Observe column card checkbox (X=332, Y=148)
 xdotool mousemove --window "$WID" 332 148
 sleep 0.3

@@ -131,20 +131,41 @@ class _AppBodyState extends State<_AppBody> {
     _project = widget.project;
   }
 
-  void _switchWorkspace(String wid) {
-    if (wid == _currentWsId || widget.provider == null) return;
+  void _switchWorkspace(String wid) async {
+    if (wid == _currentWsId) return;
     final ws = widget.workspaces!.firstWhere((w) => w.id == wid);
     if (ws.projectIds.isEmpty) return;
     final pid = ws.projectIds.first;
-    widget.provider!.loadProject(wid, pid).then((project) {
+
+    if (widget.provider != null) {
+      try {
+        final project = await widget.provider!.loadProject(wid, pid);
+        final cache = widget.cacheBuilder(wid, pid);
+        cache.save(project);
+        setState(() {
+          _currentWsId = wid;
+          _currentPid = pid;
+          _project = project;
+        });
+      } catch (_) {}
+    } else {
       final cache = widget.cacheBuilder(wid, pid);
-      cache.save(project);
+      Project? project = await cache.load();
+      if (project == null) {
+        try {
+          final raw = await rootBundle.loadString('assets/fixtures/$wid/$pid.json');
+          project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+          await cache.save(project);
+        } catch (_) {
+          return;
+        }
+      }
       setState(() {
         _currentWsId = wid;
         _currentPid = pid;
-        _project = project;
+        _project = project!;
       });
-    }).catchError((_) {});
+    }
   }
 
   @override
@@ -238,8 +259,14 @@ Future<_LoadResult> _loadData() async {
     }
   }
 
+  final fallbackWorkspaces = [
+    WorkspaceInfo(id: 'workspace0', name: '工作区 0', projectIds: ['project0']),
+    WorkspaceInfo(id: 'workspace1', name: '工作区 1', projectIds: ['project1']),
+  ];
+
   return _LoadResult(
     project: project,
+    workspaces: fallbackWorkspaces,
     provider: provider,
     cacheBuilder: cacheBuilder,
     currentWsId: 'workspace0',
