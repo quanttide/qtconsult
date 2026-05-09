@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="flutter_quanttide_project API docs, for the Dart programming language.">
+  <title>flutter_quanttide_project - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">flutter_quanttide_project package</li>
+  </ol>
+  <div class="self-name">flutter_quanttide_project</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="flutter-quanttide-project">flutter-quanttide-project</h1>
+<p>看板项目领域模型。为 <code>quanttide-project-toolkit</code> 的 Flutter 实现奠定基础。</p>
+<h2 id="">模型</h2>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BoardCard</code></td>
+<td>看板卡片，支持内置字段 + 自定义字段</td>
+</tr>
+<tr>
+<td><code>BoardList</code></td>
+<td>具名卡片列表</td>
+</tr>
+<tr>
+<td><code>Board</code></td>
+<td>看板，包含 <code>Map&lt;String, BoardList&gt;</code></td>
+</tr>
+<tr>
+<td><code>Project</code></td>
+<td>项目，持有一个 <code>Board</code></td>
+</tr>
+</tbody>
+</table>
+<p>不包含任何业务特化逻辑（如 OODA），仅提供通用的看板数据结构。</p>
+<h2 id="-2">使用</h2>
+<pre class="language-dart"><code class="language-dart">import 'package:flutter_quanttide_project/flutter_quanttide_project.dart';
+
+final project = Project(
+  name: 'project1',
+  title: '示例项目',
+  board: Board(lists: {
+    'todo': BoardList(name: 'todo', cards: [
+      BoardCard(id: 'c1', title: '任务1'),
+    ]),
+    'done': BoardList(name: 'done', cards: []),
+  }),
+);
+
+final json = project.toJson();
+final restored = Project.fromJson(json);
+</code></pre>
+<h2 id="-3">依赖关系</h2>
+<pre class="language-dart"><code>flutter-quanttide-project  (通用看板模型)
+        ↑
+qtconsult-project          (OODA 特化适配，studio 内部)
+        ↑
+qtconsult_studio           (主应用)
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="flutter_quanttide_project">
+  <span class="name"><a href="flutter_quanttide_project/">flutter_quanttide_project</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">flutter_quanttide_project package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">flutter_quanttide_project</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="flutter_quanttide_project/">flutter_quanttide_project</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    flutter_quanttide_project
+      0.1.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

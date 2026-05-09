@@ -1,0 +1,9 @@
+name: flutter_quanttide_project
+description: 量潮看板项目领域模型
+version: 0.1.0
+
+environment:
+  sdk: ^3.11.5
+
+dev_dependencies:
+  test: ^1.25.0

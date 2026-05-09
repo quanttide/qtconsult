@@ -1,7 +1,7 @@
 {
   "name": "project1",
   "title": "商家赋能平台数字化转型",
-  "lists": {
+  "board": {
     "observe": [
       {
         "id": "o1",

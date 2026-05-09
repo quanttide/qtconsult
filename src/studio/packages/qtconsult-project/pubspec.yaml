@@ -1,0 +1,12 @@
+name: qtconsult_project
+description: 量潮咨询 OODA 看板模型
+version: 0.1.0
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter_quanttide_project:
+    path: ../../../../packages/flutter-quanttide-project
+  flutter:
+    sdk: flutter
