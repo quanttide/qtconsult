@@ -1,9 +1,0 @@
-.dart_tool/
-build/
-coverage/
-.pub-cache/
-.pub/
-*.log
-.DS_Store
-.idea/
-*.iml

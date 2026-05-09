@@ -13,8 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.2.0
   provider: ^6.1.5
-  flutter_quanttide_project:
-    path: ../../packages/flutter-quanttide-project
+  quanttide_project: ^0.1.0
   qtconsult_project:
     path: packages/qtconsult-project
 

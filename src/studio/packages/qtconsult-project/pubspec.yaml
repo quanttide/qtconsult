@@ -6,7 +6,6 @@ environment:
   sdk: ^3.11.5
 
 dependencies:
-  flutter_quanttide_project:
-    path: ../../../../packages/flutter-quanttide-project
+  quanttide_project: ^0.1.0
   flutter:
     sdk: flutter
