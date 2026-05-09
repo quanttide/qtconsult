@@ -8,24 +8,25 @@
 
 ## 包结构
 
-### `packages/flutter-quanttide-project`（共享）
+### `quanttide_project`（pub.dev）
 
 通用看板领域模型，不含任何业务特化。纯 Dart，零依赖。
 
 ```
 lib/
-  flutter_quanttide_project.dart  # barrel export
+  quanttide_project.dart  # barrel export
   src/
-    board_card.dart                # BoardCard（内置字段 + 自定义字段）
-    board_list.dart                # BoardList（name + cards）
-    board.dart                     # Board（Map<String, BoardList>）
-    project.dart                   # Project（name, title, board）
+    board_card.dart        # BoardCard（内置字段 + 自定义字段）
+    board_list.dart        # BoardList（name + cards）
+    board.dart             # Board（Map<String, BoardList>）
+    project.dart           # Project（name, title, board）
 ```
 
 **设计要点：**
 - `Board.lists` 是 `Map<String, BoardList>`，不预设列表名称
 - `BoardCard` 的 `category` 等字段保留，不做业务特化解释
 - 不包含任何 Provider/API/Cache 逻辑
+- 发布到 pub.dev，版本依赖 `^0.1.0`
 
 ### `src/studio/packages/qtconsult-project`
 
@@ -33,13 +34,15 @@ OODA 工作流适配层，提供 Studio 特有的 `ProjectLists` 访问器和视
 
 ```
 lib/
-  qtconsult_project.dart     # barrel export（含 flutter_quanttide_project 的全部导出）
+  qtconsult_project.dart     # barrel export（含 quanttide_project 的全部导出）
   src/
     project_lists.dart       # ProjectLists OODA 适配器 + BoardCardCluster
     visual_helpers.dart      # statusColor / taskStatusColor / taskStatusLabel
 ```
 
-**依赖：** `flutter_quanttide_project` + `flutter` SDK
+**依赖：** `quanttide_project: ^0.1.0` + `flutter` SDK
+
+**原则：** 优先复用 `quanttide_project` 的通用模型；当通用层无法满足 OODA 特化需求时，可直接定义自有模型，不必迁就通用层。
 
 ### `qtconsult_studio`（主应用）
 
