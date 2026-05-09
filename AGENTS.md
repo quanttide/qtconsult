@@ -13,6 +13,7 @@
 - **`src/studio/packages/qtconsult-project`** — OODA 特化适配层（ProjectLists + 视觉辅助），私有包
   - 优先复用 `quanttide_project` 的通用模型
   - 当通用层无法满足 OODA 特化需求时，可直接定义自有模型，不必迁就通用层
+  - 原则：**抽象不该成为新需求的瓶颈。** 如果为了让某件事符合通用模型而扭曲业务代码，那就是本末倒置
 - **`src/studio/`** — 主应用，通过 `qtconsult-project` 间接使用领域模型
 
 ## BoardCard 字段分组
