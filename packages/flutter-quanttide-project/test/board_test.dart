@@ -13,7 +13,7 @@ void main() {
                 custom: {'status': 'pending'}),
           ]),
           'orient': BoardList(name: 'orient', cards: [
-            BoardCard(id: 'i1', title: '洞察1', types: '技术领域'),
+            BoardCard(id: 'i1', title: '洞察1', tags: {'domain': '技术领域'}),
           ]),
           'decide': BoardList(name: 'decide', cards: [
             BoardCard(id: 's1', title: '方案A', custom: {'isSelected': true}),
@@ -32,7 +32,7 @@ void main() {
       expect(restored.board.lists.length, 4);
       expect(restored.board.lists['observe']!.cards.length, 1);
       expect(restored.board.lists['observe']!.cards[0].id, 'o1');
-      expect(restored.board.lists['orient']!.cards[0].types, '技术领域');
+      expect(restored.board.lists['orient']!.cards[0].tags, {'domain': '技术领域'});
       expect(restored.board.lists['decide']!.cards[0].custom['isSelected'], true);
       expect(restored.board.lists['act']!.cards[0].assignee, '某人');
     });

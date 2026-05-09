@@ -18,7 +18,7 @@ class ProjectLists {
   List<BoardCardCluster> get clusters {
     final map = <String, List<BoardCard>>{};
     for (final card in orient) {
-      final key = card.types ?? '未分类';
+      final key = card.tags['domain'] ?? '未分类';
       map.putIfAbsent(key, () => []).add(card);
     }
     return map.entries
@@ -35,4 +35,9 @@ class BoardCardCluster {
 
 extension ProjectOodaExtension on Project {
   ProjectLists get lists => ProjectLists(board: board);
+}
+
+extension BoardCardOodaExtension on BoardCard {
+  List<String> get upstream =>
+      (custom['upstream'] as List<dynamic>?)?.cast<String>() ?? [];
 }

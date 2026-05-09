@@ -28,9 +28,13 @@ class OodaState extends ChangeNotifier {
     final wasConfirmed = card.custom['status'] == 'confirmed';
     _project.lists.observe[index] = BoardCard(
       id: card.id, title: card.title, description: card.description,
-      category: card.category, types: card.types, tags: card.tags,
-      date: card.date, assignee: card.assignee, upstream: card.upstream,
-      custom: {...card.custom, 'status': wasConfirmed ? 'pending' : 'confirmed'},
+      category: card.category, tags: card.tags,
+      date: card.date, assignee: card.assignee,
+      custom: {
+        ...card.custom,
+        'upstream': card.upstream,
+        'status': wasConfirmed ? 'pending' : 'confirmed',
+      },
     );
     _markDirty(card.id);
   }
@@ -42,9 +46,13 @@ class OodaState extends ChangeNotifier {
     _project.lists.decide[index] = BoardCard(
       id: card.id, title: card.title, description: card.description,
       category: card.custom['isSelected'] == true ? null : 'selected',
-      types: card.types, tags: card.tags, date: card.date,
-      assignee: card.assignee, upstream: card.upstream,
-      custom: {...card.custom, 'isSelected': card.custom['isSelected'] != true},
+      tags: card.tags, date: card.date,
+      assignee: card.assignee,
+      custom: {
+        ...card.custom,
+        'upstream': card.upstream,
+        'isSelected': card.custom['isSelected'] != true,
+      },
     );
     _markDirty(card.id);
   }
@@ -55,9 +63,13 @@ class OodaState extends ChangeNotifier {
     final card = _project.lists.decide[index];
     _project.lists.decide[index] = BoardCard(
       id: card.id, title: card.title, description: card.description,
-      category: card.category, types: card.types, tags: card.tags,
-      date: card.date, assignee: card.assignee, upstream: card.upstream,
-      custom: {...card.custom, 'clientNote': note},
+      category: card.category, tags: card.tags,
+      date: card.date, assignee: card.assignee,
+      custom: {
+        ...card.custom,
+        'upstream': card.upstream,
+        'clientNote': note,
+      },
     );
     _markDirty(card.id);
   }

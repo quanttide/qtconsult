@@ -15,20 +15,14 @@ class BoardCard {
   /// 系统分类。如 ideal / reality，含义由上层业务约定。
   final String? category;
 
-  /// 问题领域。如"技术领域"、"数据基建"，可选多个类型参考。
-  final String? types;
-
-  /// 灵活标签列表。
-  final List<String> tags;
+  /// 标签 Map，用于多维度标记和筛选。如 {"domain": "sales", "priority": "high"}。
+  final Map<String, String> tags;
 
   /// 日期信息。支持 String 单日期或 Map 起止日期。
   final dynamic date;
 
   /// 负责人。
   final String? assignee;
-
-  /// 上游卡片 ID 列表，用于卡片间引用链路。
-  final List<String> upstream;
 
   /// 自定义字段。不在内置字段列表中的 JSON 键值对均归入此 Map。
   final Map<String, dynamic> custom;
@@ -38,11 +32,9 @@ class BoardCard {
     required this.title,
     this.description = '',
     this.category,
-    this.types,
-    this.tags = const [],
+    this.tags = const {},
     this.date,
     this.assignee,
-    this.upstream = const [],
     this.custom = const {},
   });
 
@@ -50,8 +42,8 @@ class BoardCard {
   /// 其余字段自动归入 [custom]。
   factory BoardCard.fromJson(Map<String, dynamic> json) {
     const builtIn = {
-      'id', 'title', 'description', 'category', 'types',
-      'tags', 'date', 'assignee', 'upstream',
+      'id', 'title', 'description', 'category',
+      'tags', 'date', 'assignee',
     };
     final custom = <String, dynamic>{};
     json.forEach((key, value) {
@@ -62,11 +54,12 @@ class BoardCard {
       title: json['title'] as String,
       description: json['description'] as String? ?? '',
       category: json['category'] as String?,
-      types: json['types'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? [],
+      tags: json['tags'] is Map
+          ? (json['tags'] as Map<String, dynamic>)
+              .map((k, v) => MapEntry(k, v.toString()))
+          : {},
       date: json['date'],
       assignee: json['assignee'] as String?,
-      upstream: (json['upstream'] as List<dynamic>?)?.cast<String>() ?? [],
       custom: custom,
     );
   }
@@ -74,7 +67,6 @@ class BoardCard {
   /// 创建当前卡片的副本，可选覆盖部分字段。
   BoardCard copyWith({
     String? category,
-    String? types,
     String? assignee,
   }) {
     return BoardCard(
@@ -82,11 +74,9 @@ class BoardCard {
       title: title,
       description: description,
       category: category ?? this.category,
-      types: types ?? this.types,
       tags: tags,
       date: date,
       assignee: assignee ?? this.assignee,
-      upstream: upstream,
       custom: custom,
     );
   }
@@ -99,11 +89,9 @@ class BoardCard {
       'description': description,
     };
     if (category != null) map['category'] = category;
-    if (types != null) map['types'] = types;
     if (tags.isNotEmpty) map['tags'] = tags;
     if (date != null) map['date'] = date;
     if (assignee != null) map['assignee'] = assignee;
-    if (upstream.isNotEmpty) map['upstream'] = upstream;
     map.addAll(custom);
     return map;
   }

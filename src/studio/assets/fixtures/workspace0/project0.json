@@ -75,45 +75,63 @@
         "id": "i1",
         "title": "小项目策略正在消耗核心团队",
         "description": "连续小项目利润为负 + 产能利用率低 → 小项目越做越亏，需要转向高客单价大项目。",
-        "types": "策略偏差",
         "date": null,
         "assignee": null,
-        "upstream": ["o1", "o2"],
+        "upstream": [
+          "o1",
+          "o2"
+        ],
         "rootCause": "缺乏主动获客机制和销售自信，被动接受小项目维持运转。",
-        "impact": "核心团队时间被低价值项目占用，无法承接高价值大单。"
+        "impact": "核心团队时间被低价值项目占用，无法承接高价值大单。",
+        "tags": {
+          "domain": "策略偏差"
+        }
       },
       {
         "id": "i2",
         "title": "缺乏主动获客机制",
         "description": "近一月无主动销售行为，完全依赖被动咨询和老客户复购。增长不可持续。",
-        "types": "销售断层",
         "date": null,
         "assignee": null,
-        "upstream": ["o3"],
+        "upstream": [
+          "o3"
+        ],
         "rootCause": "无专职销售角色，创始人同时负责交付和销售。",
-        "impact": "项目来源不稳定，无法规划产能和团队增长。"
+        "impact": "项目来源不稳定，无法规划产能和团队增长。",
+        "tags": {
+          "domain": "销售断层"
+        }
       },
       {
         "id": "i3",
         "title": "产品能力已有，规模化能力不足",
         "description": "咨询平台原型获客户正面反馈，但尚未形成标准化交付流程和规模化能力。",
-        "types": "产品化",
         "date": null,
         "assignee": null,
-        "upstream": ["o4", "o6"],
+        "upstream": [
+          "o4",
+          "o6"
+        ],
         "rootCause": "团队以项目制思维运作，缺乏产品化思维和标准化交付流程。",
-        "impact": "无法放大已验证的产品能力，错失平台化增长机会。"
+        "impact": "无法放大已验证的产品能力，错失平台化增长机会。",
+        "tags": {
+          "domain": "产品化"
+        }
       },
       {
         "id": "i4",
         "title": "创始人角色需从执行转向决策",
         "description": "创始人同时跑三条线，精力分散。需要秘书处分担协调，聚焦战略决策。",
-        "types": "组织治理",
         "date": null,
         "assignee": null,
-        "upstream": ["o5"],
+        "upstream": [
+          "o5"
+        ],
         "rootCause": "团队规模小，未建立分层决策机制。",
-        "impact": "创始人成为瓶颈，限制团队承载力和决策速度。"
+        "impact": "创始人成为瓶颈，限制团队承载力和决策速度。",
+        "tags": {
+          "domain": "组织治理"
+        }
       }
     ],
     "decide": [
@@ -123,7 +141,12 @@
         "description": "用当前接近谈成的大单验证交付能力，建立标杆案例，提升品牌定位。",
         "date": null,
         "assignee": null,
-        "upstream": ["i1", "i2", "i3", "i4"],
+        "upstream": [
+          "i1",
+          "i2",
+          "i3",
+          "i4"
+        ],
         "priority": "P1",
         "advantage": "一举解决利润率问题、品牌定位问题和团队信心问题。",
         "summary": "第一步：大单验证 → 第二步：重构项目管理框架 → 第三步：建立双平台机制",
@@ -138,7 +161,10 @@
         "description": "通过标准化和工具化提升小项目利润率，维持现状渐进改进。",
         "date": null,
         "assignee": null,
-        "upstream": ["i1", "i4"],
+        "upstream": [
+          "i1",
+          "i4"
+        ],
         "priority": "P2",
         "advantage": "风险低，不需要改变当前运作模式。",
         "summary": "建立小项目标准化模板 → 工具化降低交付成本 → 逐步提价筛选客户",
@@ -153,9 +179,14 @@
         "id": "t1",
         "title": "大单攻坚：推进当前接近谈成的大项目",
         "description": "集中资源推进大单落地，建立标杆案例。",
-        "date": { "start": "2026-05-08", "end": "2026-06-30" },
+        "date": {
+          "start": "2026-05-08",
+          "end": "2026-06-30"
+        },
         "assignee": "创始人",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "doing",
         "progress": 0.3,
         "notes": "客户沟通进行中，预计6月底前签约"
@@ -164,9 +195,14 @@
         "id": "t2",
         "title": "设立秘书处分担协调工作",
         "description": "招聘或指定专人负责日程协调、会议安排、信息过滤，释放创始人时间。",
-        "date": { "start": "2026-05-08", "end": "2026-05-31" },
+        "date": {
+          "start": "2026-05-08",
+          "end": "2026-05-31"
+        },
         "assignee": "创始人",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": ""
@@ -175,9 +211,14 @@
         "id": "t3",
         "title": "重构项目管理框架",
         "description": "以看板为原方法统一瀑布与敏捷，建立可复用的项目交付框架。",
-        "date": { "start": "2026-06-01", "end": "2026-08-31" },
+        "date": {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        },
         "assignee": "核心团队",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": "参考咨询平台原型中的OODA看板模式"
@@ -186,9 +227,14 @@
         "id": "t4",
         "title": "建立主动销售机制",
         "description": "建立市场/销售角色或机制，不再依赖被动获客。",
-        "date": { "start": "2026-06-01", "end": "2026-07-31" },
+        "date": {
+          "start": "2026-06-01",
+          "end": "2026-07-31"
+        },
         "assignee": "创始人 + 待招销售",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": "可考虑合伙人模式引入销售资源"
@@ -197,9 +243,14 @@
         "id": "t5",
         "title": "构建「内观-外观」双平台机制",
         "description": "让自我观察成为制度化能力，持续监测团队效能和市场变化。",
-        "date": { "start": "2026-09-01", "end": "2026-12-31" },
+        "date": {
+          "start": "2026-09-01",
+          "end": "2026-12-31"
+        },
         "assignee": "核心团队",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": ""
@@ -208,9 +259,14 @@
         "id": "t6",
         "title": "现有小项目收尾与交接",
         "description": "处理进行中的小项目，确保平稳过渡到大项目路线。",
-        "date": { "start": "2026-05-08", "end": "2026-07-31" },
+        "date": {
+          "start": "2026-05-08",
+          "end": "2026-07-31"
+        },
         "assignee": "现有团队",
-        "upstream": ["s2"],
+        "upstream": [
+          "s2"
+        ],
         "status": "doing",
         "progress": 0.5,
         "notes": ""

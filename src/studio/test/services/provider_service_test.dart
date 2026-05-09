@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:qtconsult_studio/models/ooda_data.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 import 'package:qtconsult_studio/services/provider_service.dart';
 
 class _MockClient extends http.BaseClient {
@@ -73,7 +71,7 @@ void main() {
           'GET', 'http://localhost:8756/workspaces/ws1/projects/p1', 200, {
         'name': 'p1',
         'title': '测试项目',
-        'lists': {
+        'board': {
           'observe': [{'id': 'o1', 'title': '卡片1', 'category': 'ideal'}],
           'orient': [],
           'decide': [],

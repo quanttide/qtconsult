@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:qtconsult_studio/models/ooda_data.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 import 'package:qtconsult_studio/screens/ooda_screen.dart';
 import 'package:qtconsult_studio/services/ooda_state.dart';
 import 'package:qtconsult_studio/services/cache_service.dart';
@@ -11,26 +11,26 @@ Project makeTestProject() {
   return Project(
     name: 'test',
     title: '测试项目',
-    lists: ProjectLists(
-      observe: [
+    board: Board(lists: {
+      'observe': BoardList(name: 'observe', cards: [
         BoardCard(id: 'o1', title: '调研卡片', description: '测试描述', category: 'ideal',
             custom: {'status': 'pending', 'source': '访谈'}),
         BoardCard(id: 'o2', title: '现实卡片', category: 'reality',
             custom: {'status': 'confirmed', 'source': '审计'}),
-      ],
-      orient: [
-        BoardCard(id: 'i1', title: '洞察测试', types: '技术领域',
-            upstream: ['o1'], custom: {'rootCause': '根因', 'impact': '影响'}),
-      ],
-      decide: [
-        BoardCard(id: 's1', title: '方案A', upstream: ['i1'],
-            custom: {'advantage': '优势', 'isSelected': true}),
-      ],
-      act: [
+      ]),
+      'orient': BoardList(name: 'orient', cards: [
+        BoardCard(id: 'i1', title: '洞察测试', tags: {'domain': '技术领域'},
+            custom: {'upstream': ['o1'], 'rootCause': '根因', 'impact': '影响'}),
+      ]),
+      'decide': BoardList(name: 'decide', cards: [
+        BoardCard(id: 's1', title: '方案A',
+            custom: {'upstream': ['i1'], 'advantage': '优势', 'isSelected': true}),
+      ]),
+      'act': BoardList(name: 'act', cards: [
         BoardCard(id: 't1', title: '任务1', assignee: '某人',
             custom: {'status': 'doing', 'progress': 0.5}),
-      ],
-    ),
+      ]),
+    }),
   );
 }
 

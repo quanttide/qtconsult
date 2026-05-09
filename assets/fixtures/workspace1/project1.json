@@ -97,45 +97,69 @@
         "id": "i1",
         "title": "战略目标与技术承载能力之间存在差距",
         "description": "过往技术投入以支撑运行为主，未为下一阶段做储备，导致三大任务需协调推进，避免资源分散。",
-        "types": "战略技术断层",
         "date": null,
         "assignee": null,
-        "upstream": ["o1", "o2", "o4"],
+        "upstream": [
+          "o1",
+          "o2",
+          "o4"
+        ],
         "rootCause": "过往技术投入以支撑运行为主，未为下一阶段做储备。",
-        "impact": "三大任务需协调推进，避免资源分散。"
+        "impact": "三大任务需协调推进，避免资源分散。",
+        "tags": {
+          "domain": "战略技术断层"
+        }
       },
       {
         "id": "i2",
         "title": "架构优化前置有助于新平台建设",
         "description": "现有代码和架构有优化空间，技术债需在新建前处理，否则将旧问题延拓到新系统。",
-        "types": "战略技术断层",
         "date": null,
         "assignee": null,
-        "upstream": ["o5", "o6", "o4"],
+        "upstream": [
+          "o5",
+          "o6",
+          "o4"
+        ],
         "rootCause": "现有代码和架构有优化空间，技术债需在新建前处理。",
-        "impact": "不清债直接建新平台，可能将旧问题延拓到新系统。"
+        "impact": "不清债直接建新平台，可能将旧问题延拓到新系统。",
+        "tags": {
+          "domain": "战略技术断层"
+        }
       },
       {
         "id": "i3",
         "title": "数据分析需求日趋复杂，数据基础有待夯实",
         "description": "多维分析需求涌现，但数据采集和存储能力尚在建设中，需分阶段建设。",
-        "types": "数据基建",
         "date": null,
         "assignee": null,
-        "upstream": ["o3", "o7", "o8"],
+        "upstream": [
+          "o3",
+          "o7",
+          "o8"
+        ],
         "rootCause": "多维分析需求涌现，但数据采集和存储能力尚在建设中。",
-        "impact": "需分阶段建设，优先聚焦商家ROI和流量效果评估。"
+        "impact": "需分阶段建设，优先聚焦商家ROI和流量效果评估。",
+        "tags": {
+          "domain": "数据基建"
+        }
       },
       {
         "id": "i4",
         "title": "新平台与数据基础设施需统筹规划",
         "description": "新平台数据架构若独立规划，未来可能形成新数据孤岛，应从设计阶段考虑数据规范。",
-        "types": "数据基建",
         "date": null,
         "assignee": null,
-        "upstream": ["o2", "o3", "o8"],
+        "upstream": [
+          "o2",
+          "o3",
+          "o8"
+        ],
         "rootCause": "新平台数据架构若独立规划，未来可能形成新数据孤岛。",
-        "impact": "应从设计阶段就考虑数据规范和数据上报机制。"
+        "impact": "应从设计阶段就考虑数据规范和数据上报机制。",
+        "tags": {
+          "domain": "数据基建"
+        }
       }
     ],
     "decide": [
@@ -145,7 +169,12 @@
         "description": "先夯实技术基础，降低后期治理成本。",
         "date": null,
         "assignee": null,
-        "upstream": ["i1", "i2", "i3", "i4"],
+        "upstream": [
+          "i1",
+          "i2",
+          "i3",
+          "i4"
+        ],
         "priority": "P1",
         "advantage": "先夯实技术基础，降低后期治理成本。",
         "summary": "第1阶段（4个月）架构优化+团队扩充 → 第2阶段（6个月）新平台+数仓并行 → 第3阶段分析能力深化。",
@@ -160,7 +189,11 @@
         "description": "新平台快速上线验证方向，抢占窗口期。",
         "date": null,
         "assignee": null,
-        "upstream": ["i1", "i3", "i4"],
+        "upstream": [
+          "i1",
+          "i3",
+          "i4"
+        ],
         "priority": "P2",
         "advantage": "新平台快速上线验证方向，抢占窗口期。",
         "summary": "第1阶段（6个月）MVP研发 → 第2阶段（4个月）架构优化+数据基建 → 第3阶段整合。",
@@ -175,9 +208,14 @@
         "id": "t1",
         "title": "架构优化与工程规范建设",
         "description": "",
-        "date": { "start": "2026-06-01", "end": "2026-09-30" },
+        "date": {
+          "start": "2026-06-01",
+          "end": "2026-09-30"
+        },
         "assignee": "架构组",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "doing",
         "progress": 0.6,
         "notes": "CI/CD已完成，核心重构60%"
@@ -186,9 +224,14 @@
         "id": "t2",
         "title": "团队扩充",
         "description": "",
-        "date": { "start": "2026-06-01", "end": "2026-08-31" },
+        "date": {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        },
         "assignee": "HR + CTO",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "doing",
         "progress": 0.4,
         "notes": "架构师已到岗，数据工程师招聘中"
@@ -197,9 +240,14 @@
         "id": "t3",
         "title": "商家赋能平台MVP研发",
         "description": "",
-        "date": { "start": "2026-10-01", "end": "2027-03-31" },
+        "date": {
+          "start": "2026-10-01",
+          "end": "2027-03-31"
+        },
         "assignee": "待定",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": ""
@@ -208,9 +256,14 @@
         "id": "t4",
         "title": "数据仓库与BI体系建设",
         "description": "",
-        "date": { "start": "2026-10-01", "end": "2027-06-30" },
+        "date": {
+          "start": "2026-10-01",
+          "end": "2027-06-30"
+        },
         "assignee": "待定（需数据工程师到岗）",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "todo",
         "progress": 0.0,
         "notes": ""
@@ -221,7 +274,9 @@
         "description": "高峰期保障、日常修复、外包协调",
         "date": null,
         "assignee": "现有团队",
-        "upstream": ["s2"],
+        "upstream": [
+          "s2"
+        ],
         "status": "doing",
         "progress": 1.0,
         "notes": ""
@@ -232,7 +287,9 @@
         "description": "",
         "date": null,
         "assignee": "数据工程师（待招）",
-        "upstream": ["s1"],
+        "upstream": [
+          "s1"
+        ],
         "status": "blocked",
         "progress": 0.05,
         "notes": "",
