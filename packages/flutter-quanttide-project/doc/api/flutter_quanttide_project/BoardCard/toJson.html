@@ -76,11 +76,9 @@
     &#39;description&#39;: description,
   };
   if (category != null) map[&#39;category&#39;] = category;
-  if (types != null) map[&#39;types&#39;] = types;
   if (tags.isNotEmpty) map[&#39;tags&#39;] = tags;
   if (date != null) map[&#39;date&#39;] = date;
   if (assignee != null) map[&#39;assignee&#39;] = assignee;
-  if (upstream.isNotEmpty) map[&#39;upstream&#39;] = upstream;
   map.addAll(custom);
   return map;
 }</code></pre>

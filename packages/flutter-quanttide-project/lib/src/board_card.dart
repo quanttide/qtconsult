@@ -1,8 +1,13 @@
 /// 看板卡片。
 ///
-/// 支持内置字段和自定义字段。
-/// 自定义字段通过 [custom] Map 存储，序列化时合并到 JSON 根层级。
+/// 字段分四组：
+/// - **标识**：id、title、description
+/// - **分类**：category（系统分类）、tags（多维度标签，Map<String, String>）
+/// - **上下文**：date（时间）、assignee（负责人）
+/// - **扩展**：custom（自定义字段，序列化时展开到 JSON 根层级）
 class BoardCard {
+  // ===== 标识 =====
+
   /// 卡片唯一标识。
   final String id;
 
@@ -12,19 +17,28 @@ class BoardCard {
   /// 卡片详细描述。
   final String description;
 
-  /// 系统分类。如 ideal / reality，含义由上层业务约定。
+  // ===== 分类 =====
+
+  /// 系统分类。由上层业务约定，如 OODA 中区分 ideal（业务理想）和 reality（现实状况）。
   final String? category;
 
-  /// 标签 Map，用于多维度标记和筛选。如 {"domain": "sales", "priority": "high"}。
+  /// 标签 Map，用于多维度标记和筛选。键为维度名，值为标签值。
+  ///
+  /// 示例：{"domain": "sales", "priority": "high", "status": "active"}
   final Map<String, String> tags;
 
-  /// 日期信息。支持 String 单日期或 Map 起止日期。
+  // ===== 上下文 =====
+
+  /// 日期信息。支持 String 单日期（"2024-01-15"）或 Map 起止日期。
   final dynamic date;
 
   /// 负责人。
   final String? assignee;
 
+  // ===== 扩展 =====
+
   /// 自定义字段。不在内置字段列表中的 JSON 键值对均归入此 Map。
+  /// 序列化时展开到 JSON 根层级，与内置字段平级。
   final Map<String, dynamic> custom;
 
   const BoardCard({

@@ -8,7 +8,9 @@ class Project {
   /// 项目显示标题。
   final String title;
 
-  /// 项目的看板数据。
+  // ===== 看板 =====
+
+  /// 项目的看板数据，包含一组具名列表。
   final Board board;
 
   const Project({

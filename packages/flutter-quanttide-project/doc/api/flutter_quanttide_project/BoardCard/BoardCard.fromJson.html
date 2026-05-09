@@ -69,8 +69,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory BoardCard.fromJson(Map&lt;String, dynamic&gt; json) {
   const builtIn = {
-    &#39;id&#39;, &#39;title&#39;, &#39;description&#39;, &#39;category&#39;, &#39;types&#39;,
-    &#39;tags&#39;, &#39;date&#39;, &#39;assignee&#39;, &#39;upstream&#39;,
+    &#39;id&#39;, &#39;title&#39;, &#39;description&#39;, &#39;category&#39;,
+    &#39;tags&#39;, &#39;date&#39;, &#39;assignee&#39;,
   };
   final custom = &lt;String, dynamic&gt;{};
   json.forEach((key, value) {
@@ -81,11 +81,12 @@
     title: json[&#39;title&#39;] as String,
     description: json[&#39;description&#39;] as String? ?? &#39;&#39;,
     category: json[&#39;category&#39;] as String?,
-    types: json[&#39;types&#39;] as String?,
-    tags: (json[&#39;tags&#39;] as List&lt;dynamic&gt;?)?.cast&lt;String&gt;() ?? [],
+    tags: json[&#39;tags&#39;] is Map
+        ? (json[&#39;tags&#39;] as Map&lt;String, dynamic&gt;)
+            .map((k, v) =&gt; MapEntry(k, v.toString()))
+        : {},
     date: json[&#39;date&#39;],
     assignee: json[&#39;assignee&#39;] as String?,
-    upstream: (json[&#39;upstream&#39;] as List&lt;dynamic&gt;?)?.cast&lt;String&gt;() ?? [],
     custom: custom,
   );
 }</code></pre>

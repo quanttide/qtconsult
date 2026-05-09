@@ -5,7 +5,7 @@ import 'board_list.dart';
 ///
 /// 例如 OODA 工作流使用 observe / orient / decide / act 四个列表。
 class Board {
-  /// 列表 Map，键为列表名称，值为 [BoardList]。
+  /// 列表 Map，键为列表名称，值为 [BoardList]，顺序由上游约定。
   final Map<String, BoardList> lists;
 
   const Board({required this.lists});
