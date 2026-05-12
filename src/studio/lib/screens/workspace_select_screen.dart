@@ -62,8 +62,8 @@ class WorkspaceSelectScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider(
-            create: (_) => OodaState(tasks, cache, provider: provider, workspaceId: wid, projectId: pid),
-            child: const OodaScreen(),
+            create: (_) => ConsultState(tasks, cache, provider: provider, workspaceId: wid, projectId: pid),
+            child: const ConsultBoardScreen(),
           ),
         ),
       );

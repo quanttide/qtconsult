@@ -38,7 +38,7 @@ class _MockClient extends http.BaseClient {
 void main() {
   test('toggleObserveConfirm 切换状态', () {
     final tasks = makeTestTasks();
-    final state = OodaState(tasks, CacheService(filePath: ''));
+    final state = ConsultState(tasks, CacheService(filePath: ''));
     expect(tasks[0].status, 'pending');
 
     state.toggleObserveConfirm('o1');
@@ -47,7 +47,7 @@ void main() {
 
   test('toggleStrategySelect 切换选中状态', () {
     final tasks = makeTestTasks();
-    final state = OodaState(tasks, CacheService(filePath: ''));
+    final state = ConsultState(tasks, CacheService(filePath: ''));
     expect(tasks[3].tags['isSelected'], 'true');
 
     state.toggleStrategySelect('s1');
@@ -56,7 +56,7 @@ void main() {
 
   test('updateClientNote 更新备注', () {
     final tasks = makeTestTasks();
-    final state = OodaState(tasks, CacheService(filePath: ''));
+    final state = ConsultState(tasks, CacheService(filePath: ''));
     expect(tasks[3].tags['clientNote'], '');
 
     state.updateClientNote('s1', '客户要求调整方案');
@@ -69,7 +69,7 @@ void main() {
     final cachePath = '${tmpDir.path}/cache.json';
     final tasks = makeTestTasks();
     final cache = CacheService(filePath: cachePath);
-    final state = OodaState(tasks, cache);
+    final state = ConsultState(tasks, cache);
 
     state.toggleObserveConfirm('o1');
     await state.flush();
@@ -88,7 +88,7 @@ void main() {
       client: mock,
     );
     final tasks = makeTestTasks();
-    final state = OodaState(tasks, CacheService(filePath: ''),
+    final state = ConsultState(tasks, CacheService(filePath: ''),
         provider: provider, workspaceId: 'ws1', projectId: 'test');
 
     state.toggleObserveConfirm('o1');
@@ -101,9 +101,9 @@ void main() {
     expect(match, true);
   });
 
-  test('OodaState 持有 workspaceId 和 projectId', () {
+  test('ConsultState 持有 workspaceId 和 projectId', () {
     final tasks = makeTestTasks();
-    final state = OodaState(tasks, CacheService(filePath: ''),
+    final state = ConsultState(tasks, CacheService(filePath: ''),
         workspaceId: 'ws1', projectId: 'test');
     expect(state.hasUnsavedChanges, false);
     state.toggleObserveConfirm('o1');

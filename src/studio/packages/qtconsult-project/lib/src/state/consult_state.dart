@@ -6,7 +6,7 @@ import 'package:data_sources/provider_service.dart';
 import 'package:quanttide_project/quanttide_project.dart';
 import '../project_lists.dart';
 
-class OodaState extends ChangeNotifier {
+class ConsultState extends ChangeNotifier {
   List<Task> _tasks;
   final CacheService _cache;
   final ProviderService? _provider;
@@ -15,7 +15,7 @@ class OodaState extends ChangeNotifier {
   final Set<String> _dirtyTaskIds = {};
   bool _dirty = false;
 
-  OodaState(this._tasks, this._cache,
+  ConsultState(this._tasks, this._cache,
       {ProviderService? provider, String workspaceId = '', String projectId = ''})
       : _workspaceId = workspaceId,
         _projectId = projectId,
@@ -105,7 +105,7 @@ class OodaState extends ChangeNotifier {
 
   void _flushInBackground() {
     flush().catchError((error) {
-      debugPrint('OodaState flush failed: $error');
+      debugPrint('ConsultState flush failed: $error');
     });
   }
 }

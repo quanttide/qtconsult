@@ -6,13 +6,13 @@ import 'package:flutter_quanttide_project/flutter_quanttide_project.dart' as ui;
 import 'workspace_switcher.dart';
 import 'stage_column.dart';
 
-class OodaScreen extends StatelessWidget {
+class ConsultBoardScreen extends StatelessWidget {
   final List<WorkspaceInfo>? workspaces;
   final String? currentWsId;
   final void Function(String wid)? onSwitchWorkspace;
   final String? loadWarning;
 
-  const OodaScreen({
+  const ConsultBoardScreen({
     super.key,
     this.workspaces,
     this.currentWsId,
@@ -24,7 +24,7 @@ class OodaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('量潮咨询服务看板'),
+        title: const Text('量潮咨询'),
         centerTitle: true,
         backgroundColor: const Color(0xFFF5F5F5),
         elevation: 0,
@@ -40,7 +40,7 @@ class OodaScreen extends StatelessWidget {
             ),
         ],
       ),
-      body: Consumer<OodaState>(
+      body: Consumer<ConsultState>(
         builder: (context, state, _) {
           final lists = state.lists;
           return Column(
@@ -122,17 +122,17 @@ class OodaScreen extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           const Text(
-            '咨询服务看板',
+            '咨询看板',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF222222)),
           ),
           const Spacer(),
-          _buildLegend('调研 · Observe', const Color(0xFF444444)),
+          _buildLegend('需求澄清 · Clarify', const Color(0xFF444444)),
           const SizedBox(width: 14),
-          _buildLegend('分析 · Orient', const Color(0xFF666666)),
+          _buildLegend('调研分析 · Research', const Color(0xFF666666)),
           const SizedBox(width: 14),
-          _buildLegend('决策 · Decide', const Color(0xFF888888)),
+          _buildLegend('决策方案 · Decide', const Color(0xFF888888)),
           const SizedBox(width: 14),
-          _buildLegend('执行 · Act', const Color(0xFFAAAAAA)),
+          _buildLegend('执行跟踪 · Execute', const Color(0xFFAAAAAA)),
         ],
       ),
     );
@@ -217,7 +217,7 @@ class _ObserveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<OodaState>();
+    final state = context.read<ConsultState>();
     final isConfirmed = task.status == 'confirmed';
     return ui.BoardCard(
       title: Row(
@@ -417,7 +417,7 @@ class _DecideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<OodaState>();
+    final state = context.read<ConsultState>();
     final isSelected = task.tags['isSelected'] == 'true';
     return Container(
       margin: const EdgeInsets.only(bottom: 12),

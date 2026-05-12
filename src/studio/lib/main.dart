@@ -186,14 +186,14 @@ class _AppBodyState extends State<_AppBody> {
     final cache = widget.cacheBuilder(_currentWsId, _currentPid);
     return ChangeNotifierProvider(
       key: ValueKey('$_currentWsId:$_currentPid'),
-      create: (_) => OodaState(
+      create: (_) => ConsultState(
         _tasks,
         cache,
         provider: widget.provider,
         workspaceId: _currentWsId,
         projectId: _currentPid,
       ),
-      child: OodaScreen(
+      child: ConsultBoardScreen(
         workspaces: widget.workspaces,
         currentWsId: _currentWsId,
         onSwitchWorkspace: widget.workspaces != null ? _switchWorkspace : null,

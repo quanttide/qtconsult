@@ -33,9 +33,9 @@ Widget buildApp(List<Task> tasks,
     void Function(String)? onSwitch,
     String? loadWarning}) {
   return ChangeNotifierProvider(
-    create: (_) => OodaState(tasks, CacheService(filePath: '')),
+    create: (_) => ConsultState(tasks, CacheService(filePath: '')),
     child: MaterialApp(
-      home: OodaScreen(
+      home: ConsultBoardScreen(
         workspaces: workspaces,
         currentWsId: currentWsId,
         onSwitchWorkspace: onSwitch,
