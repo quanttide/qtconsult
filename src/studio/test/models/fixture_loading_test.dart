@@ -17,10 +17,10 @@ void main() {
         .map((e) => Task.fromJson(e as Map<String, dynamic>))
         .toList();
     expect(tasks.length, 18);
-    expect(tasks.where((t) => t.type == 'observe-ideal' || t.type == 'observe-reality').length, 6);
-    expect(tasks.where((t) => t.type == 'orient').length, 4);
+    expect(tasks.where((t) => t.type == 'clarify').length, 2);
+    expect(tasks.where((t) => t.type == 'research').length, 8);
     expect(tasks.where((t) => t.type == 'decide').length, 2);
-    expect(tasks.where((t) => t.type == 'act').length, 6);
+    expect(tasks.where((t) => t.type == 'execute').length, 6);
   });
 
   test('load fixture workspace1/project1.json', () {
@@ -35,9 +35,9 @@ void main() {
         .map((e) => Task.fromJson(e as Map<String, dynamic>))
         .toList();
     expect(tasks.length, 20);
-    expect(tasks.where((t) => t.type == 'observe-ideal' || t.type == 'observe-reality').length, 8);
-    expect(tasks.where((t) => t.type == 'orient').length, 4);
+    expect(tasks.where((t) => t.type == 'clarify').length, 4);
+    expect(tasks.where((t) => t.type == 'research').length, 8);
     expect(tasks.where((t) => t.type == 'decide').length, 2);
-    expect(tasks.where((t) => t.type == 'act').length, 6);
+    expect(tasks.where((t) => t.type == 'execute').length, 6);
   });
 }

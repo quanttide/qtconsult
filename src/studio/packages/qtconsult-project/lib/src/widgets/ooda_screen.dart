@@ -289,7 +289,6 @@ class _OrientContentState extends State<_OrientContent> {
 
   @override
   Widget build(BuildContext context) {
-    final total = widget.clusters.fold(0, (sum, c) => sum + c.tasks.length);
     final filtered = _filter == '全部'
         ? widget.clusters
         : widget.clusters.where((c) => c.name == _filter).toList();
