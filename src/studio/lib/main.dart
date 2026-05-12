@@ -156,28 +156,18 @@ class _AppBodyState extends State<_AppBody> {
         });
       } catch (_) {}
     } else {
-      final cache = widget.cacheBuilder(wid, pid);
-      final cachedRaw = await cache.load();
-      List<Task>? tasks;
-      if (cachedRaw != null) {
-        final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
-        tasks = _parseTasks(json).tasks;
+      try {
+        final raw = await rootBundle.loadString('assets/fixtures/$wid/$pid.json');
+        final json = jsonDecode(raw) as Map<String, dynamic>;
+        final parsed = _parseTasks(json);
+        setState(() {
+          _currentWsId = wid;
+          _currentPid = pid;
+          _tasks = parsed.tasks;
+        });
+      } catch (_) {
+        return;
       }
-      if (tasks == null) {
-        try {
-          final raw = await rootBundle.loadString('assets/fixtures/$wid/$pid.json');
-          final json = jsonDecode(raw) as Map<String, dynamic>;
-          tasks = _parseTasks(json).tasks;
-          await cache.save(jsonEncode(json));
-        } catch (_) {
-          return;
-        }
-      }
-      setState(() {
-        _currentWsId = wid;
-        _currentPid = pid;
-        _tasks = tasks!;
-      });
     }
   }
 
@@ -265,43 +255,26 @@ Future<_LoadResult> _loadData() async {
     }
   }
 
-  // Fallback: try cache for default project
-  final defaultCache = CacheService(filePath: 'data/cache/workspace0/project0.json');
-  String? cachedRaw;
-  try {
-    cachedRaw = await defaultCache.load();
-  } catch (_) {}
+  // Fallback: load from fixture
   Project? project;
   List<Task>? tasks;
-  if (cachedRaw != null) {
-    try {
-      final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
-      final parsed = _parseTasks(json);
-      project = parsed.project;
-      tasks = parsed.tasks;
-    } catch (_) {}
-  }
   String? loadWarning;
 
-  if (project == null) {
+  try {
+    final raw = await rootBundle.loadString('assets/fixtures/workspace0/project0.json');
+    final json = jsonDecode(raw) as Map<String, dynamic>;
+    final parsed = _parseTasks(json);
+    project = parsed.project;
+    tasks = parsed.tasks;
+  } catch (_) {
     try {
-      final raw = await rootBundle.loadString('assets/fixtures/workspace0/project0.json');
+      final raw = await rootBundle.loadString('assets/fixtures/workspace1/project1.json');
       final json = jsonDecode(raw) as Map<String, dynamic>;
       final parsed = _parseTasks(json);
       project = parsed.project;
       tasks = parsed.tasks;
-      await defaultCache.save(jsonEncode(json));
-    } catch (_) {
-      try {
-        final raw = await rootBundle.loadString('assets/fixtures/workspace1/project1.json');
-        final json = jsonDecode(raw) as Map<String, dynamic>;
-        final parsed = _parseTasks(json);
-        project = parsed.project;
-        tasks = parsed.tasks;
-        await defaultCache.save(jsonEncode(json));
-      } catch (e) {
-        loadWarning = '所有数据源加载失败: $e';
-      }
+    } catch (e) {
+      loadWarning = '所有数据源加载失败: $e';
     }
   }
 
