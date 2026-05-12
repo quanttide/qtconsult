@@ -1,5 +1,20 @@
 # Changelog
 
+## [studio/v0.3.0] - 2026-05-12
+
+### Changed
+- 重构看板阶段命名：Observe/Orient/Act → Clarify/Research/Execute
+- OodaState → ConsultState, OodaScreen → ConsultBoardScreen
+- 统一卡片组件：删除 4 个独立 Column 和定制 Card，改用 SimpleCard
+- 调研分析列合并：原 Orient（根因分析）并入 Research
+- 数据加载直接走 fixture，绕过错位缓存
+- 清理死代码：删除 board_card_title.dart、board_card_description.dart
+- 列布局从独立 Widget 改为 StageColumn + content builder
+
+### Added
+- SimpleCard 公共卡片组件（title + description）
+- fixture 加载测试覆盖
+
 ## [0.2.0] - 2026-05-08
 
 ### Added
