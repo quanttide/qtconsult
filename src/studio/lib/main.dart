@@ -69,6 +69,11 @@ class _AppLoaderState extends State<_AppLoader> {
             ),
           );
         }
+        if (snapshot.hasError) {
+          return const Scaffold(
+            body: Center(child: Text('加载失败', style: TextStyle(color: Colors.red))),
+          );
+        }
         final result = snapshot.data;
         if (result == null) {
           return const Scaffold(
@@ -262,14 +267,19 @@ Future<_LoadResult> _loadData() async {
 
   // Fallback: try cache for default project
   final defaultCache = CacheService(filePath: 'data/cache/workspace0/project0.json');
-  final cachedRaw = await defaultCache.load();
+  String? cachedRaw;
+  try {
+    cachedRaw = await defaultCache.load();
+  } catch (_) {}
   Project? project;
   List<Task>? tasks;
   if (cachedRaw != null) {
-    final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
-    final parsed = _parseTasks(json);
-    project = parsed.project;
-    tasks = parsed.tasks;
+    try {
+      final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
+      final parsed = _parseTasks(json);
+      project = parsed.project;
+      tasks = parsed.tasks;
+    } catch (_) {}
   }
   String? loadWarning;
 
