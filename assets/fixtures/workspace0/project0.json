@@ -7,55 +7,55 @@
       "id": "37d1a178-4a13-4042-81d4-54508a02aead",
       "title": "团队产能利用率不足60%",
       "description": "团队产能利用率不足60%，但每个人感觉都在满负荷运转。说明存在严重的效率浪费或任务错配。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "团队效能",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "量潮云 · 项目数据"}
+      "tags": {"source": "量潮云 · 项目数据"}
     },
     {
       "id": "43121521-2899-4aa0-8724-0213867336a4",
       "title": "连续3个小项目利润率为负",
       "description": "连续3个小项目利润率为负，占用了核心团队时间却未产生合理收益。小项目策略正在消耗团队。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "项目策略",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "量潮云 · 财务数据"}
+      "tags": {"source": "量潮云 · 财务数据"}
     },
     {
       "id": "e367c750-9b1d-4b36-a091-3f70b2356111",
       "title": "近一个月无主动销售行为",
       "description": "近一个月无主动销售行为，所有项目机会均来自老客户复购或被动咨询。缺乏主动获客机制。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "销售",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "量潮云 · 销售看板"}
+      "tags": {"source": "量潮云 · 销售看板"}
     },
     {
       "id": "9c2b3a77-86aa-42a9-8f8e-dcc7ee85b024",
       "title": "咨询平台原型已跑通",
       "description": "咨询平台原型已跑通，客户反馈正面。产品能力已具备，但尚未形成规模化交付。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "产品",
       "status": "confirmed",
-      "tags": {"observe_type": "ideal", "source": "量潮云 · 项目数据"}
+      "tags": {"source": "量潮云 · 项目数据"}
     },
     {
       "id": "aaf51719-52fb-48e0-88f3-d50fa43c9b44",
       "title": "创始人精力分散",
       "description": "同时在跑平台建设、项目交付、商务谈判三条线，需要秘书处分担协调工作。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "组织管理",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "访谈"}
+      "tags": {"source": "访谈"}
     },
     {
       "id": "5a7ca07f-080a-4ea6-bfcf-2d41a4e75ebd",
       "title": "团队能力已溢出当前项目体量",
       "description": "团队能力已溢出当前项目体量，但不敢接大单。瓶颈不在交付能力，而在预期管理和销售自信。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "团队能力",
       "status": "confirmed",
-      "tags": {"observe_type": "ideal", "source": "评估"}
+      "tags": {"source": "评估"}
     },
     {
       "id": "530a4250-a4ad-4f54-b91c-3b9df82a4351",

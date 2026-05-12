@@ -7,73 +7,73 @@
       "id": "9921dbc8-5caf-4ca2-8c5d-c03c24df2b30",
       "title": "战略转型 · 商家赋能",
       "description": "从\"做大平台订单\"转向\"帮商家拉流量、提营收\"，需要新平台和数据分析能力支撑。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "战略",
       "status": "pending",
-      "tags": {"observe_type": "ideal", "source": "访谈"}
+      "tags": {"source": "访谈"}
     },
     {
       "id": "8618e473-ebe2-484f-88b3-e91eb8c289db",
       "title": "新平台研发 · 商家赋能平台",
       "description": "从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "产品技术",
       "status": "pending",
-      "tags": {"observe_type": "ideal", "source": "访谈"}
+      "tags": {"source": "访谈"}
     },
     {
       "id": "aea11ad3-1f7a-4d84-9ce3-2db75ba6b55c",
       "title": "数据分析 · 复杂多维",
       "description": "需要商家分析、市场调控、平台运营三大维度的交叉分析能力。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "数据",
       "status": "pending",
-      "tags": {"observe_type": "ideal", "source": "访谈"}
+      "tags": {"source": "访谈"}
     },
     {
       "id": "48b0823c-bec3-404f-afa7-8f3d34deb950",
       "title": "技术升级 · 平台能力建设",
       "description": "当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。",
-      "type": "observe",
+      "type": "observe-ideal",
       "category": "技术基建",
       "status": "pending",
-      "tags": {"observe_type": "ideal", "source": "评估"}
+      "tags": {"source": "评估"}
     },
     {
       "id": "31ff8e85-b8f3-495d-b3a9-e8c3e532de7e",
       "title": "技术债务",
       "description": "代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "技术债",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "代码审计"}
+      "tags": {"source": "代码审计"}
     },
     {
       "id": "15242a21-27e5-49c4-aa82-085bc378d477",
       "title": "技术团队能力",
       "description": "团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "团队",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "评估"}
+      "tags": {"source": "评估"}
     },
     {
       "id": "50c52803-47b6-4f0e-bda1-f79bfe19af3c",
       "title": "数据分析能力",
       "description": "无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "数据",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "调研"}
+      "tags": {"source": "调研"}
     },
     {
       "id": "fc3bd447-e182-45d5-944c-dc3a6a34d6a7",
       "title": "数据基础设施",
       "description": "无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。",
-      "type": "observe",
+      "type": "observe-reality",
       "category": "数据基建",
       "status": "confirmed",
-      "tags": {"observe_type": "reality", "source": "评估"}
+      "tags": {"source": "评估"}
     },
     {
       "id": "e9ab0979-83d5-4112-ba25-6f54390be8b4",
