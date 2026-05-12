@@ -11,11 +11,11 @@ List<Task> makeTestTasks() {
         tags: {'source': '访谈'}, status: 'pending'),
     Task(id: 'o2', title: '现实卡片', type: 'research',
         tags: {'source': '审计'}, status: 'confirmed'),
-    Task(id: 'i1', title: '洞察测试', type: 'orient',
+    Task(id: 'i1', title: '洞察测试', type: 'research',
         tags: {'domain': '技术领域', 'rootCause': '根因', 'impact': '影响'}),
     Task(id: 's1', title: '方案A', type: 'decide',
         tags: {'advantage': '优势', 'isSelected': 'true'}),
-    Task(id: 't1', title: '任务1', type: 'act', assignee: '某人', status: 'doing',
+    Task(id: 't1', title: '任务1', type: 'execute', assignee: '某人', status: 'doing',
         tags: {'progress': '0.5'}),
   ];
 }
@@ -52,7 +52,7 @@ void main() {
 
     await tester.pumpWidget(buildApp(makeTestTasks()));
 
-    expect(find.text('咨询服务看板'), findsOneWidget);
+    expect(find.text('咨询看板'), findsOneWidget);
     expect(find.text('调研卡片'), findsOneWidget);
     expect(find.text('洞察测试'), findsOneWidget);
     expect(find.text('方案A'), findsOneWidget);

@@ -62,23 +62,26 @@ class ConsultBoardScreen extends StatelessWidget {
                     (child: StageColumn(
                       title: BoardColumnTitle(
                         icon: Icons.search_outlined,
-                        title: '调研 · Observe',
-                        count: '${lists.ideals.length + lists.realities.length} 条',
+                        title: '需求澄清 · Clarify',
+                        count: '${lists.clarify.length} 项',
                       ),
-                      content: _ObserveBody(ideals: lists.ideals, realities: lists.realities),
-                    ), flex: 1.3),
+                      content: ListView(
+                        padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
+                        children: lists.clarify.map((t) => _ClarifyCard(task: t)).toList(),
+                      ),
+                    ), flex: 1.0),
                     (child: StageColumn(
                       title: BoardColumnTitle(
                         icon: Icons.psychology_outlined,
-                        title: '分析 · Orient',
-                        count: '${lists.clusters.fold(0, (sum, c) => sum + c.tasks.length)} 条洞察',
+                        title: '调研分析 · Research',
+                        count: '${lists.research.length} 条',
                       ),
-                      content: _OrientContent(clusters: lists.clusters),
+                      content: _ResearchContent(clusters: lists.clusters),
                     ), flex: 1.0),
                     (child: StageColumn(
                       title: BoardColumnTitle(
                         icon: Icons.account_tree_outlined,
-                        title: '决策 · Decide',
+                        title: '决策方案 · Decide',
                         count: '${lists.decide.length} 套方案',
                       ),
                       content: ListView(
@@ -89,12 +92,12 @@ class ConsultBoardScreen extends StatelessWidget {
                     (child: StageColumn(
                       title: BoardColumnTitle(
                         icon: Icons.play_arrow_outlined,
-                        title: '执行 · Act',
-                        count: '${lists.act.length} 项任务',
+                        title: '执行跟踪 · Execute',
+                        count: '${lists.execute.length} 项任务',
                       ),
                       content: ListView(
                         padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
-                        children: lists.act.map((t) => _ActCard(task: t)).toList(),
+                        children: lists.execute.map((t) => _ExecuteCard(task: t)).toList(),
                       ),
                     ), flex: 0.7),
                   ],
@@ -150,102 +153,58 @@ class ConsultBoardScreen extends StatelessWidget {
   }
 }
 
-// --- Observe ---
+// --- Clarify ---
 
-class _ObserveBody extends StatelessWidget {
-  final List<Task> ideals;
-  final List<Task> realities;
-
-  const _ObserveBody({required this.ideals, required this.realities});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _side('业务理想', ideals, Colors.white),
-          const SizedBox(width: 8),
-          _side('现实状况', realities, const Color(0xFFFAFAFA)),
-        ],
-      ),
-    );
-  }
-
-  Widget _side(String label, List<Task> tasks, Color bgColor) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFEEEEEE)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-              width: double.infinity,
-              child: Row(
-                children: [
-                  Text(label,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
-                  const SizedBox(width: 4),
-                  Text('${tasks.length}',
-                      style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                children: tasks.map<Widget>((t) => _ObserveCard(task: t)).toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ObserveCard extends StatelessWidget {
+class _ClarifyCard extends StatelessWidget {
   final Task task;
 
-  const _ObserveCard({required this.task});
+  const _ClarifyCard({required this.task});
 
   @override
   Widget build(BuildContext context) {
     final state = context.read<ConsultState>();
     final isConfirmed = task.status == 'confirmed';
-    return ui.BoardCard(
-      title: Row(
-        children: [
-          Expanded(child: BoardCardTitle(text: task.title)),
-          GestureDetector(
-            onTap: () => state.toggleObserveConfirm(task.id),
-            child: Container(
-              width: 22, height: 22,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isConfirmed ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(4),
-                color: isConfirmed ? const Color(0xFF333333) : Colors.transparent,
-              ),
-              child: isConfirmed
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
-                  : null,
-            ),
-          ),
-        ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFE6E6E6)),
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
       ),
-      description: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BoardCardDescription(text: task.description),
+          Row(
+            children: [
+              Expanded(
+                child: Text(task.title,
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
+              ),
+              GestureDetector(
+                onTap: () => state.toggleObserveConfirm(task.id),
+                child: Container(
+                  width: 22, height: 22,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isConfirmed ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                    color: isConfirmed ? const Color(0xFF333333) : Colors.transparent,
+                  ),
+                  child: isConfirmed
+                      ? const Icon(Icons.check, size: 14, color: Colors.white)
+                      : null,
+                ),
+              ),
+            ],
+          ),
+          if (task.description.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(task.description, maxLines: 2, overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF666666))),
+          ],
           const SizedBox(height: 8),
           Row(
             children: [
@@ -272,18 +231,18 @@ class _ObserveCard extends StatelessWidget {
   }
 }
 
-// --- Orient ---
+// --- Research ---
 
-class _OrientContent extends StatefulWidget {
+class _ResearchContent extends StatefulWidget {
   final List<TaskCluster> clusters;
 
-  const _OrientContent({required this.clusters});
+  const _ResearchContent({required this.clusters});
 
   @override
-  State<_OrientContent> createState() => _OrientContentState();
+  State<_ResearchContent> createState() => _ResearchContentState();
 }
 
-class _OrientContentState extends State<_OrientContent> {
+class _ResearchContentState extends State<_ResearchContent> {
   final Set<String> _collapsed = {};
   String _filter = '全部';
 
@@ -366,17 +325,17 @@ class _OrientContentState extends State<_OrientContent> {
             ),
           ),
         ),
-        if (!isCollapsed) ...cluster.tasks.map((t) => _OrientInsight(task: t)),
+        if (!isCollapsed) ...cluster.tasks.map((t) => _ResearchInsight(task: t)),
         const SizedBox(height: 6),
       ],
     );
   }
 }
 
-class _OrientInsight extends StatelessWidget {
+class _ResearchInsight extends StatelessWidget {
   final Task task;
 
-  const _OrientInsight({required this.task});
+  const _ResearchInsight({required this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -543,12 +502,12 @@ class _DecideCard extends StatelessWidget {
   }
 }
 
-// --- Act ---
+// --- Execute ---
 
-class _ActCard extends StatelessWidget {
+class _ExecuteCard extends StatelessWidget {
   final Task task;
 
-  const _ActCard({required this.task});
+  const _ExecuteCard({required this.task});
 
   @override
   Widget build(BuildContext context) {
