@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:data_sources/provider_service.dart';
+import 'board_view.dart';
+import 'workspace_switcher.dart';
 import 'observe_column.dart';
 import 'orient_column.dart';
 import 'decide_column.dart';
 import 'act_column.dart';
-import 'workspace_switcher.dart';
 
 class OodaScreen extends StatelessWidget {
   final List<WorkspaceInfo>? workspaces;
@@ -53,65 +54,17 @@ class OodaScreen extends StatelessWidget {
               ),
             ),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isMobile = constraints.maxWidth < 768;
-                if (isMobile) {
-                  return _buildMobile();
-                }
-                return _buildDesktop();
-              },
+            child: BoardView(
+              header: _buildHeader(),
+              columns: const [
+                ObserveColumn(),
+                OrientColumn(),
+                DecideColumn(),
+                ActColumn(),
+              ],
+              flexes: [1.3, 1.0, 1.0, 0.7],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDesktop() {
-    return Column(
-      children: [
-        _buildHeader(),
-        const SizedBox(height: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final colWidth = (constraints.maxWidth - 42) / 4;
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(width: colWidth * 1.3, child: const ObserveColumn()),
-                    const SizedBox(width: 14),
-                    SizedBox(width: colWidth, child: const OrientColumn()),
-                    const SizedBox(width: 14),
-                    SizedBox(width: colWidth * 1.0, child: const DecideColumn()),
-                    const SizedBox(width: 14),
-                    SizedBox(width: colWidth * 0.7, child: const ActColumn()),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMobile() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(12),
-      child: const Column(
-        children: [
-          SizedBox(height: 8),
-          ObserveColumn(),
-          SizedBox(height: 10),
-          OrientColumn(),
-          SizedBox(height: 10),
-          DecideColumn(),
-          SizedBox(height: 10),
-          ActColumn(),
         ],
       ),
     );
@@ -124,8 +77,7 @@ class OodaScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 6,
-            height: 6,
+            width: 6, height: 6,
             decoration: const BoxDecoration(
               color: Color(0xFF444444),
               shape: BoxShape.circle,
@@ -134,11 +86,7 @@ class OodaScreen extends StatelessWidget {
           const SizedBox(width: 8),
           const Text(
             '咨询服务看板',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF222222),
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF222222)),
           ),
           const Spacer(),
           _buildLegend('调研 · Observe', const Color(0xFF444444)),
@@ -159,13 +107,7 @@ class OodaScreen extends StatelessWidget {
       children: [
         Container(width: 8, height: 8, color: color),
         const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Color(0xFF888888),
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF888888))),
       ],
     );
   }
