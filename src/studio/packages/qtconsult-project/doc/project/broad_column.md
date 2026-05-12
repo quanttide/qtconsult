@@ -20,11 +20,11 @@
 
 ```dart
 class BoardColumn extends StatelessWidget {
-  final Widget header;    // 标题栏插槽
+  final Widget title;    // 标题栏插槽
   final Widget content;   // 内容插槽
 
-  // 内部：白框 + 阴影 + header + Expanded(content)
-  // 不假设 header 里面有什么
+  // 内部：白框 + 阴影 + title + Expanded(content)
+  // 不假设 title 里面有什么
 }
 ```
 
@@ -32,7 +32,7 @@ class BoardColumn extends StatelessWidget {
 
 ```dart
 BoardColumn(
-  header: Row(children: [
+  title: Row(children: [
     const Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
     const SizedBox(width: 8),
     const Flexible(
@@ -53,38 +53,65 @@ BoardColumn(
 
 ## 业务层封装
 
-如果每个 Column 都写一遍 Row + icon + Text 太重复，在业务包 `qtconsult-project` 内封装 `ColumnHeader`：
+如果每个 Column 都写一遍 Row + icon + Text 太重复，在业务包 `qtconsult-project` 内封装 `BoardColumnTitle`：
 
 ```dart
-class ColumnHeader extends StatelessWidget {
+class BoardColumnTitle extends StatelessWidget {
   final IconData icon;
   final String title;
   final String count;
 
-  Widget build(context) => Row(children: [
-    Icon(icon, size: 16, color: Color(0xFF333333)),
-    const SizedBox(width: 8),
-    Flexible(child: Text(title, overflow: TextOverflow.ellipsis, ...)),
-    const Spacer(),
-    Flexible(child: Text(count, overflow: TextOverflow.ellipsis, ...)),
-  ]);
+  const BoardColumnTitle({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Icon(icon, size: 16, color: Color(0xFF333333)),
+      const SizedBox(width: 8),
+      Flexible(
+        child: Text(title,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+      ),
+      const Spacer(),
+      Flexible(
+        child: Text(count,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
+      ),
+    ]);
+  }
 }
 ```
 
-## 沉淀路径
+BoardColumn 的 `title` 插槽中传入 `BoardColumnTitle`：
+
+```dart
+BoardColumn(
+  title: BoardColumnTitle(
+    icon: Icons.search_outlined,
+    title: '调研 · Observe',
+    count: '8 条',
+  ),
+  content: _Body(...),
+)
+```
+
+## 层次关系
 
 ```
-当前（业务包内实现，验证模式）
-  qtconsult-project
-    └─ BoardColumn + 4 个 Column
-
 稳定后（提炼到基础库，业务包依赖基础库）
   quanttide-project-toolkit
-    └─ BoardColumn: 壳（header + content 插槽）
+    └─ BoardColumn: 壳（title + content 插槽）
   qtconsult-project
-    └─ ColumnHeader: 图标 + 标题 + 计数封装
+    └─ BoardColumnTitle: 图标 + 标题 + 计数封装
     └─ ObserveColumn / OrientColumn / DecideColumn / ActColumn
-         └─ 使用 BoardColumn + ColumnHeader + 具体 content
+         └─ 使用 BoardColumn + BoardColumnTitle + 具体 content
 ```
 
 先跑通、再稳定、最后才提到基础库。不提前做抽象。BoardColumn 是否值得进基础库，取决于 qtconsult 之外是否出现第二个业务包使用它。
