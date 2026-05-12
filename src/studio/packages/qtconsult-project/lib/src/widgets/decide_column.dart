@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
-import 'board_column.dart';
+import 'package:flutter_quanttide_project/flutter_quanttide_project.dart' hide BoardCard;
 import 'board_column_title.dart';
 
 class DecideColumn extends StatelessWidget {
@@ -11,7 +11,7 @@ class DecideColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        final strategies = state.project.lists.decide;
+        final strategies = state.lists.decide;
         return BoardColumn(
           title: BoardColumnTitle(
             icon: Icons.account_tree_outlined,
@@ -20,7 +20,7 @@ class DecideColumn extends StatelessWidget {
           ),
           content: ListView(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-            children: strategies.map<Widget>((s) => _StrategyCardWidget(card: s)).toList(),
+            children: strategies.map<Widget>((s) => _StrategyWidget(task: s)).toList(),
           ),
         );
       },
@@ -28,15 +28,15 @@ class DecideColumn extends StatelessWidget {
   }
 }
 
-class _StrategyCardWidget extends StatelessWidget {
-  final BoardCard card;
+class _StrategyWidget extends StatelessWidget {
+  final Task task;
 
-  const _StrategyCardWidget({required this.card});
+  const _StrategyWidget({required this.task});
 
   @override
   Widget build(BuildContext context) {
     final state = context.read<OodaState>();
-    final isSelected = card.custom['isSelected'] == true;
+    final isSelected = task.tags['isSelected'] == 'true';
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -58,10 +58,10 @@ class _StrategyCardWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Flexible(
-                      child: Text(card.title,
+                      child: Text(task.title,
                           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Color(0xFF1A1A1A))),
                     ),
-                    if ((card.custom['priority'] as String?)?.isNotEmpty == true) ...[
+                    if ((task.priority)?.isNotEmpty == true) ...[
                       const SizedBox(width: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -69,26 +69,26 @@ class _StrategyCardWidget extends StatelessWidget {
                           color: const Color(0xFFF5F5F5),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text(card.custom['priority'] as String,
+                        child: Text(task.priority!,
                             style: const TextStyle(fontSize: 11, color: Color(0xFF666666), fontWeight: FontWeight.w500)),
                       ),
                     ],
                   ],
                 ),
               ),
-              Text('关联 ${card.upstream.length} 条洞察',
+              Text('关联 ${task.upstream.length} 条洞察',
                   style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
             ],
           ),
           const SizedBox(height: 10),
-          _row('优势', card.custom['advantage'] as String? ?? ''),
+          _row('优势', task.tags['advantage'] ?? ''),
           const SizedBox(height: 6),
-          _row('概要', card.custom['summary'] as String? ?? ''),
+          _row('概要', task.tags['summary'] ?? ''),
           const SizedBox(height: 6),
-          _row('资源与价格', card.custom['resources'] as String? ?? ''),
-          if ((card.custom['keyAssumption'] as String?)?.isNotEmpty == true) ...[
+          _row('资源与价格', task.tags['resources'] ?? ''),
+          if ((task.tags['keyAssumption'] ?? '').isNotEmpty) ...[
             const SizedBox(height: 6),
-            Text('关键假设：${card.custom['keyAssumption']}',
+            Text('关键假设：${task.tags['keyAssumption']}',
                 style: const TextStyle(fontSize: 12, color: Color(0xFF999999), fontStyle: FontStyle.italic)),
           ],
           const SizedBox(height: 10),
@@ -97,7 +97,7 @@ class _StrategyCardWidget extends StatelessWidget {
           Row(
             children: [
               GestureDetector(
-                onTap: () => state.toggleStrategySelect(card.id),
+                onTap: () => state.toggleStrategySelect(task.id),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -126,7 +126,7 @@ class _StrategyCardWidget extends StatelessWidget {
                 child: SizedBox(
                   height: 32,
                   child: TextField(
-                    controller: TextEditingController(text: card.custom['clientNote'] as String? ?? ''),
+                    controller: TextEditingController(text: task.tags['clientNote'] ?? ''),
                     style: const TextStyle(fontSize: 12, color: Color(0xFF666666)),
                     decoration: InputDecoration(
                       hintText: '填写顾虑或条件……',
@@ -138,7 +138,7 @@ class _StrategyCardWidget extends StatelessWidget {
                       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       isDense: true,
                     ),
-                    onChanged: (v) => state.updateClientNote(card.id, v),
+                    onChanged: (v) => state.updateClientNote(task.id, v),
                   ),
                 ),
               ),

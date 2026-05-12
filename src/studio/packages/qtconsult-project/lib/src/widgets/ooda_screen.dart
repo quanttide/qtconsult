@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:data_sources/provider_service.dart';
-import 'board_view.dart';
+import 'package:flutter_quanttide_project/flutter_quanttide_project.dart' hide BoardCard;
 import 'workspace_switcher.dart';
 import 'observe_column.dart';
 import 'orient_column.dart';

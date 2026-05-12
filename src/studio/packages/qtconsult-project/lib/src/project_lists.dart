@@ -1,43 +1,39 @@
 import 'package:quanttide_project/quanttide_project.dart';
 
+class TaskCluster {
+  final String name;
+  final List<Task> tasks;
+  const TaskCluster({required this.name, required this.tasks});
+}
+
 class ProjectLists {
-  final Board board;
+  final List<Task> tasks;
 
-  const ProjectLists({required this.board});
+  const ProjectLists({required this.tasks});
 
-  List<BoardCard> get observe => board.lists['observe']?.cards ?? [];
-  List<BoardCard> get orient => board.lists['orient']?.cards ?? [];
-  List<BoardCard> get decide => board.lists['decide']?.cards ?? [];
-  List<BoardCard> get act => board.lists['act']?.cards ?? [];
+  List<Task> get observe => tasks.where((t) => t.type == 'observe').toList();
+  List<Task> get orient => tasks.where((t) => t.type == 'orient').toList();
+  List<Task> get decide => tasks.where((t) => t.type == 'decide').toList();
+  List<Task> get act => tasks.where((t) => t.type == 'act').toList();
 
-  List<BoardCard> get ideals =>
-      observe.where((c) => c.category == 'ideal').toList();
-  List<BoardCard> get realities =>
-      observe.where((c) => c.category == 'reality').toList();
+  List<Task> get ideals =>
+      observe.where((t) => t.category == 'ideal').toList();
+  List<Task> get realities =>
+      observe.where((t) => t.category == 'reality').toList();
 
-  List<BoardCardCluster> get clusters {
-    final map = <String, List<BoardCard>>{};
-    for (final card in orient) {
-      final key = card.tags['domain'] ?? '未分类';
-      map.putIfAbsent(key, () => []).add(card);
+  List<TaskCluster> get clusters {
+    final map = <String, List<Task>>{};
+    for (final task in orient) {
+      final key = task.tags['domain'] ?? '未分类';
+      map.putIfAbsent(key, () => []).add(task);
     }
     return map.entries
-        .map((e) => BoardCardCluster(name: e.key, cards: e.value))
+        .map((e) => TaskCluster(name: e.key, tasks: e.value))
         .toList();
   }
 }
 
-class BoardCardCluster {
-  final String name;
-  final List<BoardCard> cards;
-  const BoardCardCluster({required this.name, required this.cards});
-}
-
-extension ProjectOodaExtension on Project {
-  ProjectLists get lists => ProjectLists(board: board);
-}
-
-extension BoardCardOodaExtension on BoardCard {
+extension TaskOodaExtension on Task {
   List<String> get upstream =>
-      (custom['upstream'] as List<dynamic>?)?.cast<String>() ?? [];
+      (tags['upstream'] as String?)?.split(',').where((s) => s.isNotEmpty).toList() ?? [];
 }

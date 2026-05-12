@@ -2,49 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 
-Project makeTestProject() {
-  return Project(
-    name: 'test',
-    title: '测试项目',
-    board: Board(lists: {
-      'observe': BoardList(name: 'observe', cards: [
-        BoardCard(id: 'o1', title: '调研卡片', description: '测试描述', category: 'ideal',
-            custom: {'status': 'pending', 'source': '访谈'}),
-        BoardCard(id: 'o2', title: '现实卡片', category: 'reality',
-            custom: {'status': 'confirmed', 'source': '审计'}),
-      ]),
-      'orient': BoardList(name: 'orient', cards: [
-        BoardCard(id: 'i1', title: '洞察测试', tags: {'domain': '技术领域'},
-            custom: {'upstream': ['o1'], 'rootCause': '根因', 'impact': '影响'}),
-      ]),
-      'decide': BoardList(name: 'decide', cards: [
-        BoardCard(id: 's1', title: '方案A',
-            custom: {'upstream': ['i1'], 'advantage': '优势', 'isSelected': true}),
-      ]),
-      'act': BoardList(name: 'act', cards: [
-        BoardCard(id: 't1', title: '任务1', assignee: '某人',
-            custom: {'status': 'doing', 'progress': 0.5}),
-      ]),
-    }),
-  );
+List<Task> makeTestTasks() {
+  return [
+    Task(id: 'o1', title: '调研卡片', description: '测试描述', type: 'observe', category: 'ideal',
+        tags: {'source': '访谈'}, status: 'pending'),
+    Task(id: 'o2', title: '现实卡片', type: 'observe', category: 'reality',
+        tags: {'source': '审计'}, status: 'confirmed'),
+    Task(id: 'i1', title: '洞察测试', type: 'orient',
+        tags: {'domain': '技术领域', 'rootCause': '根因', 'impact': '影响'}),
+    Task(id: 's1', title: '方案A', type: 'decide',
+        tags: {'advantage': '优势', 'isSelected': 'true'}),
+    Task(id: 't1', title: '任务1', type: 'act', assignee: '某人', status: 'doing',
+        tags: {'progress': '0.5'}),
+  ];
 }
 
 void main() {
   group('ProjectLists', () {
     test('分析列按聚类分组', () {
-      final project = makeTestProject();
-      final clusters = project.lists.clusters;
+      final lists = ProjectLists(tasks: makeTestTasks());
+      final clusters = lists.clusters;
       expect(clusters.length, 1);
       expect(clusters[0].name, '技术领域');
-      expect(clusters[0].cards.length, 1);
+      expect(clusters[0].tasks.length, 1);
     });
 
-    test('Observe 卡片按 category 分组', () {
-      final project = makeTestProject();
-      expect(project.lists.ideals.length, 1);
-      expect(project.lists.realities.length, 1);
-      expect(project.lists.ideals[0].id, 'o1');
-      expect(project.lists.realities[0].id, 'o2');
+    test('Observe 按 category 分组', () {
+      final lists = ProjectLists(tasks: makeTestTasks());
+      expect(lists.ideals.length, 1);
+      expect(lists.realities.length, 1);
+      expect(lists.ideals[0].id, 'o1');
+      expect(lists.realities[0].id, 'o2');
     });
   });
 

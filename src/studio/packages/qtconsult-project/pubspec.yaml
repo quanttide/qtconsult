@@ -8,7 +8,8 @@ environment:
 dependencies:
   data_sources:
     path: ../data-sources
-  quanttide_project: ^0.1.0
+  quanttide_project: ^0.2.0
+  flutter_quanttide_project: ^0.1.0
   flutter:
     sdk: flutter
   provider: ^6.1.5

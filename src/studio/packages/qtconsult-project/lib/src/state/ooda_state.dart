@@ -3,82 +3,88 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:data_sources/cache_service.dart';
 import 'package:data_sources/provider_service.dart';
-import 'package:qtconsult_project/qtconsult_project.dart';
+import 'package:quanttide_project/quanttide_project.dart';
+import '../project_lists.dart';
 
 class OodaState extends ChangeNotifier {
-  final Project _project;
+  List<Task> _tasks;
   final CacheService _cache;
   final ProviderService? _provider;
   final String _workspaceId;
   final String _projectId;
-  final Set<String> _dirtyCardIds = {};
+  final Set<String> _dirtyTaskIds = {};
   bool _dirty = false;
 
-  OodaState(this._project, this._cache, {ProviderService? provider, String workspaceId = '', String projectId = ''})
+  OodaState(this._tasks, this._cache,
+      {ProviderService? provider, String workspaceId = '', String projectId = ''})
       : _workspaceId = workspaceId,
         _projectId = projectId,
         _provider = provider;
 
-  Project get project => _project;
+  ProjectLists get lists => ProjectLists(tasks: _tasks);
 
   bool get hasUnsavedChanges => _dirty;
 
   void toggleObserveConfirm(String id) {
-    final index = _project.lists.observe.indexWhere((c) => c.id == id);
+    final index = _tasks.indexWhere((t) => t.id == id);
     if (index == -1) return;
-    final card = _project.lists.observe[index];
-    final wasConfirmed = card.custom['status'] == 'confirmed';
-    _project.lists.observe[index] = BoardCard(
-      id: card.id, title: card.title, description: card.description,
-      category: card.category, tags: card.tags,
-      date: card.date, assignee: card.assignee,
-      custom: {
-        ...card.custom,
-        'upstream': card.upstream,
-        'status': wasConfirmed ? 'pending' : 'confirmed',
-      },
+    final t = _tasks[index];
+    _tasks[index] = Task(
+      id: t.id, title: t.title, description: t.description,
+      type: t.type, category: t.category, tags: t.tags,
+      status: t.status == 'confirmed' ? 'pending' : 'confirmed',
+      priority: t.priority,
+      assigner: t.assigner, assignee: t.assignee,
+      startAt: t.startAt, endAt: t.endAt,
+      createdBy: t.createdBy, createdAt: t.createdAt,
+      updatedBy: t.updatedBy, updatedAt: t.updatedAt,
     );
-    _markDirty(card.id);
+    _markDirty(id);
   }
 
   void toggleStrategySelect(String id) {
-    final index = _project.lists.decide.indexWhere((c) => c.id == id);
+    final index = _tasks.indexWhere((t) => t.id == id);
     if (index == -1) return;
-    final card = _project.lists.decide[index];
-    _project.lists.decide[index] = BoardCard(
-      id: card.id, title: card.title, description: card.description,
-      category: card.custom['isSelected'] == true ? null : 'selected',
-      tags: card.tags, date: card.date,
-      assignee: card.assignee,
-      custom: {
-        ...card.custom,
-        'upstream': card.upstream,
-        'isSelected': card.custom['isSelected'] != true,
-      },
+    final t = _tasks[index];
+    final tags = Map<String, String>.from(t.tags);
+    if (tags['isSelected'] == 'true') {
+      tags.remove('isSelected');
+    } else {
+      tags['isSelected'] = 'true';
+    }
+    _tasks[index] = Task(
+      id: t.id, title: t.title, description: t.description,
+      type: t.type, category: t.category, tags: tags,
+      status: t.status, priority: t.priority,
+      assigner: t.assigner, assignee: t.assignee,
+      startAt: t.startAt, endAt: t.endAt,
+      createdBy: t.createdBy, createdAt: t.createdAt,
+      updatedBy: t.updatedBy, updatedAt: t.updatedAt,
     );
-    _markDirty(card.id);
+    _markDirty(id);
   }
 
   void updateClientNote(String id, String note) {
-    final index = _project.lists.decide.indexWhere((c) => c.id == id);
+    final index = _tasks.indexWhere((t) => t.id == id);
     if (index == -1) return;
-    final card = _project.lists.decide[index];
-    _project.lists.decide[index] = BoardCard(
-      id: card.id, title: card.title, description: card.description,
-      category: card.category, tags: card.tags,
-      date: card.date, assignee: card.assignee,
-      custom: {
-        ...card.custom,
-        'upstream': card.upstream,
-        'clientNote': note,
-      },
+    final t = _tasks[index];
+    final tags = Map<String, String>.from(t.tags);
+    tags['clientNote'] = note;
+    _tasks[index] = Task(
+      id: t.id, title: t.title, description: t.description,
+      type: t.type, category: t.category, tags: tags,
+      status: t.status, priority: t.priority,
+      assigner: t.assigner, assignee: t.assignee,
+      startAt: t.startAt, endAt: t.endAt,
+      createdBy: t.createdBy, createdAt: t.createdAt,
+      updatedBy: t.updatedBy, updatedAt: t.updatedAt,
     );
-    _markDirty(card.id);
+    _markDirty(id);
   }
 
-  void _markDirty(String cardId) {
+  void _markDirty(String taskId) {
     _dirty = true;
-    _dirtyCardIds.add(cardId);
+    _dirtyTaskIds.add(taskId);
     notifyListeners();
     _flushInBackground();
   }
@@ -86,35 +92,20 @@ class OodaState extends ChangeNotifier {
   Future<void> flush() async {
     if (!_dirty) return;
     if (_provider != null) {
-      for (final cardId in _dirtyCardIds.toList()) {
-        final card = _findCard(cardId);
-        if (card == null) continue;
-        await _provider!.updateCard(_workspaceId, _projectId, card.toJson());
+      for (final taskId in _dirtyTaskIds.toList()) {
+        final index = _tasks.indexWhere((t) => t.id == taskId);
+        if (index == -1) continue;
+        await _provider!.updateCard(_workspaceId, _projectId, _tasks[index].toJson());
       }
     }
-    await _cache.save(jsonEncode(_project.toJson()));
+    await _cache.save(jsonEncode(_tasks.map((t) => t.toJson()).toList()));
     _dirty = false;
-    _dirtyCardIds.clear();
+    _dirtyTaskIds.clear();
   }
 
   void _flushInBackground() {
     flush().catchError((error) {
       debugPrint('OodaState flush failed: $error');
     });
-  }
-
-  BoardCard? _findCard(String cardId) {
-    final lists = [
-      _project.lists.observe,
-      _project.lists.orient,
-      _project.lists.decide,
-      _project.lists.act,
-    ];
-    for (final list in lists) {
-      for (final card in list) {
-        if (card.id == cardId) return card;
-      }
-    }
-    return null;
   }
 }

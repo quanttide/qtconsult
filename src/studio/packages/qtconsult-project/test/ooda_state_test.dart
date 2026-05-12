@@ -7,31 +7,19 @@ import 'package:data_sources/cache_service.dart';
 import 'package:data_sources/provider_service.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 
-Project makeTestProject() {
-  return Project(
-    name: 'test',
-    title: '测试项目',
-    board: Board(lists: {
-      'observe': BoardList(name: 'observe', cards: [
-        BoardCard(id: 'o1', title: '调研卡片', description: '测试描述', category: 'ideal',
-            custom: {'status': 'pending', 'source': '访谈'}),
-        BoardCard(id: 'o2', title: '现实卡片', category: 'reality',
-            custom: {'status': 'confirmed', 'source': '审计'}),
-      ]),
-      'orient': BoardList(name: 'orient', cards: [
-        BoardCard(id: 'i1', title: '洞察测试', tags: {'domain': '技术领域'},
-            custom: {'upstream': ['o1'], 'cause': '根因', 'effect': '影响'}),
-      ]),
-      'decide': BoardList(name: 'decide', cards: [
-        BoardCard(id: 's1', title: '方案A',
-            custom: {'upstream': ['i1'], 'advantage': '优势', 'isSelected': true, 'clientNote': null}),
-      ]),
-      'act': BoardList(name: 'act', cards: [
-        BoardCard(id: 't1', title: '任务1', assignee: '某人',
-            custom: {'status': 'doing', 'progress': 0.5}),
-      ]),
-    }),
-  );
+List<Task> makeTestTasks() {
+  return [
+    Task(id: 'o1', title: '调研卡片', description: '测试描述', type: 'observe', category: 'ideal',
+        tags: {'source': '访谈'}, status: 'pending'),
+    Task(id: 'o2', title: '现实卡片', type: 'observe', category: 'reality',
+        tags: {'source': '审计'}, status: 'confirmed'),
+    Task(id: 'i1', title: '洞察测试', type: 'orient',
+        tags: {'domain': '技术领域', 'cause': '根因', 'effect': '影响'}),
+    Task(id: 's1', title: '方案A', type: 'decide',
+        tags: {'advantage': '优势', 'isSelected': 'true', 'clientNote': ''}),
+    Task(id: 't1', title: '任务1', type: 'act', assignee: '某人', status: 'doing',
+        tags: {'progress': '0.5'}),
+  ];
 }
 
 class _MockClient extends http.BaseClient {
@@ -49,47 +37,48 @@ class _MockClient extends http.BaseClient {
 
 void main() {
   test('toggleObserveConfirm 切换状态', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.observe[0].custom['status'], 'pending');
+    final tasks = makeTestTasks();
+    final state = OodaState(tasks, CacheService(filePath: ''));
+    expect(tasks[0].status, 'pending');
 
     state.toggleObserveConfirm('o1');
-    expect(project.lists.observe[0].custom['status'], 'confirmed');
+    expect(tasks[0].status, 'confirmed');
   });
 
   test('toggleStrategySelect 切换选中状态', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.decide[0].custom['isSelected'], true);
+    final tasks = makeTestTasks();
+    final state = OodaState(tasks, CacheService(filePath: ''));
+    expect(tasks[3].tags['isSelected'], 'true');
 
     state.toggleStrategySelect('s1');
-    expect(project.lists.decide[0].custom['isSelected'], false);
+    expect(tasks[3].tags['isSelected'], isNull);
   });
 
   test('updateClientNote 更新备注', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''));
-    expect(project.lists.decide[0].custom['clientNote'], isNull);
+    final tasks = makeTestTasks();
+    final state = OodaState(tasks, CacheService(filePath: ''));
+    expect(tasks[3].tags['clientNote'], '');
 
     state.updateClientNote('s1', '客户要求调整方案');
-    expect(project.lists.decide[0].custom['clientNote'], '客户要求调整方案');
+    expect(tasks[3].tags['clientNote'], '客户要求调整方案');
   });
 
   test('flush 保存到缓存', () async {
     final tmpDir = Directory.systemTemp.createTempSync('qtconsult_test_');
     addTearDown(() => tmpDir.deleteSync(recursive: true));
     final cachePath = '${tmpDir.path}/cache.json';
-    final project = makeTestProject();
+    final tasks = makeTestTasks();
     final cache = CacheService(filePath: cachePath);
-    final state = OodaState(project, cache);
+    final state = OodaState(tasks, cache);
 
     state.toggleObserveConfirm('o1');
     await state.flush();
 
     final cachedRaw = await cache.load();
     expect(cachedRaw, isNotNull);
-    final cached = Project.fromJson(jsonDecode(cachedRaw!) as Map<String, dynamic>);
-    expect(cached.lists.observe[0].custom['status'], 'confirmed');
+    final decoded = jsonDecode(cachedRaw!) as List<dynamic>;
+    final list = decoded.map((e) => Task.fromJson(e as Map<String, dynamic>)).toList();
+    expect(list[0].status, 'confirmed');
   });
 
   test('flush 通过 provider 更新卡片', () async {
@@ -98,8 +87,8 @@ void main() {
       baseUrl: 'http://localhost:8756',
       client: mock,
     );
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''),
+    final tasks = makeTestTasks();
+    final state = OodaState(tasks, CacheService(filePath: ''),
         provider: provider, workspaceId: 'ws1', projectId: 'test');
 
     state.toggleObserveConfirm('o1');
@@ -113,8 +102,8 @@ void main() {
   });
 
   test('OodaState 持有 workspaceId 和 projectId', () {
-    final project = makeTestProject();
-    final state = OodaState(project, CacheService(filePath: ''),
+    final tasks = makeTestTasks();
+    final state = OodaState(tasks, CacheService(filePath: ''),
         workspaceId: 'ws1', projectId: 'test');
     expect(state.hasUnsavedChanges, false);
     state.toggleObserveConfirm('o1');

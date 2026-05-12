@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
-import 'board_column.dart';
+import 'package:flutter_quanttide_project/flutter_quanttide_project.dart' as ui;
 import 'board_column_title.dart';
-import 'board_card.dart' as card_widget;
 
 class ObserveColumn extends StatelessWidget {
   const ObserveColumn({super.key});
@@ -12,8 +11,8 @@ class ObserveColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        final lists = state.project.lists;
-        return BoardColumn(
+        final lists = state.lists;
+        return ui.BoardColumn(
           title: BoardColumnTitle(
             icon: Icons.search_outlined,
             title: '调研 · Observe',
@@ -27,8 +26,8 @@ class ObserveColumn extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  final List<BoardCard> ideals;
-  final List<BoardCard> realities;
+  final List<Task> ideals;
+  final List<Task> realities;
 
   const _Body({required this.ideals, required this.realities});
 
@@ -47,7 +46,7 @@ class _Body extends StatelessWidget {
     );
   }
 
-  Widget _side(String label, List<BoardCard> cards, Color bgColor) {
+  Widget _side(String label, List<Task> tasks, Color bgColor) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -66,7 +65,7 @@ class _Body extends StatelessWidget {
                   Text(label,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
                   const SizedBox(width: 4),
-                  Text('${cards.length}',
+                  Text('${tasks.length}',
                       style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
                 ],
               ),
@@ -74,7 +73,7 @@ class _Body extends StatelessWidget {
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                children: cards.map<Widget>((c) => _CardWidget(card: c)).toList(),
+                children: tasks.map<Widget>((t) => _TaskWidget(task: t)).toList(),
               ),
             ),
           ],
@@ -84,24 +83,21 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _CardWidget extends StatelessWidget {
-  final BoardCard card;
+class _TaskWidget extends StatelessWidget {
+  final Task task;
 
-  const _CardWidget({required this.card});
+  const _TaskWidget({required this.task});
 
   @override
   Widget build(BuildContext context) {
     final state = context.read<OodaState>();
-    final status = card.custom['status'] as String?;
-    final isConfirmed = status == 'confirmed';
-    return card_widget.BoardCard(
+    final isConfirmed = task.status == 'confirmed';
+    return ui.BoardCard(
       title: Row(
         children: [
-          Expanded(
-            child: BoardCardTitle(text: card.title),
-          ),
+          Expanded(child: BoardCardTitle(text: task.title)),
           GestureDetector(
-            onTap: () => state.toggleObserveConfirm(card.id),
+            onTap: () => state.toggleObserveConfirm(task.id),
             child: Container(
               width: 22, height: 22,
               decoration: BoxDecoration(
@@ -122,11 +118,11 @@ class _CardWidget extends StatelessWidget {
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BoardCardDescription(text: card.description),
+          BoardCardDescription(text: task.description),
           const SizedBox(height: 8),
           Row(
             children: [
-              Text(card.custom['source'] as String? ?? '',
+              Text(task.tags['source'] ?? '',
                   style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
               const Spacer(),
               Container(

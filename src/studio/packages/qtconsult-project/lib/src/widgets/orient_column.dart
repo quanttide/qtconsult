@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
-import 'board_column.dart';
+import 'package:flutter_quanttide_project/flutter_quanttide_project.dart' hide BoardCard;
 import 'board_column_title.dart';
 
 class OrientColumn extends StatelessWidget {
@@ -11,14 +11,14 @@ class OrientColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        return _OrientBody(clusters: state.project.lists.clusters);
+        return _OrientBody(clusters: state.lists.clusters);
       },
     );
   }
 }
 
 class _OrientBody extends StatefulWidget {
-  final List<BoardCardCluster> clusters;
+  final List<TaskCluster> clusters;
 
   const _OrientBody({required this.clusters});
 
@@ -32,7 +32,7 @@ class _OrientBodyState extends State<_OrientBody> {
 
   @override
   Widget build(BuildContext context) {
-    final total = widget.clusters.fold(0, (sum, c) => sum + c.cards.length);
+    final total = widget.clusters.fold(0, (sum, c) => sum + c.tasks.length);
     final filtered = _filter == '全部'
         ? widget.clusters
         : widget.clusters.where((c) => c.name == _filter).toList();
@@ -87,7 +87,7 @@ class _OrientBodyState extends State<_OrientBody> {
     );
   }
 
-  Widget _buildCluster(BoardCardCluster cluster) {
+  Widget _buildCluster(TaskCluster cluster) {
     final isCollapsed = _collapsed.contains(cluster.name);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,23 +111,23 @@ class _OrientBodyState extends State<_OrientBody> {
                 Text(cluster.name,
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF666666))),
                 const SizedBox(width: 6),
-                Text('${cluster.cards.length}',
+                Text('${cluster.tasks.length}',
                     style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
               ],
             ),
           ),
         ),
-        if (!isCollapsed) ...cluster.cards.map((c) => _InsightCardWidget(card: c)),
+        if (!isCollapsed) ...cluster.tasks.map((t) => _InsightWidget(task: t)),
         const SizedBox(height: 6),
       ],
     );
   }
 }
 
-class _InsightCardWidget extends StatelessWidget {
-  final BoardCard card;
+class _InsightWidget extends StatelessWidget {
+  final Task task;
 
-  const _InsightCardWidget({required this.card});
+  const _InsightWidget({required this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -141,16 +141,16 @@ class _InsightCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(card.title,
+          Text(task.title,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
-          if (card.custom['rootCause'] != null) ...[
+          if (task.tags['rootCause'] != null) ...[
             const SizedBox(height: 8),
-            Text('根因：${card.custom['rootCause']}',
+            Text('根因：${task.tags['rootCause']}',
                 style: const TextStyle(fontSize: 13, color: Color(0xFF666666), height: 1.6)),
           ],
-          if (card.custom['impact'] != null) ...[
+          if (task.tags['impact'] != null) ...[
             const SizedBox(height: 4),
-            Text('影响：${card.custom['impact']}',
+            Text('影响：${task.tags['impact']}',
                 style: const TextStyle(fontSize: 13, color: Color(0xFF666666), height: 1.6)),
           ],
         ],

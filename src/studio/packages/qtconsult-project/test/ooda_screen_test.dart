@@ -5,31 +5,19 @@ import 'package:data_sources/cache_service.dart';
 import 'package:data_sources/provider_service.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 
-Project makeTestProject() {
-  return Project(
-    name: 'test',
-    title: '测试项目',
-    board: Board(lists: {
-      'observe': BoardList(name: 'observe', cards: [
-        BoardCard(id: 'o1', title: '调研卡片', description: '测试描述', category: 'ideal',
-            custom: {'status': 'pending', 'source': '访谈'}),
-        BoardCard(id: 'o2', title: '现实卡片', category: 'reality',
-            custom: {'status': 'confirmed', 'source': '审计'}),
-      ]),
-      'orient': BoardList(name: 'orient', cards: [
-        BoardCard(id: 'i1', title: '洞察测试', tags: {'domain': '技术领域'},
-            custom: {'upstream': ['o1'], 'rootCause': '根因', 'impact': '影响'}),
-      ]),
-      'decide': BoardList(name: 'decide', cards: [
-        BoardCard(id: 's1', title: '方案A',
-            custom: {'upstream': ['i1'], 'advantage': '优势', 'isSelected': true}),
-      ]),
-      'act': BoardList(name: 'act', cards: [
-        BoardCard(id: 't1', title: '任务1', assignee: '某人',
-            custom: {'status': 'doing', 'progress': 0.5}),
-      ]),
-    }),
-  );
+List<Task> makeTestTasks() {
+  return [
+    Task(id: 'o1', title: '调研卡片', description: '测试描述', type: 'observe', category: 'ideal',
+        tags: {'source': '访谈'}, status: 'pending'),
+    Task(id: 'o2', title: '现实卡片', type: 'observe', category: 'reality',
+        tags: {'source': '审计'}, status: 'confirmed'),
+    Task(id: 'i1', title: '洞察测试', type: 'orient',
+        tags: {'domain': '技术领域', 'rootCause': '根因', 'impact': '影响'}),
+    Task(id: 's1', title: '方案A', type: 'decide',
+        tags: {'advantage': '优势', 'isSelected': 'true'}),
+    Task(id: 't1', title: '任务1', type: 'act', assignee: '某人', status: 'doing',
+        tags: {'progress': '0.5'}),
+  ];
 }
 
 List<WorkspaceInfo> makeWorkspaces() {
@@ -39,13 +27,13 @@ List<WorkspaceInfo> makeWorkspaces() {
   ];
 }
 
-Widget buildApp(Project project,
+Widget buildApp(List<Task> tasks,
     {List<WorkspaceInfo>? workspaces,
     String currentWsId = '',
     void Function(String)? onSwitch,
     String? loadWarning}) {
   return ChangeNotifierProvider(
-    create: (_) => OodaState(project, CacheService(filePath: '')),
+    create: (_) => OodaState(tasks, CacheService(filePath: '')),
     child: MaterialApp(
       home: OodaScreen(
         workspaces: workspaces,
@@ -62,7 +50,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(buildApp(makeTestProject()));
+    await tester.pumpWidget(buildApp(makeTestTasks()));
 
     expect(find.text('咨询服务看板'), findsOneWidget);
     expect(find.text('调研卡片'), findsOneWidget);
@@ -75,7 +63,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(buildApp(makeTestProject(),
+    await tester.pumpWidget(buildApp(makeTestTasks(),
         workspaces: makeWorkspaces(),
         currentWsId: 'ws1',
         onSwitch: (_) {}));
@@ -87,7 +75,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(buildApp(makeTestProject(),
+    await tester.pumpWidget(buildApp(makeTestTasks(),
         onSwitch: (_) {}));
 
     expect(find.byIcon(Icons.workspaces_outlined), findsNothing);
@@ -98,7 +86,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     String? selected;
-    await tester.pumpWidget(buildApp(makeTestProject(),
+    await tester.pumpWidget(buildApp(makeTestTasks(),
         workspaces: makeWorkspaces(),
         currentWsId: 'ws1',
         onSwitch: (wid) => selected = wid));
@@ -114,11 +102,9 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await tester.pumpWidget(buildApp(makeTestProject(),
+    await tester.pumpWidget(buildApp(makeTestTasks(),
         loadWarning: 'Provider 不可用，使用缓存数据'));
 
     expect(find.text('Provider 不可用，使用缓存数据'), findsOneWidget);
   });
-
-
 }
