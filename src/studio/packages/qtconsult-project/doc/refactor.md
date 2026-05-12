@@ -1,4 +1,4 @@
-# 重构方案：分层拆包
+# 重构记录：分层拆包
 
 ## 目标
 
@@ -7,13 +7,13 @@
 ```
 src/studio/lib/      (主应用，仅保留入口 + 应用级逻辑)
   └─ packages/
-       ├─ data-sources/       (新增，通用基础设施)
+       ├─ data-sources/       (通用基础设施)
        └─ qtconsult-project/  (OODA 领域 + 状态 + UI)
 ```
 
 两层包各自独立验证架构可用性，不与 qtadmin 共享基础设施。
 
-## 分层设计
+## 最终结构
 
 ### data-sources
 
@@ -21,12 +21,12 @@ src/studio/lib/      (主应用，仅保留入口 + 应用级逻辑)
 
 | 文件 | 职责 |
 |------|------|
+| `lib/data_sources.dart` | barrel export |
 | `lib/cache_service.dart` | 条件导出入口 |
-| `lib/cache_service_stub.dart` | 存根（无操作） |
+| `lib/cache_service_stub.dart` | 存根（返回 null） |
 | `lib/cache_service_io.dart` | 文件系统实现（dart:io） |
 | `lib/cache_service_web.dart` | localStorage 实现（dart:html） |
-| `lib/provider_service.dart` | HTTP 客户端，返回 raw `Map`，不感知领域模型 |
-| `lib/data_sources.dart` | barrel export |
+| `lib/provider_service.dart` | HTTP 客户端，返回 `Map<String, dynamic>` |
 
 **关键设计决策**：基础设施不感知领域模型。
 - `CacheService` 存储 `String`（raw JSON），调用方自行序列化
@@ -40,8 +40,8 @@ OODA 领域模型 + 状态管理 + UI 组件。依赖 `data-sources`。
 lib/
 ├── qtconsult_project.dart      # barrel export
 └── src/
-    ├── project_lists.dart       # OODA 存取 + 聚类（已有）
-    ├── visual_helpers.dart      # 色值/标签映射（已有）
+    ├── project_lists.dart       # OODA 存取 + 聚类
+    ├── visual_helpers.dart      # 色值/标签映射
     ├── state/
     │   └── ooda_state.dart      # OodaState，通过 data-sources 做持久化
     └── widgets/
@@ -53,47 +53,49 @@ lib/
         └── workspace_switcher.dart
 ```
 
-## 范围
+### 主应用
 
-### 从主应用移入 qtconsult-project
+```
+lib/
+├── main.dart                        # 应用入口，组装依赖
+├── models/ooda_data.dart            # 桥接 re-export
+└── screens/workspace_select_screen.dart
+```
 
-| 源路径 | 目标路径 | 注意 |
-|--------|---------|------|
-| `lib/widgets/observe_column.dart` | `lib/src/widgets/` | import 改为 package 路径 |
-| `lib/widgets/orient_column.dart` | `lib/src/widgets/` | 同上 |
-| `lib/widgets/decide_column.dart` | `lib/src/widgets/` | 同上 |
-| `lib/widgets/act_column.dart` | `lib/src/widgets/` | 同上 |
-| `lib/widgets/workspace_switcher.dart` | `lib/src/widgets/` | 同上 |
-| `lib/screens/ooda_screen.dart` | `lib/src/widgets/` | 同上，去掉 `package:qtconsult_studio` 引用 |
-| `lib/services/ooda_state.dart` | `lib/src/state/` | 改造：通过 data-sources 做持久化 |
-| `lib/models/ooda_data.dart` | —（删除） | 已经是 barrel export，功能由 qtconsult_project.dart 替代 |
+## 关键变更
 
-### 从主应用移入 data-sources
+### 移动的文件
 
-| 源路径 | 目标路径 | 变更 |
-|--------|---------|------|
-| `lib/services/cache_service.dart` | `lib/` | 改为存 raw String |
-| `lib/services/cache_service_stub.dart` | `lib/` | 返回 null/空 |
-| `lib/services/cache_service_io.dart` | `lib/` | 读写 String |
-| `lib/services/cache_service_web.dart` | `lib/` | 读写 String |
-| `lib/services/provider_service.dart` | `lib/` | 去掉 Project/BoardCard 依赖，返回 `Map` |
+**主应用 → data-sources：**
+- `cache_service.dart`（含 stub/io/web 条件导出）
+- `provider_service.dart`（改为返回 `Map`，去掉领域依赖）
 
-### 从主应用移入 data-sources 的测试
+**主应用 → qtconsult-project：**
+- `ooda_state.dart` → `lib/src/state/`
+- `observe_column.dart` → `lib/src/widgets/`
+- `orient_column.dart` → `lib/src/widgets/`
+- `decide_column.dart` → `lib/src/widgets/`
+- `act_column.dart` → `lib/src/widgets/`
+- `workspace_switcher.dart` → `lib/src/widgets/`
+- `ooda_screen.dart` → `lib/src/widgets/`
 
-| 源路径 | 目标路径 |
-|--------|---------|
-| `test/models/ooda_data_test.dart` | `test/project_lists_test.dart` |
-| `test/models/ooda_state_test.dart` | `test/ooda_state_test.dart` |
-| `test/widgets/ooda_screen_test.dart` | `test/ooda_screen_test.dart` |
+**主应用 → qtconsult-project 的测试：**
+- `ooda_data_test.dart` → `test/project_lists_test.dart`
+- `ooda_state_test.dart` → `test/ooda_state_test.dart`
+- `ooda_screen_test.dart` → `test/ooda_screen_test.dart`
 
-### 留在主应用
+**留在主应用的测试：**
+- `test/services/provider_service_test.dart`
+- `test/widgets/workspace_switcher_test.dart`
 
-| 文件 | 理由 |
-|------|------|
-| `lib/main.dart` | 应用入口，组装依赖 |
-| `lib/screens/workspace_select_screen.dart` | 应用级工作区选择 |
-| `test/services/provider_service_test.dart` | Provider HTTP 集成测试 |
-| `test/widgets/workspace_switcher_test.dart` | WorkspaceSwitcher 单独测试 |
+### API 变更
+
+| 类 | 变更前 | 变更后 |
+|----|--------|--------|
+| `CacheService.load()` | 返回 `Project?` | 返回 `String?` |
+| `CacheService.save()` | 接收 `Project` | 接收 `String` |
+| `ProviderService.loadProject()` | 返回 `Project` | 返回 `Map<String, dynamic>` |
+| `ProviderService.updateCard()` | 接收 `BoardCard` | 接收 `Map<String, dynamic>` |
 
 ## 依赖关系
 
@@ -101,79 +103,21 @@ lib/
 main_app
   ├─ qtconsult-project
   │    ├─ data-sources
+  │    │    └─ http, flutter
   │    └─ quanttide_project (pub.dev)
+  │         └─ provider
   └─ data-sources
        └─ http, flutter
 ```
 
-### pubspec.yaml 变更
+key libraries removed from main app: `http`, `quanttide_project`（通过 qtconsult-project 传递获得）
 
-**data-sources（新增）：**
-```yaml
-name: data_sources
-dependencies:
-  flutter:
-    sdk: flutter
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-```
+## 测试结果
 
-**qtconsult-project（更新）：**
-```yaml
-dependencies:
-  data_sources:
-    path: ../data-sources
-  quanttide_project: ^0.1.0
-  flutter:
-    sdk: flutter
-  provider: ^6.1.5    # 新增
-```
+- **qtconsult-project**: 26 个测试全部通过
+- **主应用**: 11 个测试全部通过
 
-**主应用 qtconsult_studio（移除直接依赖）：**
-```yaml
-dependencies:
-  data_sources:        # 新增
-    path: packages/data-sources
-  qtconsult_project:
-    path: packages/qtconsult-project
-  # quanttide_project 已通过 qtconsult-project 传递
-```
+## 提交记录
 
-## 导入路径变更
-
-### data-sources 包
-
-文件各自使用相对路径 import。
-
-### qtconsult-project
-
-| 旧 import | 新 import |
-|-----------|-----------|
-| `package:qtconsult_studio/services/cache_service.dart` | `package:data_sources/cache_service.dart` |
-| `package:qtconsult_studio/services/provider_service.dart` | `package:data_sources/provider_service.dart` |
-| `package:qtconsult_studio/models/ooda_data.dart` | `package:qtconsult_project/qtconsult_project.dart` |
-| `package:qtconsult_studio/services/ooda_state.dart` | `package:qtconsult_project/src/state/ooda_state.dart` |
-| `package:qtconsult_studio/widgets/*.dart` | `package:qtconsult_project/src/widgets/*.dart` |
-| `package:qtconsult_studio/screens/ooda_screen.dart` | `package:qtconsult_project/src/widgets/ooda_screen.dart` |
-
-### 主应用
-
-| 旧 import | 新 import |
-|-----------|-----------|
-| `package:qtconsult_studio/services/cache_service.dart` | `package:data_sources/cache_service.dart` |
-| `package:qtconsult_studio/services/provider_service.dart` | `package:data_sources/provider_service.dart` |
-| `package:qtconsult_studio/models/ooda_data.dart` | `package:qtconsult_project/qtconsult_project.dart` |
-| `package:qtconsult_studio/services/ooda_state.dart` | `package:qtconsult_project/src/state/ooda_state.dart` |
-| `package:qtconsult_studio/screens/ooda_screen.dart` | `package:qtconsult_project/src/widgets/ooda_screen.dart` |
-
-## 执行顺序
-
-1. 创建 `data-sources` 包目录 + pubspec.yaml
-2. 编写 `data-sources` 的 5 个 lib 文件
-3. 更新 `qtconsult-project/pubspec.yaml`（新增 data_sources、provider 依赖）
-4. 将 OODA 组件文件从主应用移到 `qtconsult-project`，修正 import
-5. 更新 `qtconsult-project/lib/qtconsult_project.dart` barrel export
-6. 更新主应用的 import
-7. 移动测试文件，更新 import
-8. 运行测试验证
+- qtconsult 子模块: `f1e3322` — refactor: split into data-sources and qtconsult-project layered packages
+- 主仓库: `736b0fc` — chore: update qtconsult submodule (layered package refactor)
