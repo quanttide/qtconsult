@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:data_sources/cache_service.dart';
+import 'package:data_sources/provider_service.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
-import 'package:qtconsult_studio/screens/ooda_screen.dart';
-import 'package:qtconsult_studio/services/ooda_state.dart';
-import 'package:qtconsult_studio/services/cache_service.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
 
 Project makeTestProject() {
   return Project(

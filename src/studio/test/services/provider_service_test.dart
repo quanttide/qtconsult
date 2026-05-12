@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:qtconsult_project/qtconsult_project.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
+import 'package:data_sources/provider_service.dart';
 
 class _MockClient extends http.BaseClient {
   final Map<String, _MockResponse> _responses = {};
@@ -66,7 +65,7 @@ void main() {
   });
 
   group('loadProject', () {
-    test('返回项目数据', () async {
+    test('返回项目原始 JSON', () async {
       mock.expect(
           'GET', 'http://localhost:8756/workspaces/ws1/projects/p1', 200, {
         'name': 'p1',
@@ -78,11 +77,12 @@ void main() {
           'act': [],
         }
       });
-      final project = await service.loadProject('ws1', 'p1');
-      expect(project.name, 'p1');
-      expect(project.title, '测试项目');
-      expect(project.lists.observe.length, 1);
-      expect(project.lists.observe[0].title, '卡片1');
+      final json = await service.loadProject('ws1', 'p1');
+      expect(json['name'], 'p1');
+      expect(json['title'], '测试项目');
+      final observe = (json['board'] as Map)['observe'] as List;
+      expect(observe.length, 1);
+      expect(observe[0]['title'], '卡片1');
     });
 
     test('非200抛出异常', () async {
@@ -100,8 +100,7 @@ void main() {
           'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
           200,
           {'id': 'o1', 'title': '已更新'});
-      final card = BoardCard(id: 'o1', title: '已更新');
-      await service.updateCard('ws1', 'p1', card);
+      await service.updateCard('ws1', 'p1', {'id': 'o1', 'title': '已更新'});
     });
 
       test('非200抛出异常', () async {
@@ -110,8 +109,7 @@ void main() {
           'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
           404,
           {});
-      final card = BoardCard(id: 'o1', title: 'x');
-      expect(() => service.updateCard('ws1', 'p1', card),
+      expect(() => service.updateCard('ws1', 'p1', {'id': 'o1', 'title': 'x'}),
           throwsA(isA<ProviderException>()));
     });
   });

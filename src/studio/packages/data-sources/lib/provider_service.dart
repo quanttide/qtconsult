@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:qtconsult_studio/models/ooda_data.dart';
 
 class WorkspaceInfo {
   final String id;
@@ -44,24 +43,24 @@ class ProviderService {
     return list.map((e) => WorkspaceInfo.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<Project> loadProject(String workspaceId, String projectId) async {
+  Future<Map<String, dynamic>> loadProject(String workspaceId, String projectId) async {
     final response = await _client.get(
       baseUri.resolve('/workspaces/$workspaceId/projects/$projectId'),
     );
     if (response.statusCode != 200) {
       throw ProviderException('Failed to load project', response.statusCode);
     }
-    return Project.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
-  Future<void> updateCard(String workspaceId, String projectId, BoardCard card) async {
+  Future<void> updateCard(String workspaceId, String projectId, Map<String, dynamic> card) async {
     final response = await _client.put(
-      baseUri.resolve('/workspaces/$workspaceId/projects/$projectId/cards/${Uri.encodeComponent(card.id)}'),
+      baseUri.resolve('/workspaces/$workspaceId/projects/$projectId/cards/${Uri.encodeComponent(card['id'] as String)}'),
       headers: _headers,
-      body: jsonEncode(card.toJson()),
+      body: jsonEncode(card),
     );
     if (response.statusCode != 200) {
-      throw ProviderException('Failed to update card ${card.id}', response.statusCode);
+      throw ProviderException('Failed to update card ${card['id']}', response.statusCode);
     }
   }
 

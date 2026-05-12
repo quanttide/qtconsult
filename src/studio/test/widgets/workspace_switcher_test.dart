@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
-import 'package:qtconsult_studio/widgets/workspace_switcher.dart';
+import 'package:data_sources/provider_service.dart';
+import 'package:qtconsult_project/src/widgets/workspace_switcher.dart';
 
 List<WorkspaceInfo> makeWorkspaces() {
   return [

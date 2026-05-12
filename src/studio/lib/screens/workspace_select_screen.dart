@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qtconsult_studio/screens/ooda_screen.dart';
-import 'package:qtconsult_studio/services/cache_service.dart';
-import 'package:qtconsult_studio/services/ooda_state.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
+import 'package:data_sources/cache_service.dart';
+import 'package:data_sources/provider_service.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 
 class WorkspaceSelectScreen extends StatelessWidget {
   final List<WorkspaceInfo> workspaces;
@@ -48,9 +49,12 @@ class WorkspaceSelectScreen extends StatelessWidget {
 
   void _openProject(BuildContext context, String wid, String pid) {
     final cache = cacheBuilder(wid, pid);
-    provider?.loadProject(wid, pid).then((p) => cache.save(p)).catchError((_) {});
-    cache.load().then((project) {
-      if (project == null || !context.mounted) return;
+    provider?.loadProject(wid, pid)
+        .then((json) => cache.save(jsonEncode(json)))
+        .catchError((_) {});
+    cache.load().then((raw) {
+      if (raw == null || !context.mounted) return;
+      final project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
+import 'package:data_sources/provider_service.dart';
 
 class WorkspaceSwitcher extends StatelessWidget {
   final List<WorkspaceInfo> workspaces;

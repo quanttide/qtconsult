@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
-import 'package:qtconsult_studio/widgets/observe_column.dart';
-import 'package:qtconsult_studio/widgets/orient_column.dart';
-import 'package:qtconsult_studio/widgets/decide_column.dart';
-import 'package:qtconsult_studio/widgets/act_column.dart';
-import 'package:qtconsult_studio/widgets/workspace_switcher.dart';
+import 'package:data_sources/provider_service.dart';
+import 'observe_column.dart';
+import 'orient_column.dart';
+import 'decide_column.dart';
+import 'act_column.dart';
+import 'workspace_switcher.dart';
 
 class OodaScreen extends StatelessWidget {
   final List<WorkspaceInfo>? workspaces;

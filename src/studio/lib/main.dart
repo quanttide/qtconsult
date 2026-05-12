@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:qtconsult_studio/models/ooda_data.dart';
-import 'package:qtconsult_studio/screens/ooda_screen.dart';
-import 'package:qtconsult_studio/services/cache_service.dart';
-import 'package:qtconsult_studio/services/ooda_state.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
+import 'package:data_sources/cache_service.dart';
+import 'package:data_sources/provider_service.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 
 String get providerUrl {
   return const String.fromEnvironment('QTCONSULT_PROVIDER_URL');
@@ -139,9 +137,10 @@ class _AppBodyState extends State<_AppBody> {
 
     if (widget.provider != null) {
       try {
-        final project = await widget.provider!.loadProject(wid, pid);
+        final json = await widget.provider!.loadProject(wid, pid);
+        final project = Project.fromJson(json);
         final cache = widget.cacheBuilder(wid, pid);
-        cache.save(project);
+        cache.save(jsonEncode(project.toJson()));
         setState(() {
           _currentWsId = wid;
           _currentPid = pid;
@@ -150,12 +149,16 @@ class _AppBodyState extends State<_AppBody> {
       } catch (_) {}
     } else {
       final cache = widget.cacheBuilder(wid, pid);
-      Project? project = await cache.load();
+      final cachedRaw = await cache.load();
+      Project? project;
+      if (cachedRaw != null) {
+        project = Project.fromJson(jsonDecode(cachedRaw) as Map<String, dynamic>);
+      }
       if (project == null) {
         try {
           final raw = await rootBundle.loadString('assets/fixtures/$wid/$pid.json');
           project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-          await cache.save(project);
+          await cache.save(jsonEncode(project.toJson()));
         } catch (_) {
           return;
         }
@@ -223,7 +226,8 @@ Future<_LoadResult> _loadData() async {
         final ws = workspaces.first;
         if (ws.projectIds.isNotEmpty) {
           final pid = ws.projectIds.first;
-          final project = await provider.loadProject(ws.id, pid);
+          final json = await provider.loadProject(ws.id, pid);
+          final project = Project.fromJson(json);
           return _LoadResult(
             workspaces: workspaces,
             project: project,
@@ -240,19 +244,23 @@ Future<_LoadResult> _loadData() async {
 
   // Fallback: try cache for default project
   final defaultCache = CacheService(filePath: 'qtconsult:workspace0:project0');
-  Project? project = await defaultCache.load();
+  final cachedRaw = await defaultCache.load();
+  Project? project;
+  if (cachedRaw != null) {
+    project = Project.fromJson(jsonDecode(cachedRaw) as Map<String, dynamic>);
+  }
   String? loadWarning;
 
   if (project == null) {
     try {
       final raw = await rootBundle.loadString('assets/fixtures/workspace0/project0.json');
       project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      await defaultCache.save(project);
+      await defaultCache.save(jsonEncode(project.toJson()));
     } catch (_) {
       try {
         final raw = await rootBundle.loadString('assets/fixtures/workspace1/project1.json');
         project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-        await defaultCache.save(project);
+        await defaultCache.save(jsonEncode(project.toJson()));
       } catch (e) {
         loadWarning = '所有数据源加载失败: $e';
       }

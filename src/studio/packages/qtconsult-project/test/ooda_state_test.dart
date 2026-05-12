@@ -3,10 +3,9 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:data_sources/cache_service.dart';
+import 'package:data_sources/provider_service.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
-import 'package:qtconsult_studio/services/ooda_state.dart';
-import 'package:qtconsult_studio/services/cache_service.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
 
 Project makeTestProject() {
   return Project(
@@ -87,9 +86,10 @@ void main() {
     state.toggleObserveConfirm('o1');
     await state.flush();
 
-    final cached = await cache.load();
-    expect(cached, isNotNull);
-    expect(cached!.lists.observe[0].custom['status'], 'confirmed');
+    final cachedRaw = await cache.load();
+    expect(cachedRaw, isNotNull);
+    final cached = Project.fromJson(jsonDecode(cachedRaw!) as Map<String, dynamic>);
+    expect(cached.lists.observe[0].custom['status'], 'confirmed');
   });
 
   test('flush 通过 provider 更新卡片', () async {

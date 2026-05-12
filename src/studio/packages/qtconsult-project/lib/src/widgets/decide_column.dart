@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qtconsult_studio/models/ooda_data.dart';
-import 'package:qtconsult_studio/services/ooda_state.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 
 class DecideColumn extends StatelessWidget {
   const DecideColumn({super.key});

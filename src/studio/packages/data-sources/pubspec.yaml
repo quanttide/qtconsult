@@ -1,0 +1,16 @@
+name: data_sources
+description: 量潮咨询通用数据基础设施（缓存、API 客户端）。
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

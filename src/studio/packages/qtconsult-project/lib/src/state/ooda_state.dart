@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:qtconsult_studio/models/ooda_data.dart';
-import 'package:qtconsult_studio/services/cache_service.dart';
-import 'package:qtconsult_studio/services/provider_service.dart';
+import 'package:data_sources/cache_service.dart';
+import 'package:data_sources/provider_service.dart';
+import 'package:qtconsult_project/qtconsult_project.dart';
 
 class OodaState extends ChangeNotifier {
   final Project _project;
@@ -87,10 +89,10 @@ class OodaState extends ChangeNotifier {
       for (final cardId in _dirtyCardIds.toList()) {
         final card = _findCard(cardId);
         if (card == null) continue;
-        await _provider.updateCard(_workspaceId, _projectId, card);
+        await _provider!.updateCard(_workspaceId, _projectId, card.toJson());
       }
     }
-    await _cache.save(_project);
+    await _cache.save(jsonEncode(_project.toJson()));
     _dirty = false;
     _dirtyCardIds.clear();
   }

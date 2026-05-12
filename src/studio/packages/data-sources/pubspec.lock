@@ -41,13 +41,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.19.1"
-  data_sources:
-    dependency: "direct main"
-    description:
-      path: "../data-sources"
-      relative: true
-    source: path
-    version: "0.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -67,7 +60,7 @@ packages:
     source: sdk
     version: "0.0.0"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
@@ -130,14 +123,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.17.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -146,22 +131,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.1"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "6.1.5+1"
-  quanttide_project:
-    dependency: "direct main"
-    description:
-      name: quanttide_project
-      sha256: "3952adeddb8f8e8a5f828f7b34622b09104b43366a03138465d3ac4e79feb8a3"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.0+1"
   sky_engine:
     dependency: transitive
     description: flutter
