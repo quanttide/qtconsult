@@ -3,24 +3,17 @@ import 'package:flutter/material.dart';
 class BoardCard extends StatelessWidget {
   final Widget title;
   final Widget? description;
-  final Widget? child;
-  final Color? borderColor;
-  final Color? backgroundColor;
   final void Function()? onTap;
 
   const BoardCard({
     super.key,
     required this.title,
     this.description,
-    this.child,
-    this.borderColor,
-    this.backgroundColor,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final borderSide = BorderSide(color: borderColor ?? const Color(0xFFE6E6E6));
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
@@ -28,9 +21,9 @@ class BoardCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           decoration: BoxDecoration(
-            color: backgroundColor ?? Colors.white,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(8),
-            border: Border.fromBorderSide(borderSide),
+            border: Border.all(color: const Color(0xFFE6E6E6)),
           ),
           padding: const EdgeInsets.all(14),
           child: Column(
@@ -40,10 +33,6 @@ class BoardCard extends StatelessWidget {
               if (description != null) ...[
                 const SizedBox(height: 6),
                 description!,
-              ],
-              if (child != null) ...[
-                const SizedBox(height: 8),
-                child!,
               ],
             ],
           ),

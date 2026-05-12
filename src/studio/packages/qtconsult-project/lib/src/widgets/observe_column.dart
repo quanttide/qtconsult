@@ -95,7 +95,6 @@ class _CardWidget extends StatelessWidget {
     final status = card.custom['status'] as String?;
     final isConfirmed = status == 'confirmed';
     return card_widget.BoardCard(
-      backgroundColor: isConfirmed ? const Color(0xFFFAFAFA) : null,
       title: Row(
         children: [
           Expanded(
@@ -120,23 +119,29 @@ class _CardWidget extends StatelessWidget {
           ),
         ],
       ),
-      description: BoardCardDescription(text: card.description),
-      child: Row(
+      description: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(card.custom['source'] as String? ?? '',
-              style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: isConfirmed ? const Color(0xFFF2F2F2) : const Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              isConfirmed ? '已确认' : '待确认',
-              style: TextStyle(fontSize: 11,
-                  color: isConfirmed ? const Color(0xFF1A1A1A) : const Color(0xFF888888)),
-            ),
+          BoardCardDescription(text: card.description),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Text(card.custom['source'] as String? ?? '',
+                  style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: isConfirmed ? const Color(0xFFF2F2F2) : const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  isConfirmed ? '已确认' : '待确认',
+                  style: TextStyle(fontSize: 11,
+                      color: isConfirmed ? const Color(0xFF1A1A1A) : const Color(0xFF888888)),
+                ),
+              ),
+            ],
           ),
         ],
       ),
