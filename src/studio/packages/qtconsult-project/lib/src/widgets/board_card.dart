@@ -4,7 +4,6 @@ class BoardCard extends StatelessWidget {
   final Widget title;
   final Widget? description;
   final Widget? child;
-  final Color? accentColor;
   final Color? borderColor;
   final Color? backgroundColor;
   final void Function()? onTap;
@@ -14,7 +13,6 @@ class BoardCard extends StatelessWidget {
     required this.title,
     this.description,
     this.child,
-    this.accentColor,
     this.borderColor,
     this.backgroundColor,
     this.onTap,
@@ -34,30 +32,19 @@ class BoardCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.fromBorderSide(borderSide),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (accentColor != null)
-                Container(width: 4, color: accentColor),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      title,
-                      if (description != null) ...[
-                        const SizedBox(height: 6),
-                        description!,
-                      ],
-                      if (child != null) ...[
-                        const SizedBox(height: 8),
-                        child!,
-                      ],
-                    ],
-                  ),
-                ),
-              ),
+              title,
+              if (description != null) ...[
+                const SizedBox(height: 6),
+                description!,
+              ],
+              if (child != null) ...[
+                const SizedBox(height: 8),
+                child!,
+              ],
             ],
           ),
         ),
