@@ -156,5 +156,3 @@ class ConsultBoardScreen extends StatelessWidget {
     );
   }
 }
-
-}
