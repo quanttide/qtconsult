@@ -10,7 +10,9 @@
       "type": "clarify",
       "category": "战略",
       "status": "pending",
-      "tags": {"source": "访谈"}
+      "tags": {
+        "source": "访谈"
+      }
     },
     {
       "id": "8618e473-ebe2-484f-88b3-e91eb8c289db",
@@ -19,7 +21,9 @@
       "type": "clarify",
       "category": "产品技术",
       "status": "pending",
-      "tags": {"source": "访谈"}
+      "tags": {
+        "source": "访谈"
+      }
     },
     {
       "id": "aea11ad3-1f7a-4d84-9ce3-2db75ba6b55c",
@@ -28,7 +32,9 @@
       "type": "clarify",
       "category": "数据",
       "status": "pending",
-      "tags": {"source": "访谈"}
+      "tags": {
+        "source": "访谈"
+      }
     },
     {
       "id": "48b0823c-bec3-404f-afa7-8f3d34deb950",
@@ -37,7 +43,9 @@
       "type": "clarify",
       "category": "技术基建",
       "status": "pending",
-      "tags": {"source": "评估"}
+      "tags": {
+        "source": "评估"
+      }
     },
     {
       "id": "31ff8e85-b8f3-495d-b3a9-e8c3e532de7e",
@@ -46,7 +54,9 @@
       "type": "research",
       "category": "技术债",
       "status": "confirmed",
-      "tags": {"source": "代码审计"}
+      "tags": {
+        "source": "代码审计"
+      }
     },
     {
       "id": "15242a21-27e5-49c4-aa82-085bc378d477",
@@ -55,7 +65,9 @@
       "type": "research",
       "category": "团队",
       "status": "confirmed",
-      "tags": {"source": "评估"}
+      "tags": {
+        "source": "评估"
+      }
     },
     {
       "id": "50c52803-47b6-4f0e-bda1-f79bfe19af3c",
@@ -64,7 +76,9 @@
       "type": "research",
       "category": "数据",
       "status": "confirmed",
-      "tags": {"source": "调研"}
+      "tags": {
+        "source": "调研"
+      }
     },
     {
       "id": "fc3bd447-e182-45d5-944c-dc3a6a34d6a7",
@@ -73,7 +87,9 @@
       "type": "research",
       "category": "数据基建",
       "status": "confirmed",
-      "tags": {"source": "评估"}
+      "tags": {
+        "source": "评估"
+      }
     },
     {
       "id": "e9ab0979-83d5-4112-ba25-6f54390be8b4",
@@ -158,7 +174,7 @@
     {
       "id": "42453861-8425-4e4c-91cb-31ff24fa47bd",
       "title": "架构优化与工程规范建设",
-      "description": "",
+      "description": "解耦核心模块、建立CI/CD流水线、统一代码规范，为后续开发打好基础",
       "type": "execute",
       "category": "技术基建",
       "status": "doing",
@@ -173,7 +189,7 @@
     {
       "id": "5c93f4f0-f2a3-4285-8512-3b5c74b0d517",
       "title": "团队扩充",
-      "description": "",
+      "description": "招聘架构师1名、数据工程师2名、后端开发2名，补齐技术短板",
       "type": "execute",
       "category": "组织",
       "status": "doing",
@@ -188,26 +204,30 @@
     {
       "id": "03bbd56b-6d4e-4cf7-ae1a-3a6a9f28d3bf",
       "title": "商家赋能平台MVP研发",
-      "description": "",
+      "description": "开发商家入驻、流量投放、数据分析、效果追踪四大核心功能",
       "type": "execute",
       "category": "产品技术",
       "status": "todo",
       "assignee": "待定",
       "startAt": "2026-10-01",
       "endAt": "2027-03-31",
-      "tags": {"progress": "0.0"}
+      "tags": {
+        "progress": "0.0"
+      }
     },
     {
       "id": "9abd1569-f1ae-414b-ac67-c2d7c16b052b",
       "title": "数据仓库与BI体系建设",
-      "description": "",
+      "description": "搭建数仓分层架构，接入业务数据源，建设BI可视化报表",
       "type": "execute",
       "category": "数据基建",
       "status": "todo",
       "assignee": "待定（需数据工程师到岗）",
       "startAt": "2026-10-01",
       "endAt": "2027-06-30",
-      "tags": {"progress": "0.0"}
+      "tags": {
+        "progress": "0.0"
+      }
     },
     {
       "id": "82b2a10e-c2db-4993-a8f3-0420e7750fed",
@@ -217,12 +237,14 @@
       "category": "运维",
       "status": "doing",
       "assignee": "现有团队",
-      "tags": {"progress": "1.0"}
+      "tags": {
+        "progress": "1.0"
+      }
     },
     {
       "id": "b430e667-91c0-43c6-8aca-40affaa733cf",
       "title": "数据治理与数据规范制定",
-      "description": "",
+      "description": "制定数据标准、数据字典、质量监控规则，确保数据一致性",
       "type": "execute",
       "category": "数据基建",
       "status": "blocked",
