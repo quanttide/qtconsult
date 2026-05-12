@@ -57,12 +57,11 @@ class OodaScreen extends StatelessWidget {
             child: BoardView(
               header: _buildHeader(),
               columns: const [
-                ObserveColumn(),
-                OrientColumn(),
-                DecideColumn(),
-                ActColumn(),
+                (child: ObserveColumn(), flex: 1.3),
+                (child: OrientColumn(), flex: 1.0),
+                (child: DecideColumn(), flex: 1.0),
+                (child: ActColumn(), flex: 0.7),
               ],
-              flexes: [1.3, 1.0, 1.0, 0.7],
             ),
           ),
         ],

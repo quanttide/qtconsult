@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 
 class BoardView extends StatelessWidget {
   final Widget? header;
-  final List<Widget> columns;
-  final List<double> flexes;
+  final List<({Widget child, double flex})> columns;
 
   const BoardView({
     super.key,
     this.header,
     required this.columns,
-    required this.flexes,
-  }) : assert(columns.length == flexes.length);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class BoardView extends StatelessWidget {
     final gap = 14.0;
     final paddedWidth = constraints.maxWidth - 32;
     final totalGaps = (columns.length - 1) * gap;
-    final totalFlex = flexes.fold(0.0, (a, b) => a + b);
+    final totalFlex = columns.fold(0.0, (a, c) => a + c.flex);
     final unitWidth = (paddedWidth - totalGaps) / totalFlex;
 
     return Column(
@@ -42,7 +40,7 @@ class BoardView extends StatelessWidget {
             children: [
               for (int i = 0; i < columns.length; i++) ...[
                 if (i > 0) const SizedBox(width: 14),
-                SizedBox(width: unitWidth * flexes[i], child: columns[i]),
+                SizedBox(width: unitWidth * columns[i].flex, child: columns[i].child),
               ],
             ],
           ),
@@ -59,7 +57,7 @@ class BoardView extends StatelessWidget {
           if (header != null) header!,
           const SizedBox(height: 8),
           for (final col in columns) ...[
-            col,
+            col.child,
             const SizedBox(height: 10),
           ],
         ],
