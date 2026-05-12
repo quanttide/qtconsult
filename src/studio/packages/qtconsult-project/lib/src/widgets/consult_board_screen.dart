@@ -351,6 +351,16 @@ class _ResearchInsight extends StatelessWidget {
         children: [
           Text(task.title,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
+          if (task.description.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(task.description, maxLines: 2, overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF666666))),
+          ],
+          if (task.tags['source'] != null) ...[
+            const SizedBox(height: 6),
+            Text(task.tags['source']!,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF999999))),
+          ],
           if (task.tags['rootCause'] != null) ...[
             const SizedBox(height: 8),
             Text('根因：${task.tags['rootCause']}',
