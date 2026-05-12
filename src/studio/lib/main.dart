@@ -217,7 +217,7 @@ Future<_LoadResult> _loadData() async {
       : null;
 
   CacheService Function(String wid, String pid) cacheBuilder =
-      (wid, pid) => CacheService(filePath: 'qtconsult:$wid:$pid');
+      (wid, pid) => CacheService(filePath: 'data/cache/$wid/$pid.json');
 
   if (provider != null) {
     try {
@@ -243,7 +243,7 @@ Future<_LoadResult> _loadData() async {
   }
 
   // Fallback: try cache for default project
-  final defaultCache = CacheService(filePath: 'qtconsult:workspace0:project0');
+  final defaultCache = CacheService(filePath: 'data/cache/workspace0/project0.json');
   final cachedRaw = await defaultCache.load();
   Project? project;
   if (cachedRaw != null) {
