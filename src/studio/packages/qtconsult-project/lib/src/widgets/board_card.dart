@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BoardCard extends StatelessWidget {
-  final Widget child;
+  final Widget title;
+  final Widget? description;
+  final Widget? child;
   final Color? accentColor;
   final Color? borderColor;
   final Color? backgroundColor;
@@ -9,7 +11,9 @@ class BoardCard extends StatelessWidget {
 
   const BoardCard({
     super.key,
-    required this.child,
+    required this.title,
+    this.description,
+    this.child,
     this.accentColor,
     this.borderColor,
     this.backgroundColor,
@@ -38,7 +42,20 @@ class BoardCard extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(14),
-                  child: child,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title,
+                      if (description != null) ...[
+                        const SizedBox(height: 6),
+                        description!,
+                      ],
+                      if (child != null) ...[
+                        const SizedBox(height: 8),
+                        child!,
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ],
