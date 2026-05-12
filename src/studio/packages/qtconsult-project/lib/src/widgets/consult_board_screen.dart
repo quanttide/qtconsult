@@ -182,7 +182,7 @@ class _ClarifyCard extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A1A1A))),
               ),
               GestureDetector(
-                onTap: () => state.toggleObserveConfirm(task.id),
+                onTap: () => state.toggleClarifyConfirm(task.id),
                 child: Container(
                   width: 22, height: 22,
                   decoration: BoxDecoration(

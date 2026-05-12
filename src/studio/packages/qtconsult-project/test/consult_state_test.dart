@@ -36,12 +36,12 @@ class _MockClient extends http.BaseClient {
 }
 
 void main() {
-  test('toggleObserveConfirm 切换状态', () {
+  test('toggleClarifyConfirm 切换状态', () {
     final tasks = makeTestTasks();
     final state = ConsultState(tasks, CacheService(filePath: ''));
     expect(tasks[0].status, 'pending');
 
-    state.toggleObserveConfirm('o1');
+    state.toggleClarifyConfirm('o1');
     expect(tasks[0].status, 'confirmed');
   });
 
@@ -71,7 +71,7 @@ void main() {
     final cache = CacheService(filePath: cachePath);
     final state = ConsultState(tasks, cache);
 
-    state.toggleObserveConfirm('o1');
+    state.toggleClarifyConfirm('o1');
     await state.flush();
 
     final cachedRaw = await cache.load();
@@ -91,7 +91,7 @@ void main() {
     final state = ConsultState(tasks, CacheService(filePath: ''),
         provider: provider, workspaceId: 'ws1', projectId: 'test');
 
-    state.toggleObserveConfirm('o1');
+    state.toggleClarifyConfirm('o1');
     await state.flush();
 
     final match = mock.requests.any((r) =>
@@ -106,7 +106,7 @@ void main() {
     final state = ConsultState(tasks, CacheService(filePath: ''),
         workspaceId: 'ws1', projectId: 'test');
     expect(state.hasUnsavedChanges, false);
-    state.toggleObserveConfirm('o1');
+    state.toggleClarifyConfirm('o1');
     expect(state.hasUnsavedChanges, true);
   });
 }

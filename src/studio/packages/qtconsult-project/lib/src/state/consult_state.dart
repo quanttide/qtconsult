@@ -25,7 +25,7 @@ class ConsultState extends ChangeNotifier {
 
   bool get hasUnsavedChanges => _dirty;
 
-  void toggleObserveConfirm(String id) {
+  void toggleClarifyConfirm(String id) {
     final index = _tasks.indexWhere((t) => t.id == id);
     if (index == -1) return;
     final t = _tasks[index];
