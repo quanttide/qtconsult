@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
+import 'board_column.dart';
 
 class ObserveColumn extends StatelessWidget {
   const ObserveColumn({super.key});
@@ -10,52 +11,33 @@ class ObserveColumn extends StatelessWidget {
     return Consumer<OodaState>(
       builder: (context, state, _) {
         final lists = state.project.lists;
-        return _ColumnLayout(
-          ideals: lists.ideals,
-          realities: lists.realities,
+        return BoardColumn(
+          icon: const Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
+          title: '调研 · Observe',
+          subtitle: '${lists.ideals.length + lists.realities.length} 条',
+          body: _Body(ideals: lists.ideals, realities: lists.realities),
         );
       },
     );
   }
 }
 
-class _ColumnLayout extends StatelessWidget {
+class _Body extends StatelessWidget {
   final List<BoardCard> ideals;
   final List<BoardCard> realities;
 
-  const _ColumnLayout({required this.ideals, required this.realities});
+  const _Body({required this.ideals, required this.realities});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _header(),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _side('业务理想', ideals, Colors.white),
-                  const SizedBox(width: 8),
-                  _side('现实状况', realities, const Color(0xFFFAFAFA)),
-                ],
-              ),
-            ),
-          ),
+          _side('业务理想', ideals, Colors.white),
+          const SizedBox(width: 8),
+          _side('现实状况', realities, const Color(0xFFFAFAFA)),
         ],
       ),
     );
@@ -93,25 +75,6 @@ class _ColumnLayout extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _header() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
-          SizedBox(width: 8),
-          Text('调研 · Observe',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-          Spacer(),
-          Text('8 条', style: TextStyle(fontSize: 11, color: Color(0xFF999999))),
-        ],
       ),
     );
   }

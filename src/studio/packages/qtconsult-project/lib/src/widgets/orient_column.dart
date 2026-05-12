@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
+import 'board_column.dart';
 
 class OrientColumn extends StatelessWidget {
   const OrientColumn({super.key});
@@ -9,78 +10,42 @@ class OrientColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        return _ColumnLayout(clusters: state.project.lists.clusters);
+        return _OrientBody(clusters: state.project.lists.clusters);
       },
     );
   }
 }
 
-class _ColumnLayout extends StatefulWidget {
+class _OrientBody extends StatefulWidget {
   final List<BoardCardCluster> clusters;
 
-  const _ColumnLayout({required this.clusters});
+  const _OrientBody({required this.clusters});
 
   @override
-  State<_ColumnLayout> createState() => _ColumnLayoutState();
+  State<_OrientBody> createState() => _OrientBodyState();
 }
 
-class _ColumnLayoutState extends State<_ColumnLayout> {
+class _OrientBodyState extends State<_OrientBody> {
   final Set<String> _collapsed = {};
   String _filter = '全部';
 
   @override
   Widget build(BuildContext context) {
+    final total = widget.clusters.fold(0, (sum, c) => sum + c.cards.length);
     final filtered = _filter == '全部'
         ? widget.clusters
         : widget.clusters.where((c) => c.name == _filter).toList();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return BoardColumn(
+      icon: const Icon(Icons.psychology_outlined, size: 16, color: Color(0xFF333333)),
+      title: '分析 · Orient',
+      subtitle: '$total 条洞察',
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
         children: [
-          _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-              children: [
-                _buildFilters(),
-                const SizedBox(height: 6),
-                ...filtered.map((c) => _buildCluster(c)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _header() {
-    final total = widget.clusters.fold(0, (sum, c) => sum + c.cards.length);
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.psychology_outlined, size: 16, color: Color(0xFF333333)),
-          const SizedBox(width: 8),
-          const Text('分析 · Orient',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-          const Spacer(),
-          Text('$total 条洞察',
-              style: const TextStyle(fontSize: 11, color: Color(0xFF999999))),
+          _buildFilters(),
+          const SizedBox(height: 6),
+          ...filtered.map((c) => _buildCluster(c)),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
+import 'board_column.dart';
 
 class ActColumn extends StatelessWidget {
   const ActColumn({super.key});
@@ -9,64 +10,17 @@ class ActColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        return _ColumnLayout(tasks: state.project.lists.act);
+        final tasks = state.project.lists.act;
+        return BoardColumn(
+          icon: const Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
+          title: '执行 · Act',
+          subtitle: '${tasks.length} 项任务',
+          body: ListView(
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
+            children: tasks.map<Widget>((t) => _TaskCardWidget(card: t)).toList(),
+          ),
+        );
       },
-    );
-  }
-}
-
-class _ColumnLayout extends StatelessWidget {
-  final List<BoardCard> tasks;
-
-  const _ColumnLayout({required this.tasks});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
-              children: tasks.map<Widget>((t) => _TaskCardWidget(card: t)).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _header() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
-          const SizedBox(width: 8),
-          const Text('执行 · Act',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-          const Spacer(),
-          Flexible(child: Text('${tasks.length} 项任务',
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF999999)))),
-        ],
-      ),
     );
   }
 }

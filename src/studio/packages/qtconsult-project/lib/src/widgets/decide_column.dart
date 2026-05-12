@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
+import 'board_column.dart';
 
 class DecideColumn extends StatelessWidget {
   const DecideColumn({super.key});
@@ -9,62 +10,17 @@ class DecideColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<OodaState>(
       builder: (context, state, _) {
-        return _ColumnLayout(strategies: state.project.lists.decide);
+        final strategies = state.project.lists.decide;
+        return BoardColumn(
+          icon: const Icon(Icons.account_tree_outlined, size: 16, color: Color(0xFF333333)),
+          title: '决策 · Decide',
+          subtitle: '${strategies.length} 套方案',
+          body: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+            children: strategies.map<Widget>((s) => _StrategyCardWidget(card: s)).toList(),
+          ),
+        );
       },
-    );
-  }
-}
-
-class _ColumnLayout extends StatelessWidget {
-  final List<BoardCard> strategies;
-
-  const _ColumnLayout({required this.strategies});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _header(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-              children: strategies.map<Widget>((s) => _StrategyCardWidget(card: s)).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _header() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFE6E6E6))),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.account_tree_outlined, size: 16, color: Color(0xFF333333)),
-          SizedBox(width: 8),
-          Text('决策 · Decide',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-          Spacer(),
-          Text('2 套方案', style: TextStyle(fontSize: 11, color: Color(0xFF999999))),
-        ],
-      ),
     );
   }
 }
