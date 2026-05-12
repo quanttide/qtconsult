@@ -11,15 +11,15 @@ class ProjectLists {
 
   const ProjectLists({required this.tasks});
 
-  List<Task> get observe => tasks.where((t) => t.type == 'observe-ideal' || t.type == 'observe-reality').toList();
+  List<Task> get observe => tasks.where((t) => t.type == 'clarify' || t.type == 'research').toList();
   List<Task> get orient => tasks.where((t) => t.type == 'orient').toList();
   List<Task> get decide => tasks.where((t) => t.type == 'decide').toList();
   List<Task> get act => tasks.where((t) => t.type == 'act').toList();
 
   List<Task> get ideals =>
-      tasks.where((t) => t.type == 'observe-ideal').toList();
+      tasks.where((t) => t.type == 'clarify').toList();
   List<Task> get realities =>
-      tasks.where((t) => t.type == 'observe-reality').toList();
+      tasks.where((t) => t.type == 'research').toList();
 
   List<TaskCluster> get clusters {
     final map = <String, List<Task>>{};
