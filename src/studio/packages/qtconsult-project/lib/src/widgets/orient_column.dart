@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 import 'board_column.dart';
+import 'board_column_title.dart';
 
 class OrientColumn extends StatelessWidget {
   const OrientColumn({super.key});
@@ -37,10 +38,12 @@ class _OrientBodyState extends State<_OrientBody> {
         : widget.clusters.where((c) => c.name == _filter).toList();
 
     return BoardColumn(
-      icon: const Icon(Icons.psychology_outlined, size: 16, color: Color(0xFF333333)),
-      title: '分析 · Orient',
-      subtitle: '$total 条洞察',
-      body: ListView(
+      title: BoardColumnTitle(
+        icon: Icons.psychology_outlined,
+        title: '分析 · Orient',
+        count: '$total 条洞察',
+      ),
+      content: ListView(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
         children: [
           _buildFilters(),

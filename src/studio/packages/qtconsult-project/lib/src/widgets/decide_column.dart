@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 import 'board_column.dart';
+import 'board_column_title.dart';
 
 class DecideColumn extends StatelessWidget {
   const DecideColumn({super.key});
@@ -12,10 +13,12 @@ class DecideColumn extends StatelessWidget {
       builder: (context, state, _) {
         final strategies = state.project.lists.decide;
         return BoardColumn(
-          icon: const Icon(Icons.account_tree_outlined, size: 16, color: Color(0xFF333333)),
-          title: '决策 · Decide',
-          subtitle: '${strategies.length} 套方案',
-          body: ListView(
+          title: BoardColumnTitle(
+            icon: Icons.account_tree_outlined,
+            title: '决策 · Decide',
+            count: '${strategies.length} 套方案',
+          ),
+          content: ListView(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
             children: strategies.map<Widget>((s) => _StrategyCardWidget(card: s)).toList(),
           ),

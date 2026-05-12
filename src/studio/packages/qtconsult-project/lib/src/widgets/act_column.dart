@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 import 'board_column.dart';
+import 'board_column_title.dart';
 
 class ActColumn extends StatelessWidget {
   const ActColumn({super.key});
@@ -12,10 +13,12 @@ class ActColumn extends StatelessWidget {
       builder: (context, state, _) {
         final tasks = state.project.lists.act;
         return BoardColumn(
-          icon: const Icon(Icons.play_arrow_outlined, size: 16, color: Color(0xFF333333)),
-          title: '执行 · Act',
-          subtitle: '${tasks.length} 项任务',
-          body: ListView(
+          title: BoardColumnTitle(
+            icon: Icons.play_arrow_outlined,
+            title: '执行 · Act',
+            count: '${tasks.length} 项任务',
+          ),
+          content: ListView(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
             children: tasks.map<Widget>((t) => _TaskCardWidget(card: t)).toList(),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qtconsult_project/qtconsult_project.dart';
 import 'board_column.dart';
+import 'board_column_title.dart';
 
 class ObserveColumn extends StatelessWidget {
   const ObserveColumn({super.key});
@@ -12,10 +13,12 @@ class ObserveColumn extends StatelessWidget {
       builder: (context, state, _) {
         final lists = state.project.lists;
         return BoardColumn(
-          icon: const Icon(Icons.search_outlined, size: 16, color: Color(0xFF333333)),
-          title: '调研 · Observe',
-          subtitle: '${lists.ideals.length + lists.realities.length} 条',
-          body: _Body(ideals: lists.ideals, realities: lists.realities),
+          title: BoardColumnTitle(
+            icon: Icons.search_outlined,
+            title: '调研 · Observe',
+            count: '${lists.ideals.length + lists.realities.length} 条',
+          ),
+          content: _Body(ideals: lists.ideals, realities: lists.realities),
         );
       },
     );
