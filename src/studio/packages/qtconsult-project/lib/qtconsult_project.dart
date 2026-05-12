@@ -2,6 +2,8 @@ export 'package:quanttide_project/quanttide_project.dart';
 export 'src/project_lists.dart';
 export 'src/visual_helpers.dart';
 export 'src/state/ooda_state.dart';
+export 'src/widgets/board_card_title.dart';
+export 'src/widgets/board_card_description.dart';
 export 'src/widgets/board_column_title.dart';
 export 'src/widgets/observe_column.dart';
 export 'src/widgets/orient_column.dart';
