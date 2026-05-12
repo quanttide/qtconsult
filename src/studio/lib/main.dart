@@ -75,7 +75,7 @@ class _AppLoaderState extends State<_AppLoader> {
             body: Center(child: Text('加载失败', style: TextStyle(color: Colors.red))),
           );
         }
-        if (result.project == null) {
+        if (result.project == null || result.tasks == null) {
           return const Scaffold(
             body: Center(child: Text('无可用的项目数据', style: TextStyle(color: Colors.red))),
           );
@@ -85,6 +85,7 @@ class _AppLoaderState extends State<_AppLoader> {
           workspaces: result.workspaces,
           currentWsId: result.currentWsId,
           project: result.project!,
+          tasks: result.tasks!,
           provider: result.provider,
           cacheBuilder: result.cacheBuilder,
           loadWarning: result.loadWarning,
@@ -98,6 +99,7 @@ class _AppBody extends StatefulWidget {
   final List<WorkspaceInfo>? workspaces;
   final String currentWsId;
   final Project project;
+  final List<Task> tasks;
   final ProviderService? provider;
   final CacheService Function(String wid, String pid) cacheBuilder;
   final String? loadWarning;
@@ -105,6 +107,7 @@ class _AppBody extends StatefulWidget {
   const _AppBody({
     super.key,
     required this.project,
+    required this.tasks,
     required this.currentWsId,
     required this.cacheBuilder,
     this.workspaces,
@@ -119,14 +122,14 @@ class _AppBody extends StatefulWidget {
 class _AppBodyState extends State<_AppBody> {
   late String _currentWsId;
   late String _currentPid;
-  late Project _project;
+  late List<Task> _tasks;
 
   @override
   void initState() {
     super.initState();
     _currentWsId = widget.currentWsId;
     _currentPid = widget.project.name;
-    _project = widget.project;
+    _tasks = widget.tasks;
   }
 
   void _switchWorkspace(String wid) async {
@@ -138,27 +141,29 @@ class _AppBodyState extends State<_AppBody> {
     if (widget.provider != null) {
       try {
         final json = await widget.provider!.loadProject(wid, pid);
-        final project = Project.fromJson(json);
+        final parsed = _parseTasks(json);
         final cache = widget.cacheBuilder(wid, pid);
-        cache.save(jsonEncode(project.toJson()));
+        cache.save(jsonEncode(json));
         setState(() {
           _currentWsId = wid;
           _currentPid = pid;
-          _project = project;
+          _tasks = parsed.tasks;
         });
       } catch (_) {}
     } else {
       final cache = widget.cacheBuilder(wid, pid);
       final cachedRaw = await cache.load();
-      Project? project;
+      List<Task>? tasks;
       if (cachedRaw != null) {
-        project = Project.fromJson(jsonDecode(cachedRaw) as Map<String, dynamic>);
+        final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
+        tasks = _parseTasks(json).tasks;
       }
-      if (project == null) {
+      if (tasks == null) {
         try {
           final raw = await rootBundle.loadString('assets/fixtures/$wid/$pid.json');
-          project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-          await cache.save(jsonEncode(project.toJson()));
+          final json = jsonDecode(raw) as Map<String, dynamic>;
+          tasks = _parseTasks(json).tasks;
+          await cache.save(jsonEncode(json));
         } catch (_) {
           return;
         }
@@ -166,7 +171,7 @@ class _AppBodyState extends State<_AppBody> {
       setState(() {
         _currentWsId = wid;
         _currentPid = pid;
-        _project = project!;
+        _tasks = tasks!;
       });
     }
   }
@@ -177,7 +182,7 @@ class _AppBodyState extends State<_AppBody> {
     return ChangeNotifierProvider(
       key: ValueKey('$_currentWsId:$_currentPid'),
       create: (_) => OodaState(
-        _project,
+        _tasks,
         cache,
         provider: widget.provider,
         workspaceId: _currentWsId,
@@ -196,6 +201,7 @@ class _AppBodyState extends State<_AppBody> {
 class _LoadResult {
   final List<WorkspaceInfo>? workspaces;
   final Project? project;
+  final List<Task>? tasks;
   final ProviderService? provider;
   final CacheService Function(String wid, String pid) cacheBuilder;
   final String? loadWarning;
@@ -204,11 +210,22 @@ class _LoadResult {
   const _LoadResult({
     this.workspaces,
     this.project,
+    this.tasks,
     this.provider,
     required this.cacheBuilder,
     this.loadWarning,
     required this.currentWsId,
   });
+}
+
+({Project project, List<Task> tasks}) _parseTasks(Map<String, dynamic> json) {
+  return (
+    project: Project.fromJson(json),
+    tasks: (json['tasks'] as List?)
+            ?.map((e) => Task.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+  );
 }
 
 Future<_LoadResult> _loadData() async {
@@ -227,10 +244,11 @@ Future<_LoadResult> _loadData() async {
         if (ws.projectIds.isNotEmpty) {
           final pid = ws.projectIds.first;
           final json = await provider.loadProject(ws.id, pid);
-          final project = Project.fromJson(json);
+          final parsed = _parseTasks(json);
           return _LoadResult(
             workspaces: workspaces,
-            project: project,
+            project: parsed.project,
+            tasks: parsed.tasks,
             provider: provider,
             cacheBuilder: cacheBuilder,
             currentWsId: ws.id,
@@ -246,21 +264,31 @@ Future<_LoadResult> _loadData() async {
   final defaultCache = CacheService(filePath: 'data/cache/workspace0/project0.json');
   final cachedRaw = await defaultCache.load();
   Project? project;
+  List<Task>? tasks;
   if (cachedRaw != null) {
-    project = Project.fromJson(jsonDecode(cachedRaw) as Map<String, dynamic>);
+    final json = jsonDecode(cachedRaw) as Map<String, dynamic>;
+    final parsed = _parseTasks(json);
+    project = parsed.project;
+    tasks = parsed.tasks;
   }
   String? loadWarning;
 
   if (project == null) {
     try {
       final raw = await rootBundle.loadString('assets/fixtures/workspace0/project0.json');
-      project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      await defaultCache.save(jsonEncode(project.toJson()));
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      final parsed = _parseTasks(json);
+      project = parsed.project;
+      tasks = parsed.tasks;
+      await defaultCache.save(jsonEncode(json));
     } catch (_) {
       try {
         final raw = await rootBundle.loadString('assets/fixtures/workspace1/project1.json');
-        project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-        await defaultCache.save(jsonEncode(project.toJson()));
+        final json = jsonDecode(raw) as Map<String, dynamic>;
+        final parsed = _parseTasks(json);
+        project = parsed.project;
+        tasks = parsed.tasks;
+        await defaultCache.save(jsonEncode(json));
       } catch (e) {
         loadWarning = '所有数据源加载失败: $e';
       }
@@ -274,6 +302,7 @@ Future<_LoadResult> _loadData() async {
 
   return _LoadResult(
     project: project,
+    tasks: tasks,
     workspaces: fallbackWorkspaces,
     provider: provider,
     cacheBuilder: cacheBuilder,

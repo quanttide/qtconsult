@@ -77,6 +77,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.0.0"
+  flutter_quanttide_project:
+    dependency: transitive
+    description:
+      name: flutter_quanttide_project
+      sha256: a770d83e30bdbc3233b545fb1041f9c666aedac7256f849d70918030693f5f71
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -189,10 +197,10 @@ packages:
     dependency: transitive
     description:
       name: quanttide_project
-      sha256: "3952adeddb8f8e8a5f828f7b34622b09104b43366a03138465d3ac4e79feb8a3"
+      sha256: f746fcc1fc5adba45eee339fe8d6e80c835abd4ee7118a0c40bb6f5e34765892
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.0+1"
+    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -1,300 +1,236 @@
 {
+  "id": "project1",
   "name": "project1",
   "title": "商家赋能平台数字化转型",
-  "board": {
-    "observe": [
-      {
-        "id": "o1",
-        "title": "战略转型 · 商家赋能",
-        "description": "从\"做大平台订单\"转向\"帮商家拉流量、提营收\"，需要新平台和数据分析能力支撑。",
-        "category": "ideal",
-        "date": "2026-05-15",
-        "assignee": null,
-        "upstream": [],
-        "source": "访谈",
-        "status": "pending"
-      },
-      {
-        "id": "o2",
-        "title": "新平台研发 · 商家赋能平台",
-        "description": "从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。",
-        "category": "ideal",
-        "date": "2026-05-15",
-        "assignee": null,
-        "upstream": [],
-        "source": "访谈",
-        "status": "pending"
-      },
-      {
-        "id": "o3",
-        "title": "数据分析 · 复杂多维",
-        "description": "需要商家分析、市场调控、平台运营三大维度的交叉分析能力。",
-        "category": "ideal",
-        "date": "2026-05-15",
-        "assignee": null,
-        "upstream": [],
-        "source": "访谈",
-        "status": "pending"
-      },
-      {
-        "id": "o4",
-        "title": "技术升级 · 平台能力建设",
-        "description": "当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。",
-        "category": "ideal",
-        "date": "2026-05-14",
-        "assignee": null,
-        "upstream": [],
-        "source": "评估",
-        "status": "pending"
-      },
-      {
-        "id": "o5",
-        "title": "技术债务",
-        "description": "代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。",
-        "category": "reality",
-        "date": "2026-05-10",
-        "assignee": null,
-        "upstream": [],
-        "source": "代码审计",
-        "status": "confirmed"
-      },
-      {
-        "id": "o6",
-        "title": "技术团队能力",
-        "description": "团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。",
-        "category": "reality",
-        "date": "2026-05-14",
-        "assignee": null,
-        "upstream": [],
-        "source": "评估",
-        "status": "confirmed"
-      },
-      {
-        "id": "o7",
-        "title": "数据分析能力",
-        "description": "无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。",
-        "category": "reality",
-        "date": "2026-05-12",
-        "assignee": null,
-        "upstream": [],
-        "source": "调研",
-        "status": "confirmed"
-      },
-      {
-        "id": "o8",
-        "title": "数据基础设施",
-        "description": "无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。",
-        "category": "reality",
-        "date": "2026-05-13",
-        "assignee": null,
-        "upstream": [],
-        "source": "评估",
-        "status": "confirmed"
-      }
-    ],
-    "orient": [
-      {
-        "id": "i1",
-        "title": "战略目标与技术承载能力之间存在差距",
-        "description": "过往技术投入以支撑运行为主，未为下一阶段做储备，导致三大任务需协调推进，避免资源分散。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "o1",
-          "o2",
-          "o4"
-        ],
+  "tasks": [
+    {
+      "id": "9921dbc8-5caf-4ca2-8c5d-c03c24df2b30",
+      "title": "战略转型 · 商家赋能",
+      "description": "从\"做大平台订单\"转向\"帮商家拉流量、提营收\"，需要新平台和数据分析能力支撑。",
+      "type": "observe",
+      "category": "战略",
+      "status": "pending",
+      "tags": {"observe_type": "ideal", "source": "访谈"}
+    },
+    {
+      "id": "8618e473-ebe2-484f-88b3-e91eb8c289db",
+      "title": "新平台研发 · 商家赋能平台",
+      "description": "从零研发商家平台，含入驻、流量投放、数据分析、效果追踪。要求6个月出MVP。",
+      "type": "observe",
+      "category": "产品技术",
+      "status": "pending",
+      "tags": {"observe_type": "ideal", "source": "访谈"}
+    },
+    {
+      "id": "aea11ad3-1f7a-4d84-9ce3-2db75ba6b55c",
+      "title": "数据分析 · 复杂多维",
+      "description": "需要商家分析、市场调控、平台运营三大维度的交叉分析能力。",
+      "type": "observe",
+      "category": "数据",
+      "status": "pending",
+      "tags": {"observe_type": "ideal", "source": "访谈"}
+    },
+    {
+      "id": "48b0823c-bec3-404f-afa7-8f3d34deb950",
+      "title": "技术升级 · 平台能力建设",
+      "description": "当前技术水平和团队配置不足以支撑新平台研发，需系统性提升。",
+      "type": "observe",
+      "category": "技术基建",
+      "status": "pending",
+      "tags": {"observe_type": "ideal", "source": "评估"}
+    },
+    {
+      "id": "31ff8e85-b8f3-495d-b3a9-e8c3e532de7e",
+      "title": "技术债务",
+      "description": "代码测试覆盖不足、CI/CD缺失、模块耦合度高，部分精力消耗在历史遗留问题上。",
+      "type": "observe",
+      "category": "技术债",
+      "status": "confirmed",
+      "tags": {"observe_type": "reality", "source": "代码审计"}
+    },
+    {
+      "id": "15242a21-27e5-49c4-aa82-085bc378d477",
+      "title": "技术团队能力",
+      "description": "团队缺乏架构设计、数据工程、DevOps经验，同时支撑三大任务存在挑战。",
+      "type": "observe",
+      "category": "团队",
+      "status": "confirmed",
+      "tags": {"observe_type": "reality", "source": "评估"}
+    },
+    {
+      "id": "50c52803-47b6-4f0e-bda1-f79bfe19af3c",
+      "title": "数据分析能力",
+      "description": "无分析工具和专职团队，经营数据靠人工Excel汇总。所需分析能力需从零建设。",
+      "type": "observe",
+      "category": "数据",
+      "status": "confirmed",
+      "tags": {"observe_type": "reality", "source": "调研"}
+    },
+    {
+      "id": "fc3bd447-e182-45d5-944c-dc3a6a34d6a7",
+      "title": "数据基础设施",
+      "description": "无数仓、无统一数据平台，数据散落各系统。数据汇聚和清洗需从头搭建。",
+      "type": "observe",
+      "category": "数据基建",
+      "status": "confirmed",
+      "tags": {"observe_type": "reality", "source": "评估"}
+    },
+    {
+      "id": "e9ab0979-83d5-4112-ba25-6f54390be8b4",
+      "title": "战略目标与技术承载能力之间存在差距",
+      "description": "过往技术投入以支撑运行为主，未为下一阶段做储备，导致三大任务需协调推进，避免资源分散。",
+      "type": "orient",
+      "category": "战略技术断层",
+      "tags": {
         "rootCause": "过往技术投入以支撑运行为主，未为下一阶段做储备。",
         "impact": "三大任务需协调推进，避免资源分散。",
-        "tags": {
-          "domain": "战略技术断层"
-        }
-      },
-      {
-        "id": "i2",
-        "title": "架构优化前置有助于新平台建设",
-        "description": "现有代码和架构有优化空间，技术债需在新建前处理，否则将旧问题延拓到新系统。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "o5",
-          "o6",
-          "o4"
-        ],
+        "domain": "战略技术断层"
+      }
+    },
+    {
+      "id": "2fd13e60-797e-4fd6-91f1-9d684e2e7a1d",
+      "title": "架构优化前置有助于新平台建设",
+      "description": "现有代码和架构有优化空间，技术债需在新建前处理，否则将旧问题延拓到新系统。",
+      "type": "orient",
+      "category": "战略技术断层",
+      "tags": {
         "rootCause": "现有代码和架构有优化空间，技术债需在新建前处理。",
         "impact": "不清债直接建新平台，可能将旧问题延拓到新系统。",
-        "tags": {
-          "domain": "战略技术断层"
-        }
-      },
-      {
-        "id": "i3",
-        "title": "数据分析需求日趋复杂，数据基础有待夯实",
-        "description": "多维分析需求涌现，但数据采集和存储能力尚在建设中，需分阶段建设。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "o3",
-          "o7",
-          "o8"
-        ],
+        "domain": "战略技术断层"
+      }
+    },
+    {
+      "id": "8eae0352-aea1-498a-a3b3-8b173c8bafe7",
+      "title": "数据分析需求日趋复杂，数据基础有待夯实",
+      "description": "多维分析需求涌现，但数据采集和存储能力尚在建设中，需分阶段建设。",
+      "type": "orient",
+      "category": "数据基建",
+      "tags": {
         "rootCause": "多维分析需求涌现，但数据采集和存储能力尚在建设中。",
         "impact": "需分阶段建设，优先聚焦商家ROI和流量效果评估。",
-        "tags": {
-          "domain": "数据基建"
-        }
-      },
-      {
-        "id": "i4",
-        "title": "新平台与数据基础设施需统筹规划",
-        "description": "新平台数据架构若独立规划，未来可能形成新数据孤岛，应从设计阶段考虑数据规范。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "o2",
-          "o3",
-          "o8"
-        ],
+        "domain": "数据基建"
+      }
+    },
+    {
+      "id": "2b1d9aa9-7b99-4835-91ab-8c6b8d49ced6",
+      "title": "新平台与数据基础设施需统筹规划",
+      "description": "新平台数据架构若独立规划，未来可能形成新数据孤岛，应从设计阶段考虑数据规范。",
+      "type": "orient",
+      "category": "数据基建",
+      "tags": {
         "rootCause": "新平台数据架构若独立规划，未来可能形成新数据孤岛。",
         "impact": "应从设计阶段就考虑数据规范和数据上报机制。",
-        "tags": {
-          "domain": "数据基建"
-        }
+        "domain": "数据基建"
       }
-    ],
-    "decide": [
-      {
-        "id": "s1",
-        "title": "方案A：\"先筑基、再建房\"三阶段推进",
-        "description": "先夯实技术基础，降低后期治理成本。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "i1",
-          "i2",
-          "i3",
-          "i4"
-        ],
-        "priority": "P1",
+    },
+    {
+      "id": "7eab679c-8e39-477a-a5f8-4980de802b50",
+      "title": "方案A：\"先筑基、再建房\"三阶段推进",
+      "description": "先夯实技术基础，降低后期治理成本。",
+      "type": "decide",
+      "category": "战略",
+      "priority": "P1",
+      "tags": {
         "advantage": "先夯实技术基础，降低后期治理成本。",
         "summary": "第1阶段（4个月）架构优化+团队扩充 → 第2阶段（6个月）新平台+数仓并行 → 第3阶段分析能力深化。",
         "resources": "总周期约18个月。团队从现有规模扩展，新增架构师、数据工程师等。",
         "keyAssumption": "管理层接受前期以技术基建为主。",
-        "isSelected": true,
+        "isSelected": "true",
         "clientNote": "前期以基建为主，业务成果交付周期较长"
-      },
-      {
-        "id": "s2",
-        "title": "方案B：新平台快速上马，技术优化并行推进",
-        "description": "新平台快速上线验证方向，抢占窗口期。",
-        "date": null,
-        "assignee": null,
-        "upstream": [
-          "i1",
-          "i3",
-          "i4"
-        ],
-        "priority": "P2",
+      }
+    },
+    {
+      "id": "6061fd70-ff6d-4456-ab01-3b5ac3dce4bc",
+      "title": "方案B：新平台快速上马，技术优化并行推进",
+      "description": "新平台快速上线验证方向，抢占窗口期。",
+      "type": "decide",
+      "category": "战略",
+      "priority": "P2",
+      "tags": {
         "advantage": "新平台快速上线验证方向，抢占窗口期。",
         "summary": "第1阶段（6个月）MVP研发 → 第2阶段（4个月）架构优化+数据基建 → 第3阶段整合。",
         "resources": "总周期约18个月。前期集中资源做新平台，数据工程师第2阶段到位。",
         "keyAssumption": "旧系统架构问题不影响新平台核心功能。",
-        "isSelected": false,
+        "isSelected": "false",
         "clientNote": ""
       }
-    ],
-    "act": [
-      {
-        "id": "t1",
-        "title": "架构优化与工程规范建设",
-        "description": "",
-        "date": {
-          "start": "2026-06-01",
-          "end": "2026-09-30"
-        },
-        "assignee": "架构组",
-        "upstream": [
-          "s1"
-        ],
-        "status": "doing",
-        "progress": 0.6,
+    },
+    {
+      "id": "42453861-8425-4e4c-91cb-31ff24fa47bd",
+      "title": "架构优化与工程规范建设",
+      "description": "",
+      "type": "act",
+      "category": "技术基建",
+      "status": "doing",
+      "assignee": "架构组",
+      "startAt": "2026-06-01",
+      "endAt": "2026-09-30",
+      "tags": {
+        "progress": "0.6",
         "notes": "CI/CD已完成，核心重构60%"
-      },
-      {
-        "id": "t2",
-        "title": "团队扩充",
-        "description": "",
-        "date": {
-          "start": "2026-06-01",
-          "end": "2026-08-31"
-        },
-        "assignee": "HR + CTO",
-        "upstream": [
-          "s1"
-        ],
-        "status": "doing",
-        "progress": 0.4,
+      }
+    },
+    {
+      "id": "5c93f4f0-f2a3-4285-8512-3b5c74b0d517",
+      "title": "团队扩充",
+      "description": "",
+      "type": "act",
+      "category": "组织",
+      "status": "doing",
+      "assignee": "HR + CTO",
+      "startAt": "2026-06-01",
+      "endAt": "2026-08-31",
+      "tags": {
+        "progress": "0.4",
         "notes": "架构师已到岗，数据工程师招聘中"
-      },
-      {
-        "id": "t3",
-        "title": "商家赋能平台MVP研发",
-        "description": "",
-        "date": {
-          "start": "2026-10-01",
-          "end": "2027-03-31"
-        },
-        "assignee": "待定",
-        "upstream": [
-          "s1"
-        ],
-        "status": "todo",
-        "progress": 0.0,
-        "notes": ""
-      },
-      {
-        "id": "t4",
-        "title": "数据仓库与BI体系建设",
-        "description": "",
-        "date": {
-          "start": "2026-10-01",
-          "end": "2027-06-30"
-        },
-        "assignee": "待定（需数据工程师到岗）",
-        "upstream": [
-          "s1"
-        ],
-        "status": "todo",
-        "progress": 0.0,
-        "notes": ""
-      },
-      {
-        "id": "t5",
-        "title": "原有系统日常维护",
-        "description": "高峰期保障、日常修复、外包协调",
-        "date": null,
-        "assignee": "现有团队",
-        "upstream": [
-          "s2"
-        ],
-        "status": "doing",
-        "progress": 1.0,
-        "notes": ""
-      },
-      {
-        "id": "t6",
-        "title": "数据治理与数据规范制定",
-        "description": "",
-        "date": null,
-        "assignee": "数据工程师（待招）",
-        "upstream": [
-          "s1"
-        ],
-        "status": "blocked",
-        "progress": 0.05,
-        "notes": "",
+      }
+    },
+    {
+      "id": "03bbd56b-6d4e-4cf7-ae1a-3a6a9f28d3bf",
+      "title": "商家赋能平台MVP研发",
+      "description": "",
+      "type": "act",
+      "category": "产品技术",
+      "status": "todo",
+      "assignee": "待定",
+      "startAt": "2026-10-01",
+      "endAt": "2027-03-31",
+      "tags": {"progress": "0.0"}
+    },
+    {
+      "id": "9abd1569-f1ae-414b-ac67-c2d7c16b052b",
+      "title": "数据仓库与BI体系建设",
+      "description": "",
+      "type": "act",
+      "category": "数据基建",
+      "status": "todo",
+      "assignee": "待定（需数据工程师到岗）",
+      "startAt": "2026-10-01",
+      "endAt": "2027-06-30",
+      "tags": {"progress": "0.0"}
+    },
+    {
+      "id": "82b2a10e-c2db-4993-a8f3-0420e7750fed",
+      "title": "原有系统日常维护",
+      "description": "高峰期保障、日常修复、外包协调",
+      "type": "act",
+      "category": "运维",
+      "status": "doing",
+      "assignee": "现有团队",
+      "tags": {"progress": "1.0"}
+    },
+    {
+      "id": "b430e667-91c0-43c6-8aca-40affaa733cf",
+      "title": "数据治理与数据规范制定",
+      "description": "",
+      "type": "act",
+      "category": "数据基建",
+      "status": "blocked",
+      "assignee": "数据工程师（待招）",
+      "tags": {
+        "progress": "0.05",
         "blockedReason": "数据工程师未到岗，无法启动"
       }
-    ]
-  }
+    }
+  ]
 }

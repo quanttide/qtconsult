@@ -9,12 +9,12 @@ import 'package:qtconsult_project/qtconsult_project.dart';
 
 List<Task> makeTestTasks() {
   return [
-    Task(id: 'o1', title: '调研卡片', description: '测试描述', type: 'observe', category: 'ideal',
+    Task(id: 'o1', title: '调研卡片', description: '测试描述', type: 'observe-ideal',
         tags: {'source': '访谈'}, status: 'pending'),
-    Task(id: 'o2', title: '现实卡片', type: 'observe', category: 'reality',
+    Task(id: 'o2', title: '现实卡片', type: 'observe-reality',
         tags: {'source': '审计'}, status: 'confirmed'),
     Task(id: 'i1', title: '洞察测试', type: 'orient',
-        tags: {'domain': '技术领域', 'cause': '根因', 'effect': '影响'}),
+        tags: {'domain': '技术领域', 'rootCause': '根因', 'impact': '影响'}),
     Task(id: 's1', title: '方案A', type: 'decide',
         tags: {'advantage': '优势', 'isSelected': 'true', 'clientNote': ''}),
     Task(id: 't1', title: '任务1', type: 'act', assignee: '某人', status: 'doing',

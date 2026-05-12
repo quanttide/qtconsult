@@ -54,12 +54,15 @@ class WorkspaceSelectScreen extends StatelessWidget {
         .catchError((_) {});
     cache.load().then((raw) {
       if (raw == null || !context.mounted) return;
-      final project = Project.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      final tasks = (json['tasks'] as List)
+          .map((e) => Task.fromJson(e as Map<String, dynamic>))
+          .toList();
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider(
-            create: (_) => OodaState(project, cache, provider: provider, workspaceId: wid, projectId: pid),
+            create: (_) => OodaState(tasks, cache, provider: provider, workspaceId: wid, projectId: pid),
             child: const OodaScreen(),
           ),
         ),
