@@ -42,7 +42,7 @@ QTCONSULT_S3_SECRET_ACCESS_KEY=...
 QTCONSULT_S3_ADDRESSING_STYLE=virtual
 ```
 
-The `platform/` prefix aligns provider-owned data with the hot archive layout in `docs/dev/storage.md`.
+The `platform/` prefix aligns provider-owned data with the hot archive layout in `docs/dev-guide.md` 的存储与运维一节.
 
 ## API
 

@@ -23,9 +23,4 @@ uv run pytest tests/ -v
 
 ## 相关文档
 
-| 文档 | 说明 |
-|:-----|:-----|
-| `docs/qa/index.md` | QA 总则 |
-| `docs/qa/workspace.md` | 工作区测试用例 |
-| `docs/qa/project.md` | 项目看板测试用例 |
-| `docs/qa/permission.md` | 权限测试用例 |
+QA 总则与三组验收用例见 [开发指南](../docs/dev-guide.md) 的「质量保证」「工作区用例」「项目用例」「权限用例」各节。
