@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- 引入 `go_router`（平台契约：Studio 统一用 go_router）：路由表 `lib/router.dart`（`/` 与 `/:wid/:pid` 深链、未知路径回落首页），Web 初始路由取 `Uri.base`；`HomeScreen` 直读当前 URI 与 `AppCubit` 单向对齐，站内工作区切换改写 URL（新增 6 个测试，共 51）
 - 结构合并：取消 `packages/`（data-sources、qtconsult-project），代码并入 `lib/` 分层（models / states / views / screens / services），入口统一为 `lib/qtconsult_studio.dart`
 - 引入 `bloc` / `flutter_bloc`：`ConsultState` 改为不可变状态，业务逻辑迁入 `ConsultCubit`；新增 `AppCubit` 承担数据加载与工作区切换，`main.dart` 拆出 `HomeScreen`
 - 引入 `bloc_lint`：`analysis_options.yaml` 以列表 include 接入 `package:bloc_lint/recommended.yaml`，`bloc lint .` 纳入检查

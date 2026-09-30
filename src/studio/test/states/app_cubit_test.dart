@@ -54,11 +54,16 @@ Future<String> _missingAsset(String path) async =>
 
 CacheService _cacheFor(String wid, String pid) => CacheService(filePath: '');
 
-AppCubit _cubit({ProviderService? provider, AssetLoader? loadAsset}) {
+AppCubit _cubit({
+  ProviderService? provider,
+  AssetLoader? loadAsset,
+  ({String wid, String pid})? initialTarget,
+}) {
   return AppCubit(
     provider: provider,
     cacheBuilder: _cacheFor,
     loadAsset: loadAsset ?? _missingAsset,
+    initialTarget: initialTarget,
   );
 }
 
@@ -116,6 +121,21 @@ void main() {
     expect(cubit.state.workspaces, isNotNull);
   });
 
+  test('深链目标优先加载（initialTarget）', () async {
+    final cubit = _cubit(
+      loadAsset: _fileAsset,
+      initialTarget: (wid: 'workspace1', pid: 'project1'),
+    );
+    addTearDown(cubit.close);
+
+    await cubit.load();
+
+    expect(cubit.state.status, AppStatus.success);
+    expect(cubit.state.currentWsId, 'workspace1');
+    expect(cubit.state.currentProjectId, 'project1');
+    expect(cubit.state.tasks, hasLength(20));
+  });
+
   test('切换工作区加载对应 fixture', () async {
     final cubit = _cubit(loadAsset: _fileAsset);
     addTearDown(cubit.close);
@@ -123,7 +143,7 @@ void main() {
     await cubit.load();
     expect(cubit.state.currentWsId, 'workspace0');
 
-    await cubit.switchWorkspace('workspace1');
+    await cubit.openProject('workspace1', 'project1');
 
     expect(cubit.state.status, AppStatus.success);
     expect(cubit.state.currentWsId, 'workspace1');
@@ -132,26 +152,26 @@ void main() {
     expect(cubit.state.tasks, hasLength(20));
   });
 
-  test('切换到当前工作区保持状态不变', () async {
+  test('打开当前项目保持状态不变', () async {
     final cubit = _cubit(loadAsset: _fileAsset);
     addTearDown(cubit.close);
 
     await cubit.load();
     final before = cubit.state;
 
-    await cubit.switchWorkspace('workspace0');
+    await cubit.openProject('workspace0', 'project0');
 
     expect(identical(cubit.state, before), isTrue);
   });
 
-  test('切换到未知工作区保持状态不变', () async {
+  test('打开未知目标保持状态不变', () async {
     final cubit = _cubit(loadAsset: _fileAsset);
     addTearDown(cubit.close);
 
     await cubit.load();
     final before = cubit.state;
 
-    await cubit.switchWorkspace('nope');
+    await cubit.openProject('nope', 'nope');
 
     expect(identical(cubit.state, before), isTrue);
   });
