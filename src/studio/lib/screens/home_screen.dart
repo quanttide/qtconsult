@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../qtconsult_studio.dart';
-import 'phase_placeholder.dart';
+import 'phase_screen.dart';
 
 /// `/` 首页：只渲染数据未就绪的阶段占位。
 ///
@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) => PhasePlaceholder(state: state),
+      builder: (context, state) => PhaseScreen(state: state),
     );
   }
 }

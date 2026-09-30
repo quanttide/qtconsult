@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 
 import '../qtconsult_studio.dart';
 import '../router.dart';
-import 'phase_placeholder.dart';
+import 'phase_screen.dart';
 
 /// `/:wid/:pid` 看板宿主：URL 与 [AppCubit] 状态单向对齐并渲染看板。
 ///
 /// 同步只读取 go_router 的**当前** URI（不读任何 widget 参数），站内 `go`、
 /// 浏览器前进后退、深链、过渡期新旧实例读数必然一致，不会互相拉扯——
 /// URL 是「打开哪个项目」的唯一真相。冷启动深链在数据就绪前渲染
-/// [PhasePlaceholder]；站内切换工作区由看板 AppBar 回调 `context.go` 改写 URL。
+/// [PhaseScreen]；站内切换工作区由看板 AppBar 回调 `context.go` 改写 URL。
 class ProjectScreen extends StatefulWidget {
   /// 创建看板宿主。
   const ProjectScreen({super.key});
@@ -61,7 +61,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
       child: BlocBuilder<AppCubit, AppState>(
         builder: (context, state) {
           if (state.status != AppStatus.success) {
-            return PhasePlaceholder(state: state);
+            return PhaseScreen(state: state);
           }
           return _BoardHost(state: state);
         },

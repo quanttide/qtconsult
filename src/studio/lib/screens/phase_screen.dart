@@ -7,9 +7,9 @@ import '../qtconsult_studio.dart';
 /// 供 `HomeScreen`（`/`）与 `ProjectScreen`（`/:wid/:pid` 冷启动期）共用。
 /// `success` 分支渲染加载占位——正常流程下它会被路由 `redirect` 抢先接管，
 /// 仅作单帧防御，看板不在这里出现。
-class PhasePlaceholder extends StatelessWidget {
+class PhaseScreen extends StatelessWidget {
   /// 创建阶段占位屏。
-  const PhasePlaceholder({super.key, required this.state});
+  const PhaseScreen({super.key, required this.state});
 
   /// 当前应用数据状态。
   final AppState state;
