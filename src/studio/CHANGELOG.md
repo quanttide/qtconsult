@@ -1,5 +1,23 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- 结构合并：取消 `packages/`（data-sources、qtconsult-project），代码并入 `lib/` 分层（models / states / views / screens / services），入口统一为 `lib/qtconsult_studio.dart`
+- 引入 `bloc` / `flutter_bloc`：`ConsultState` 改为不可变状态，业务逻辑迁入 `ConsultCubit`；新增 `AppCubit` 承担数据加载与工作区切换，`main.dart` 拆出 `HomeScreen`
+- 引入 `bloc_lint`：`analysis_options.yaml` 以列表 include 接入 `package:bloc_lint/recommended.yaml`，`bloc lint .` 纳入检查
+- 引入 `environment_config`：`QTCONSULT_PROVIDER_URL` / `QTCONSULT_API_TOKEN` 构建前生成到 `lib/environment_config.dart`，替代 `--dart-define`（deploy.yml 同步）
+- Web 缓存从 `dart:html` 迁移到 `package:web`
+- `analysis_options.yaml` 新增文档规则（`public_member_api_docs` 等 7 条）与测试规则（`use_test_throws_matchers` 等 2 条），补齐全部公开成员 `///` 文档注释
+- `lib/` 与 `test/` 统一通过 `dart format`
+- 原包文档 `packages/qtconsult-project/doc/` 迁至 `doc/`
+- 测试补齐：`AppCubit` 数据源优先级/回退/切换用例，workspace switcher 断言补全（45 个测试）
+
+### Removed
+- 空占位 `lib/models/ooda_data.dart`
+- 死代码 `lib/screens/workspace_select_screen.dart`
+- 失效的结构说明 `doc/packages.md` 与 `docs/dev/packages.md`
+
 ## [studio/v0.3.0] - 2026-05-12
 
 ### Changed

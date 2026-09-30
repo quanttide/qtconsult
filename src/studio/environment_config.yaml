@@ -1,0 +1,11 @@
+environment_config:
+  class: EnvironmentConfig
+  ignore_for_file:
+    - type=lint
+  fields:
+    providerUrl:
+      env_var: QTCONSULT_PROVIDER_URL
+      default: ''
+    apiToken:
+      env_var: QTCONSULT_API_TOKEN
+      default: ''

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:qtconsult_project/qtconsult_project.dart';
+import 'package:qtconsult_studio/qtconsult_studio.dart';
 
 void main() {
   test('load fixture workspace0/project0.json', () {
-    final raw = File('assets/fixtures/workspace0/project0.json').readAsStringSync();
+    final raw = File(
+      'assets/fixtures/workspace0/project0.json',
+    ).readAsStringSync();
     final json = jsonDecode(raw) as Map<String, dynamic>;
 
     final project = Project.fromJson(json);
@@ -24,7 +26,9 @@ void main() {
   });
 
   test('load fixture workspace1/project1.json', () {
-    final raw = File('assets/fixtures/workspace1/project1.json').readAsStringSync();
+    final raw = File(
+      'assets/fixtures/workspace1/project1.json',
+    ).readAsStringSync();
     final json = jsonDecode(raw) as Map<String, dynamic>;
 
     final project = Project.fromJson(json);

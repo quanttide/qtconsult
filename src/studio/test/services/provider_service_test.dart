@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:data_sources/provider_service.dart';
+import 'package:qtconsult_studio/services/provider_service.dart';
 
 class _MockClient extends http.BaseClient {
   final Map<String, _MockResponse> _responses = {};
@@ -21,7 +21,9 @@ class _MockClient extends http.BaseClient {
     final body = jsonEncode(resp.body);
     final stream = http.ByteStream.fromBytes(utf8.encode(body));
     final headers = {'content-type': 'application/json; charset=utf-8'};
-    return Future.value(http.StreamedResponse(stream, resp.status, headers: headers));
+    return Future.value(
+      http.StreamedResponse(stream, resp.status, headers: headers),
+    );
   }
 }
 
@@ -47,8 +49,16 @@ void main() {
   group('listWorkspaces', () {
     test('返回工作区列表', () async {
       mock.expect('GET', 'http://localhost:8756/workspaces', 200, [
-        {'id': 'ws1', 'name': '工作区A', 'project_ids': ['p1']},
-        {'id': 'ws2', 'name': '工作区B', 'project_ids': ['p2', 'p3']},
+        {
+          'id': 'ws1',
+          'name': '工作区A',
+          'project_ids': ['p1'],
+        },
+        {
+          'id': 'ws2',
+          'name': '工作区B',
+          'project_ids': ['p2', 'p3'],
+        },
       ]);
       final workspaces = await service.listWorkspaces();
       expect(workspaces.length, 2);
@@ -67,16 +77,22 @@ void main() {
   group('loadProject', () {
     test('返回项目原始 JSON', () async {
       mock.expect(
-          'GET', 'http://localhost:8756/workspaces/ws1/projects/p1', 200, {
-        'name': 'p1',
-        'title': '测试项目',
-        'board': {
-          'observe': [{'id': 'o1', 'title': '卡片1', 'category': 'ideal'}],
-          'orient': [],
-          'decide': [],
-          'act': [],
-        }
-      });
+        'GET',
+        'http://localhost:8756/workspaces/ws1/projects/p1',
+        200,
+        {
+          'name': 'p1',
+          'title': '测试项目',
+          'board': {
+            'observe': [
+              {'id': 'o1', 'title': '卡片1', 'category': 'ideal'},
+            ],
+            'orient': [],
+            'decide': [],
+            'act': [],
+          },
+        },
+      );
       final json = await service.loadProject('ws1', 'p1');
       expect(json['name'], 'p1');
       expect(json['title'], '测试项目');
@@ -87,30 +103,40 @@ void main() {
 
     test('非200抛出异常', () async {
       mock.expect(
-          'GET', 'http://localhost:8756/workspaces/ws1/projects/p1', 404, {});
-      expect(() => service.loadProject('ws1', 'p1'),
-          throwsA(isA<ProviderException>()));
+        'GET',
+        'http://localhost:8756/workspaces/ws1/projects/p1',
+        404,
+        {},
+      );
+      expect(
+        () => service.loadProject('ws1', 'p1'),
+        throwsA(isA<ProviderException>()),
+      );
     });
   });
 
   group('updateCard', () {
     test('正常更新不抛异常', () async {
       mock.expect(
-          'PUT',
-          'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
-          200,
-          {'id': 'o1', 'title': '已更新'});
+        'PUT',
+        'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
+        200,
+        {'id': 'o1', 'title': '已更新'},
+      );
       await service.updateCard('ws1', 'p1', {'id': 'o1', 'title': '已更新'});
     });
 
-      test('非200抛出异常', () async {
+    test('非200抛出异常', () async {
       mock.expect(
-          'PUT',
-          'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
-          404,
-          {});
-      expect(() => service.updateCard('ws1', 'p1', {'id': 'o1', 'title': 'x'}),
-          throwsA(isA<ProviderException>()));
+        'PUT',
+        'http://localhost:8756/workspaces/ws1/projects/p1/cards/o1',
+        404,
+        {},
+      );
+      expect(
+        () => service.updateCard('ws1', 'p1', {'id': 'o1', 'title': 'x'}),
+        throwsA(isA<ProviderException>()),
+      );
     });
   });
 

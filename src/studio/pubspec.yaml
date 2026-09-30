@@ -10,14 +10,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  bloc: ^9.2.1
   cupertino_icons: ^1.0.8
-  provider: ^6.1.5
-  data_sources:
-    path: packages/data-sources
-  qtconsult_project:
-    path: packages/qtconsult-project
+  flutter_bloc: ^9.1.1
+  flutter_quanttide_project: ^0.1.0
+  http: ^1.2.0
+  quanttide_project: ^0.2.0
+  web: ^1.1.0
 
 dev_dependencies:
+  bloc_lint: ^0.4.3
+  environment_config: ^4.1.2
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0

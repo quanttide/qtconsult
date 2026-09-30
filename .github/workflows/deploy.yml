@@ -26,11 +26,15 @@ jobs:
         working-directory: src/studio
         run: flutter pub get
 
+      - name: Generate environment config
+        working-directory: src/studio
+        env:
+          QTCONSULT_PROVIDER_URL: ${{ vars.QTCONSULT_PROVIDER_URL }}
+        run: dart run environment_config:generate
+
       - name: Build Web
         working-directory: src/studio
-        run: >
-          flutter build web --release
-          --dart-define=QTCONSULT_PROVIDER_URL=${{ vars.QTCONSULT_PROVIDER_URL }}
+        run: flutter build web --release
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
