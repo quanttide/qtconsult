@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:quanttide_project/quanttide_project.dart';
 
 import '../services/cache_service.dart';
+import '../services/project_cache.dart';
 import '../services/provider_service.dart';
 import 'app_state.dart';
 
@@ -19,19 +20,20 @@ typedef CacheServiceBuilder = CacheService Function(String wid, String pid);
 class AppCubit extends Cubit<AppState> {
   /// 创建应用逻辑。
   ///
-  /// [loadAsset] 注入资源读取（测试可替换实现），[cacheBuilder] 构造项目缓存。
+  /// [loadAsset] 注入资源读取（测试可替换实现），[cacheBuilder] 缺省为
+  /// [projectCache]，测试可注入临时路径。
   AppCubit({
     ProviderService? provider,
-    required CacheServiceBuilder cacheBuilder,
+    CacheServiceBuilder? cacheBuilder,
     required AssetLoader loadAsset,
   }) : _provider = provider,
-       _cacheBuilder = cacheBuilder,
+       _cacheBuilder = cacheBuilder ?? projectCache,
        _loadAsset = loadAsset,
        super(
          AppState(
            status: AppStatus.loading,
            provider: provider,
-           cacheBuilder: cacheBuilder,
+           cacheBuilder: cacheBuilder ?? projectCache,
          ),
        );
 

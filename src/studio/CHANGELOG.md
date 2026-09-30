@@ -8,6 +8,7 @@
 - 引入 `bloc_lint`：`analysis_options.yaml` 以列表 include 接入 `package:bloc_lint/recommended.yaml`，`bloc lint .` 纳入检查
 - 引入 `environment_config`：`QTCONSULT_PROVIDER_URL` / `QTCONSULT_API_TOKEN` 构建前生成到 `lib/environment_config.dart`，替代 `--dart-define`（deploy.yml 同步）
 - Web 缓存从 `dart:html` 迁移到 `package:web`
+- `main.dart` 瘦身为纯入口：根组件与依赖装配移到 `app.dart`，缓存默认落点 `projectCache` 移入 `services/`
 - `analysis_options.yaml` 新增文档规则（`public_member_api_docs` 等 7 条）与测试规则（`use_test_throws_matchers` 等 2 条），补齐全部公开成员 `///` 文档注释
 - `lib/` 与 `test/` 统一通过 `dart format`
 - 原包文档 `packages/qtconsult-project/doc/` 迁至 `doc/`
