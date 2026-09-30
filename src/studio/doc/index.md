@@ -20,7 +20,6 @@ quanttide_project (pub.dev)     — 通用看板领域模型（Project / Task / 
 |------|------|
 | `lib/qtconsult_studio.dart` | barrel 入口，re-export 通用模型 + 本应用组件 |
 | `lib/models/project_lists.dart` | 四阶段（clarify/research/decide/execute）分组、调研按领域聚类、上游追踪 |
-| `lib/views/visual_helpers.dart` | 卡片状态 → 颜色/中文标签映射，供 UI 层直接使用 |
 | `lib/states/consult_state.dart` | 看板不可变状态快照（任务列表 + 待回写标记） |
 | `lib/states/consult_cubit.dart` | 卡片交互、脏任务跟踪与后台回写 |
 | `lib/states/app_cubit.dart` | 数据加载（provider → fixture 回退）与工作区切换 |
@@ -39,10 +38,6 @@ UI 不按原始 key 取任务，`ProjectLists` 把 `type` 过滤封装为四个�
 
 `Task` 通过扩展方法提供 `upstream` 字段（`upstream` 标签，逗号分隔），用于在看板中建立卡片间的前驱依赖链路，支撑决策链可视化。
 
-### 状态视觉映射
-
-卡片状态（`pending`/`confirmed`）和任务状态（`todo`/`doing`/`done`/`blocked`）的色值和中文标签集中在 `visual_helpers.dart`，UI 层直接调用函数取值，不做二次映射。
-
 ### 状态与逻辑分离
 
 状态是不可变快照（`ConsultState`），变更只能经 `Cubit` 触发并 emit 新状态；bloc_lint 保证 cubit 文件不依赖 Flutter、不暴露公有字段，可独立测试。
@@ -50,6 +45,5 @@ UI 不按原始 key 取任务，`ProjectLists` 把 `type` 过滤封装为四个�
 ## 设计原则
 
 - 扩展方法优先于继承：不修改 `quanttide_project` 的通用模型
-- 纯函数优先于状态：`statusColor`、`taskStatusColor` 等是纯函数，不依赖 Widget 上下文
 - 约定优于配置：四阶段固定为 `clarify`/`research`/`decide`/`execute`，不通过配置注入
 - 抽象不成为瓶颈：当通用模型不满足需求时，直接定义自有模型（如 `TaskCluster`）

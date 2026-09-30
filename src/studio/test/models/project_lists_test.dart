@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qtconsult_studio/qtconsult_studio.dart';
 
@@ -58,54 +57,6 @@ void main() {
       expect(lists.research.length, 2);
       expect(lists.clarify[0].id, 'o1');
       expect(lists.research[0].id, 'o2');
-    });
-  });
-
-  group('statusColor', () {
-    test('pending 返回灰色', () {
-      expect(statusColor('pending'), const Color(0xFFAAAAAA));
-    });
-    test('confirmed 返回深色', () {
-      expect(statusColor('confirmed'), const Color(0xFF444444));
-    });
-    test('null 返回灰色', () {
-      expect(statusColor(null), const Color(0xFFAAAAAA));
-    });
-  });
-
-  group('taskStatusColor', () {
-    test('todo 返回浅灰', () {
-      expect(taskStatusColor('todo'), const Color(0xFFBBBBBB));
-    });
-    test('doing 返回中灰', () {
-      expect(taskStatusColor('doing'), const Color(0xFF666666));
-    });
-    test('done 返回深灰', () {
-      expect(taskStatusColor('done'), const Color(0xFF444444));
-    });
-    test('blocked 返回中灰', () {
-      expect(taskStatusColor('blocked'), const Color(0xFF999999));
-    });
-    test('null 返回浅灰', () {
-      expect(taskStatusColor(null), const Color(0xFFBBBBBB));
-    });
-  });
-
-  group('taskStatusLabel', () {
-    test('todo 返回待开始', () {
-      expect(taskStatusLabel('todo'), '待开始');
-    });
-    test('doing 返回进行中', () {
-      expect(taskStatusLabel('doing'), '进行中');
-    });
-    test('done 返回已完成', () {
-      expect(taskStatusLabel('done'), '已完成');
-    });
-    test('blocked 返回受阻', () {
-      expect(taskStatusLabel('blocked'), '受阻');
-    });
-    test('null 返回待开始', () {
-      expect(taskStatusLabel(null), '待开始');
     });
   });
 }

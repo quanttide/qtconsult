@@ -11,5 +11,4 @@ export 'states/consult_state.dart';
 export 'views/board_column_title.dart';
 export 'views/simple_card.dart';
 export 'views/stage_column.dart';
-export 'views/visual_helpers.dart';
 export 'views/workspace_switcher.dart';
