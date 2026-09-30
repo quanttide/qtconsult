@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qtconsult_studio/qtconsult_studio.dart';
 import 'package:qtconsult_studio/router.dart';
-import 'package:qtconsult_studio/screens/home_screen.dart';
 
 Future<String> _fileAsset(String path) async => File(path).readAsStringSync();
 
@@ -20,40 +19,42 @@ AppCubit _cubit({({String wid, String pid})? initialTarget}) {
   )..load();
 }
 
-Future<void> _pumpApp(
+Future<GoRouter> _pumpApp(
   WidgetTester tester,
   String location,
   AppCubit cubit,
 ) async {
   await tester.binding.setSurfaceSize(const Size(1200, 800));
   addTearDown(() => tester.binding.setSurfaceSize(null));
+  final router = buildRouter(initialLocation: location, appCubit: cubit);
   await tester.pumpWidget(
     BlocProvider<AppCubit>(
       create: (_) => cubit,
-      child: MaterialApp.router(
-        routerConfig: buildRouter(initialLocation: location),
-      ),
+      child: MaterialApp.router(routerConfig: router),
     ),
   );
   await tester.pumpAndSettle();
+  return router;
 }
 
 void main() {
-  testWidgets('/ 默认加载首个项目', (tester) async {
-    await _pumpApp(tester, '/', _cubit());
+  testWidgets('/ 加载完成后归一化到首个项目路径', (tester) async {
+    final router = await _pumpApp(tester, '/', _cubit());
 
     expect(find.text('咨询看板'), findsOneWidget);
     expect(find.text('工作区 0'), findsOneWidget);
+    expect(router.state.uri.path, '/workspace0/project0');
   });
 
   testWidgets('深链 /:wid/:pid 经 initialTarget 直达目标', (tester) async {
-    await _pumpApp(
+    final router = await _pumpApp(
       tester,
       '/workspace1/project1',
       _cubit(initialTarget: (wid: 'workspace1', pid: 'project1')),
     );
 
     expect(find.text('工作区 1'), findsOneWidget);
+    expect(router.state.uri.path, '/workspace1/project1');
   });
 
   testWidgets('深链无 initialTarget 时经状态同步收敛', (tester) async {
@@ -62,15 +63,15 @@ void main() {
     expect(find.text('工作区 1'), findsOneWidget);
   });
 
-  testWidgets('未知路径回落首页', (tester) async {
-    await _pumpApp(tester, '/random', _cubit());
+  testWidgets('未知路径回落首页并归一化', (tester) async {
+    final router = await _pumpApp(tester, '/random', _cubit());
 
     expect(find.text('咨询看板'), findsOneWidget);
-    expect(find.text('工作区 0'), findsOneWidget);
+    expect(router.state.uri.path, '/workspace0/project0');
   });
 
   testWidgets('站内切换工作区改写路由', (tester) async {
-    await _pumpApp(tester, '/', _cubit());
+    final router = await _pumpApp(tester, '/', _cubit());
 
     await tester.tap(find.byIcon(Icons.workspaces_outlined));
     await tester.pumpAndSettle();
@@ -78,7 +79,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('工作区 1'), findsOneWidget);
-    final router = GoRouter.of(tester.element(find.byType(HomeScreen)));
     expect(router.state.uri.path, '/workspace1/project1');
   });
 }

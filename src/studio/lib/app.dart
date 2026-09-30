@@ -16,13 +16,17 @@ class QtConsultStudio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final initialLocation = _webInitialLocation();
-    final router = buildRouter(initialLocation: initialLocation);
+    final appCubit = AppCubit(
+      provider: _providerFromConfig(),
+      loadAsset: rootBundle.loadString,
+      initialTarget: _routeTarget(initialLocation),
+    )..load();
+    final router = buildRouter(
+      initialLocation: initialLocation,
+      appCubit: appCubit,
+    );
     return BlocProvider<AppCubit>(
-      create: (_) => AppCubit(
-        provider: _providerFromConfig(),
-        loadAsset: rootBundle.loadString,
-        initialTarget: _routeTarget(initialLocation),
-      )..load(),
+      create: (_) => appCubit,
       child: MaterialApp.router(
         title: '量潮咨询',
         debugShowCheckedModeBanner: false,

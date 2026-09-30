@@ -52,7 +52,7 @@ cd src/studio && bloc lint .
 
 - 不添加代码注释（`///` 文档注释除外），公开成员必须有 `///` 文档（`public_member_api_docs` 门禁）
 - `main.dart` 只做入口：仅允许 `main()` + `runApp`（个位数行）。根组件与依赖装配在 `app.dart`，页面在 `screens/`，业务逻辑在 `states/`——任何代码不得回流 `main.dart`
-- 页面路由集中在 `lib/router.dart`（平台契约：Studio 统一用 go_router）：站内跳转一律 `context.go(projectLocation(...))`，禁止 widget 内直接 `Navigator.push`；`/:wid/:pid` 深链与站内切换共用一条路径，状态同步只认当前 URI（不读 widget 参数）
+- 页面路由集中在 `lib/router.dart`（平台契约：Studio 统一用 go_router）：站内跳转一律 `context.go(projectLocation(...))`，禁止 widget 内直接 `Navigator.push`；状态门用 `redirect` + `refreshListenable`（`/`=阶段占位、就绪后归一化到 `/:wid/:pid`，未知路径回 `/`）；`HomeScreen` 不依赖看板，看板宿主是 `ProjectScreen`；URL→状态同步只认当前 URI（不读 widget 参数）
 - 不添加多余空行/分隔符以外的格式化
 - 领域模型分层：通用模型 → 业务适配 → 应用 UI
 - 状态管理用 bloc：状态类 `*State`（`*_state.dart`）、逻辑类 `*Cubit`（`*_cubit.dart`）；bloc_lint 约束 cubit 文件不引 Flutter、公有方法返回 `void`/`Future<void>`、无公有字段
