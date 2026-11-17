@@ -67,6 +67,12 @@ flutter build web --release
 ossutil cp --recursive src/studio/build/web/ oss://qtconsult-studio/
 ```
 
+## 关键操作记录（部署踩坑）
+
+1. **公共读两步走**：2023 后新桶默认开启「阻止公共访问」，直接 `set-acl public-read` 或设公共 bucket-policy 均报 403（`Put public bucket acl/policy is not allowed`）。正确顺序：先 `PutBucketPublicAccessBlock`（`block_public_access=false`）再设 `public-read`——已在 `main.tf` 固化（qtclass / qtcloud / qtadmin 同款）。
+2. **自定义域名绑定需 token 验证**：`ossutil bucket-cname --method put --item token oss://<桶> <域名>` 取 token，在 DNS 加 TXT 记录 `_dnsauth.<域名>` → token，生效后再 `ossutil bucket-cname --method put oss://<桶> <域名>`。未绑定域名时 CNAME 已指过来也会 403（`Anonymous access is forbidden`，HostId 为自定义域名）。
+3. **自动证书签发有延迟**：域名绑定后 Aliyun 自动签发 HTTPS 证书需几分钟，期间严格 HTTPS 握手失败（`no alternative certificate subject name`），HTTP 已 200；重验通过即完成。
+
 ## 文件结构
 
 ```
