@@ -1,0 +1,29 @@
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Consultants from './pages/Consultants'
+import Layout from './components/Layout'
+import { ROUTE_PATHS } from './routes'
+import './App.css'
+
+// 路由表单独导出，便于在 MemoryRouter 下测试。只保留服务介绍与咨询师介绍
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path={ROUTE_PATHS.home} element={<Home />} />
+      <Route path={ROUTE_PATHS.consultants} element={<Consultants />} />
+      <Route path="*" element={<Navigate to={ROUTE_PATHS.home} replace />} />
+    </Routes>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    </BrowserRouter>
+  )
+}
+
+export default App
