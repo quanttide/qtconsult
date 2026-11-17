@@ -3,7 +3,8 @@
 ## 架构
 
 ```
-GitHub Action → Flutter Build → 阿里云 OSS → consult.quanttide.com
+GitHub Action → Flutter Build → 阿里云 OSS → studio.consult.quanttide.com
+GitHub Action → Vite Build    → 阿里云 OSS → consult.quanttide.com（主域名给 site）
 ```
 
 ## 准备工作
@@ -35,9 +36,9 @@ terraform apply
 ```
 
 自动完成：
-- 创建 OSS Bucket (`qtconsult`)
+- 创建 OSS Bucket (`qtconsult-site` 与 `qtconsult-studio`)
 - 开启静态网站托管
-- 绑定自定义域名 `consult.quanttide.com`
+- 绑定自定义域名 `consult.quanttide.com`（site）与 `studio.consult.quanttide.com`（studio）
 - 申请 SSL 证书（HTTPS）
 - 创建 DNS CNAME 记录
 
@@ -63,7 +64,7 @@ flutter build web --release
 ### 使用 ossutil 上传
 
 ```bash
-ossutil cp --recursive src/studio/build/web/ oss://qtconsult/
+ossutil cp --recursive src/studio/build/web/ oss://qtconsult-studio/
 ```
 
 ## 文件结构

@@ -35,7 +35,7 @@ describe('页面渲染冒烟', () => {
     window.history.pushState({}, '', '/')
     render(<App />)
     const studio = screen.getByRole('link', { name: 'Studio' })
-    expect(studio).toHaveAttribute('href', 'https://consult.quanttide.com')
+    expect(studio).toHaveAttribute('href', 'https://studio.consult.quanttide.com')
     expect(studio).toHaveAttribute('target', '_blank')
   })
 })

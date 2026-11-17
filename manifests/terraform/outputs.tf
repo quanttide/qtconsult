@@ -1,19 +1,29 @@
-output "bucket_name" {
+output "site_bucket_name" {
+  value       = alicloud_oss_bucket.site.bucket
+  description = "The OSS bucket for consult.quanttide.com"
+}
+
+output "site_bucket_endpoint" {
+  value       = alicloud_oss_bucket.site.extranet_endpoint
+  description = "The public endpoint of the site bucket (use this as CNAME target)"
+}
+
+output "studio_bucket_name" {
   value       = alicloud_oss_bucket.website.bucket
-  description = "The name of the OSS bucket"
+  description = "The OSS bucket for studio.consult.quanttide.com"
 }
 
-output "bucket_endpoint" {
+output "studio_bucket_endpoint" {
   value       = alicloud_oss_bucket.website.extranet_endpoint
-  description = "The public endpoint of the OSS bucket (use this as CNAME target)"
+  description = "The public endpoint of the studio bucket (use this as CNAME target)"
 }
 
-output "website_url" {
-  value       = "https://${var.domain_name}"
-  description = "The URL of the static website (available after CNAME is bound)"
+output "site_url" {
+  value       = "https://consult.quanttide.com"
+  description = "The URL of the consult site (available after CNAME is bound)"
 }
 
-output "dns_record_id" {
-  value       = alicloud_alidns_record.consult_cname.id
-  description = "The DNS record ID"
+output "studio_url" {
+  value       = "https://studio.consult.quanttide.com"
+  description = "The URL of the studio (available after CNAME is bound)"
 }

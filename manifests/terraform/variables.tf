@@ -4,16 +4,16 @@ variable "region" {
   default     = "cn-hangzhou"
 }
 
-variable "bucket_name" {
-  description = "OSS bucket name"
+variable "site_bucket_name" {
+  description = "OSS bucket for the consult site (consult.quanttide.com)"
   type        = string
-  default     = "qtconsult-studio"
+  default     = "qtconsult-site"
 }
 
-variable "domain_name" {
-  description = "Custom domain for the website"
+variable "studio_bucket_name" {
+  description = "OSS bucket for the studio (studio.consult.quanttide.com)"
   type        = string
-  default     = "consult.quanttide.com"
+  default     = "qtconsult-studio"
 }
 
 variable "index_document" {

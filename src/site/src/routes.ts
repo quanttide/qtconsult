@@ -6,5 +6,5 @@ export const ROUTE_PATHS = {
 
 // 站外连接：studio（咨询师工作台）；lite 报名端未建，链接待补
 export const EXTERNAL_LINKS = {
-  studio: 'https://consult.quanttide.com',
+  studio: 'https://studio.consult.quanttide.com',
 } as const
