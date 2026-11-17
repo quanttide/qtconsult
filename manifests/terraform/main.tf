@@ -49,6 +49,33 @@ resource "alicloud_oss_bucket" "website" {
   }
 }
 
+# 2023 后新桶默认开启"阻止公共访问"，会使 public-read 失效（AccessDenied），
+# 需显式关闭（qtclass / qtcloud / qtadmin 同款踩坑，见各自 manifests README）
+resource "alicloud_oss_bucket_public_access_block" "site" {
+  bucket              = alicloud_oss_bucket.site.bucket
+  block_public_access = false
+}
+
+resource "alicloud_oss_bucket_public_access_block" "studio" {
+  bucket              = alicloud_oss_bucket.website.bucket
+  block_public_access = false
+}
+
+# 公共读：静态站分发；如后续接入 CDN 回源鉴权可改回 private
+resource "alicloud_oss_bucket_acl" "site" {
+  bucket = alicloud_oss_bucket.site.bucket
+  acl    = "public-read"
+
+  depends_on = [alicloud_oss_bucket_public_access_block.site]
+}
+
+resource "alicloud_oss_bucket_acl" "studio" {
+  bucket = alicloud_oss_bucket.website.bucket
+  acl    = "public-read"
+
+  depends_on = [alicloud_oss_bucket_public_access_block.studio]
+}
+
 # consult.quanttide.com → site bucket（原指向 studio bucket，改值原地更新）
 resource "alicloud_alidns_record" "consult_cname" {
   domain_name = "quanttide.com"
