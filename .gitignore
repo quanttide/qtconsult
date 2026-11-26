@@ -46,3 +46,6 @@ qtconsult:*
 .coverage
 .coverage.*
 htmlcov/
+
+# Node
+node_modules/
