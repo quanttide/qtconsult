@@ -1,45 +1,34 @@
-import { officeSolution } from './vibe'
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import SolutionDetail from './pages/SolutionDetail'
+import { ROUTE_PATHS } from './routes'
 import './App.css'
 
-export default function App() {
+// 路由表单独导出，便于测试
+export function AppRoutes() {
   return (
-    <main className="page">
-      <header className="hero">
-        <h1>量潮咨询 · AI 办公方案</h1>
-        <p>{officeSolution.problem}</p>
-      </header>
-
-      <section aria-labelledby="solution">
-        <div className="trackHead">
-          <h2 id="solution">{officeSolution.name}</h2>
-          <p>平台选择问题 · 形成于 {officeSolution.decidedAt}</p>
-        </div>
-        <div className="grid">
-          <article className="card">
-            <div className="cardTop">
-              <h3>已定结论</h3>
-              <span className="badge wip">待分解</span>
-            </div>
-            <p className="summary">{officeSolution.conclusion}</p>
-            <div className="modules">
-              <span className="module">
-                {officeSolution.compute.name} · {officeSolution.compute.role}
-              </span>
-              <span className="module">
-                {officeSolution.storage.name} · {officeSolution.storage.role}
-              </span>
-            </div>
-            <ol className="steps">
-              {officeSolution.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
-            <a className="preview" href={officeSolution.source} target="_blank" rel="noopener">
-              咨询档案 →
-            </a>
-          </article>
-        </div>
-      </section>
-    </main>
+    <Routes>
+      <Route path={ROUTE_PATHS.home} element={<Home />} />
+      <Route path={ROUTE_PATHS.solutionItem} element={<SolutionDetail />} />
+      <Route path="*" element={<Navigate to={ROUTE_PATHS.home} replace />} />
+    </Routes>
   )
 }
+
+// 外壳：品牌顶栏 + 页面
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="liteApp">
+        <header className="liteHeader">
+          <span className="liteBrand">量潮咨询 Lite</span>
+        </header>
+        <main className="liteMain">
+          <AppRoutes />
+        </main>
+      </div>
+    </BrowserRouter>
+  )
+}
+
+export default App

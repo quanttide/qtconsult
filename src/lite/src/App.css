@@ -159,3 +159,87 @@ section + section {
   font-size: 14px;
   line-height: 1.8;
 }
+
+.liteList h1 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.liteNote {
+  color: #5b6472;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.liteList ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.liteItem a {
+  display: block;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid #e6e9f0;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.liteItem h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.liteItem p {
+  color: #5b6472;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.liteBack {
+  display: inline-block;
+  color: #10356b;
+  font-size: 14px;
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.liteTag {
+  color: #5b6472;
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-family: ui-monospace, monospace;
+}
+
+.liteConclusion {
+  margin-top: 12px;
+  color: #1f2430;
+  line-height: 1.7;
+}
+
+.liteModules {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.liteModules span {
+  background: #eef3fb;
+  color: #10356b;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 13px;
+}
+
+.liteSource {
+  display: inline-block;
+  margin-top: 14px;
+  color: #10356b;
+  font-size: 14px;
+}
